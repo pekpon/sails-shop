@@ -25,14 +25,14 @@
     "passport":"latest",
     "validator":"latest",
     "bcryptjs":"latest",
-    "bcrypt":"0.8.5",
     "passport-local":"latest",
     "passport-http-bearer":"latest",
     "passport-twitter":"latest",
     "passport-facebook":"latest",
     "passport-github":"latest",
     "passport-google-oauth":"latest",
-    "passport-cas":"latest"
+    "passport-cas":"latest",
+    "moment":"latest"
   },
   "scripts": {
     "start": "node app.js",

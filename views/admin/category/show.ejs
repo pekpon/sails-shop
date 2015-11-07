@@ -1,0 +1,23 @@
+<style>
+  .buttonsContainer{
+    background: #f0f0f0;
+    border-top: 2px solid #eee;
+    padding: 20px;
+  }
+</style>
+
+
+ <!-- HEADER -->
+  <div class="page-header">
+    <h1>Show <a href="/category" class="btn btn-default pull-right">Go to the index</a></h1>
+  </div>
+
+  
+	
+		<p><b>name:</b> <%= category.name %></p>
+		<p><b>slug:</b> <%= category.slug %></p>
+
+    
+  <br><br>
+    
+  <div class="buttonsContainer"><a href="/category/edit/<%=category.id%>" class="btn btn-primary">Edit</a> <a href="/category/destroy/<%=category.id%>" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</a></div>

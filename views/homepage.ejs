@@ -7,7 +7,11 @@
           <% } %> | Cart</span>
   <h1 class="text-center">Welcome to Sails-Shop</h1>
   
-  <p class="text-center">SAMPLE | SAMPLE | SAMPLE | SAMPLE | SAMPLE | SAMPLE</p>
+  <p class="text-center">
+    <% for(var i = 0; i < res.menu.length; i++){ %>
+      <a href="/collections/<%= res.menu[i].slug %>"><%= res.menu[i].name %></a> <% if(i < res.menu.length - 1) { %>|<% } %>
+    <% } %>
+  </p>
   
   <h3>Best sellers</h3>
   

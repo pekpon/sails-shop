@@ -1,0 +1,46 @@
+<style>
+  .buttonsContainer{
+    background: #f0f0f0;
+    border-top: 2px solid #eee;
+    padding: 20px;
+  }
+</style>
+
+ <!-- HEADER -->
+  <div class="page-header">
+    <h1>Add category</h1>
+  </div>
+  
+  <% if( req.session.flash && req.session.flash.error ){ %>
+    <% var error = req.flash('error') %>
+    <div class="alert alert-danger" role="alert">
+    <b>Error</b>
+     <ul>
+      <% for(var i in error){  %>
+        <li><%= error[i] %></li>
+      <% } %>
+      </ul>
+    </div>
+  <% } %>
+  
+  <form role="form" action="/admin/category/create" method="post">
+
+  <%- partial('form.ejs', {category:category}) %>
+  
+  <div class="buttonsContainer">
+    <button type="submit" class="btn btn-primary">Create</button>
+  </div>
+    
+  </form>
+    
+    
+      
+    
+      
+    
+      
+    
+  
+
+</div>
+

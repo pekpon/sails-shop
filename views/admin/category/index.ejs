@@ -1,0 +1,33 @@
+<!-- HEADER -->
+  <div class="page-header">
+    <h1>Categories <a href="/admin/category/add" class="btn btn-primary pull-right">Create new category</a></h1>
+  </div>
+  
+  <!-- SHOW categories -->
+  
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+            <th>name</th>
+            <th>slug</th>
+          <th>createdAt</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+      
+      <% for(var i in categorys ){ %>
+        <tr>
+			<td><%= categorys[i].name%></td>
+			<td><%= categorys[i].slug%></td>
+		
+      <td><%= utils.parseDate(categorys[i].createdAt) %></td>
+      <td><a href="/admin/category/edit/<%=categorys[i].id%>">Edit</a> - <a href="/admin/category/destroy/<%=categorys[i].id%>" onclick="return confirm('Are you sure?')">Delete</a></td>
+
+      </tr>
+      <% } %>
+
+      </tbody>
+    </table>
+  </div>
