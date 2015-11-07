@@ -1,6 +1,10 @@
 <div class="container">
  
-  <span class="loginBox pull-right">Login | Cart</span>
+  <span class="loginBox pull-right"><% if(req.isAuthenticated()){ %>
+            <a href="/account">User: <%= req.user.email %></a> | <a href="/logout">Logout</a>
+          <% }else{ %>
+            <a href="/login">Login</a></li>
+          <% } %> | Cart</span>
   <h1 class="text-center">Welcome to Sails-Shop</h1>
   
   <p class="text-center">SAMPLE | SAMPLE | SAMPLE | SAMPLE | SAMPLE | SAMPLE</p>
