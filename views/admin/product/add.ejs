@@ -1,0 +1,12 @@
+<div class="container">
+  
+  add product
+
+  <form role="form" action="/admin/product/create" method="post" enctype="multipart/form-data">
+    <%- partial('form.ejs', {product:product}) %>
+    <div class="buttonsContainer">
+      <button type="submit" class="btn btn-primary">Create</button>
+      </div>
+  </form>
+</div>
+    

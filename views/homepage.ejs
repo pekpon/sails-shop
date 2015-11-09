@@ -1,39 +1,48 @@
 <div class="container">
- 
-  <span class="loginBox pull-right"><% if(req.isAuthenticated()){ %>
-            <a href="/account">User: <%= req.user.email %></a> | <a href="/logout">Logout</a>
-          <% }else{ %>
-            <a href="/login">Login</a></li>
-          <% } %> | Cart</span>
-  <h1 class="text-center">Welcome to Sails-Shop</h1>
-  
-  <p class="text-center">
-    <% for(var i = 0; i < res.menu.length; i++){ %>
-      <a href="/collections/<%= res.menu[i].slug %>"><%= res.menu[i].name %></a> <% if(i < res.menu.length - 1) { %>|<% } %>
-    <% } %>
-  </p>
   
   <h3>Best sellers</h3>
+  
+  <% if(products.length == 0){ %>No products...<% } %>
   
   <div class="row">
     <div class="col-sm-3">
       
-      <img src="http://dummyimage.com/300x400/eeeeee/00ffd9.jpg" class="img-responsive" alt="">
+      <% for(var i = 0; i < products.length; i = i + 4){ %>
+        <div class="well">
+          <img src="<%= image.getFirst(products[i].images) %>" class="img-responsive" alt="">
+          <a href="/product/<%= products[i].slug %>"><%= products[i].name %></a>
+        </div>
+      <% } %>
       
     </div>
     <div class="col-sm-3">
       
-      <img src="http://dummyimage.com/300x400/eeeeee/00ffd9.jpg" class="img-responsive" alt="">
+      <% for(var i = 1; i < products.length; i = i + 4){ %>
+        <div class="well">
+          <img src="<%= image.getFirst(products[i].images) %>" class="img-responsive" alt="">
+          <a href="/product/<%= products[i].slug %>"><%= products[i].name %></a>
+        </div>
+      <% } %>
       
     </div>
     <div class="col-sm-3">
       
-      <img src="http://dummyimage.com/300x400/eeeeee/00ffd9.jpg" class="img-responsive" alt="">
+      <% for(var i = 2; i < products.length; i = i + 4){ %>
+        <div class="well">
+          <img src="<%= image.getFirst(products[i].images) %>" class="img-responsive" alt="">
+          <a href="/product/<%= products[i].slug %>"><%= products[i].name %></a>
+        </div>
+      <% } %>
       
     </div>
     <div class="col-sm-3">
       
-      <img src="http://dummyimage.com/300x400/eeeeee/00ffd9.jpg" class="img-responsive" alt="">
+      <% for(var i = 3; i < products.length; i = i + 4){ %>
+        <div class="well">
+          <img src="<%= image.getFirst(products[i].images) %>" class="img-responsive" alt="">
+          <a href="/product/<%= products[i].slug %>"><%= products[i].name %></a>
+        </div>
+      <% } %>
       
     </div>
   </div>

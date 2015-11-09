@@ -1,13 +1,13 @@
 module.exports.policies = {
 
-  '*': true,
+  '*': [true, 'category'],
+  
+  'AuthController': {
+    '*': 'category'
+  },
   
   'MainController': {
     '*': 'category'
-  },
-
-  'PostController': {
-    '*': 'isAuthenticated'
   },
   
   'AdminController': {

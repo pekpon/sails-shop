@@ -1,0 +1,23 @@
+<div class="form-group">
+  <label for="inputname">name</label>
+  <input type="text" name="name" class="form-control" id="" placeholder="Enter name" value="<%if(typeof product.name !== "undefined"){%><%=product.name%><%}%>" >
+</div>
+
+<div class="form-group">
+  <label for="inputslug">slug</label>
+  <input type="text" name="slug" class="form-control" id="" placeholder="Enter slug" value="<%if(typeof product.slug !== "undefined"){%><%=product.slug%><%}%>" >
+</div>
+
+
+<div class="form-group">
+  <label for="inputslug">description</label>
+  <textarea name="description" class="form-control" id="">
+    <%if(typeof product.description !== "undefined"){%><%=product.description%><%}%>
+  </textarea>
+</div>
+
+<div class="form-group">
+<input type="file" name="images" multiple>
+</div>
+
+

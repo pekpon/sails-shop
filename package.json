@@ -32,7 +32,8 @@
     "passport-github":"latest",
     "passport-google-oauth":"latest",
     "passport-cas":"latest",
-    "moment":"latest"
+    "moment":"latest",
+    "sails-mongo": "0.11.4"
   },
   "scripts": {
     "start": "node app.js",

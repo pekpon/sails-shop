@@ -7,7 +7,15 @@ module.exports = {
         shortcuts: false,
         rest: false
     },
-
+    
+    printLogin: function(req, res) {
+      res.view('auth/login');
+    },
+  
+    printSignUp: function(req, res) {
+      res.view('auth/signup');
+    },
+  
     login: function(req, res) {
 
         passport.authenticate('local', function(err, user, info) {

@@ -10,8 +10,12 @@ module.exports = {
   /**
    * `MainController.index()`
    */
-  index: function (req, res) {   
-    res.view('homepage');
+  index: function (req, res) { 
+    Product.find(function(err, products){
+      res.view('homepage', {
+        products: products
+      });
+    });
   }
   
 }
