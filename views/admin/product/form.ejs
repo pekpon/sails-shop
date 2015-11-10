@@ -17,6 +17,15 @@
 </div>
 
 <div class="form-group">
+  <label for="inputslug">category</label>
+  <select name="category">
+    <% for(var i = 0; i < categories.length; i++){ %>
+      <option value="<%= categories[i].id%>"><%= categories[i].name%></option>
+    <% } %>
+  </select>
+</div>
+
+<div class="form-group">
 <input type="file" name="images" multiple>
 </div>
 

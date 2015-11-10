@@ -2,7 +2,56 @@
 <h1>Index product</h1>
 
 <% if(products != null && products.length > 0){ %>
-PRODUCTS LIST
+
+
+
+
+  <div class="row">
+    <div class="col-sm-3">
+      
+      <% for(var i = 0; i < products.length; i = i + 4){ %>
+        <div class="well">
+          <img src="<%= image.getFirst(products[i].images) %>" class="img-responsive" alt="">
+          <a href="/product/<%= products[i].slug %>"><%= products[i].name %></a>
+        </div>
+      <% } %>
+      
+    </div>
+    <div class="col-sm-3">
+      
+      <% for(var i = 1; i < products.length; i = i + 4){ %>
+        <div class="well">
+          <img src="<%= image.getFirst(products[i].images) %>" class="img-responsive" alt="">
+          <a href="/product/<%= products[i].slug %>"><%= products[i].name %></a>
+        </div>
+      <% } %>
+      
+    </div>
+    <div class="col-sm-3">
+      
+      <% for(var i = 2; i < products.length; i = i + 4){ %>
+        <div class="well">
+          <img src="<%= image.getFirst(products[i].images) %>" class="img-responsive" alt="">
+          <a href="/product/<%= products[i].slug %>"><%= products[i].name %></a>
+        </div>
+      <% } %>
+      
+    </div>
+    <div class="col-sm-3">
+      
+      <% for(var i = 3; i < products.length; i = i + 4){ %>
+        <div class="well">
+          <img src="<%= image.getFirst(products[i].images) %>" class="img-responsive" alt="">
+          <a href="/product/<%= products[i].slug %>"><%= products[i].name %></a>
+        </div>
+      <% } %>
+      
+    </div>
+  </div>
+
+
+
+
 <% }else{ %>
 0 products found on this collection
 <% } %>

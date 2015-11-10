@@ -14,7 +14,10 @@ module.exports = {
     name : { type: 'string'},
     description : { type: 'string'},
     slug : { type: 'string'},
-    images: { type: 'array'}
+    images: { type: 'array'},
+    category: {
+      model: 'category'
+    }
   
   }
   

@@ -8,16 +8,25 @@
 module.exports = {
   
 	index: function(req, res, next) {
-      Product.find({category: req.param('slug')}, function(products){
-        res.view({products: products});
+      Category.findOne({slug: req.param('slug')}, function(err, category){
+        if(err) return err;
+      Product.find({category: category.id}, function(err, products){
+        if(err) return err;
+        return res.view({products: products});
+      });
       });
     },
   
     add: function(req,res){   
-      res.view('admin/product/add',{
-        layout:'layouts/dashboardLayout',
-        product: {}
-      });  
+      Category.find(function(err, categories){
+        
+        return res.view('admin/product/add',{
+          layout:'layouts/dashboardLayout',
+          product: {},
+          categories: categories
+        });  
+        
+      });
     },
 
     create: function(req, res) {
@@ -25,7 +34,8 @@ module.exports = {
       var paramObj = {
         name: req.param('name'),
         description: req.param('description'),
-        slug: req.param('slug')
+        slug: req.param('slug'),
+        category: req.param('category')
       }
 
       Product.create(paramObj, function (err, product) {
@@ -64,7 +74,10 @@ module.exports = {
     show: function(req, res, next) {
       Product.findOne({slug: req.param('slug')}, function(err, product){
         if(err) return res.serverError(err);
-        return res.view({product: product});
+        if(product)
+          return res.view({product: product});
+        else
+          return res.view('404');
       });
     },
   
