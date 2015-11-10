@@ -5,6 +5,8 @@
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
+var slugg = require('slugg');
+
 module.exports = {
   
 	index: function(req, res, next) {
@@ -34,8 +36,9 @@ module.exports = {
       var paramObj = {
         name: req.param('name'),
         description: req.param('description'),
-        slug: req.param('slug'),
-        category: req.param('category')
+        slug: slugg(req.param('name')),
+        category: req.param('category'),
+        stock: req.param('stock')
       }
 
       Product.create(paramObj, function (err, product) {

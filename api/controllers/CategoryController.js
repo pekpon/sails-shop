@@ -5,6 +5,8 @@
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
+var slugg = require('slugg');
+
 var sample = {
   name : '',
   slug : ''
@@ -40,7 +42,7 @@ module.exports = {
 
     var paramObj = {
         name: req.param('name'),
-        slug: req.param('slug')
+        slug: slugg(req.param('name'))
     }
 
     // Create a Category with the params sent from 

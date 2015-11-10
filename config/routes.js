@@ -3,14 +3,19 @@ module.exports.routes = {
   
   'GET /login': {controller: 'AuthController', action: 'printLogin'},
   'GET /signup': {controller: 'AuthController', action: 'printSignUp'},
-  'POST /login': 'AuthController.login',
-  'GET /logout': 'AuthController.logout',
+  'POST /login': {controller: 'AuthController', action: 'login'},
+  'GET /logout': {controller: 'AuthController', action: 'logout'},
   
   'GET /collections/:slug': {controller: 'ProductController', action: 'index'},
   
   'GET /product/:slug': {controller: 'ProductController', action: 'show'},
   
-  'GET /admin': 'AdminController.index',
+  'POST /addtocart': { controller: 'CartController', action: 'add'},
+  'GET /cart': { controller: 'CartController', action: 'show'},
+  
+  
+  
+  'GET /admin': {controller: 'AdminController', action: 'index'},
   
   'GET /admin/category': {controller: 'CategoryController', action: 'index'},
   'GET /admin/category/add': {controller: 'CategoryController', action: 'add'},

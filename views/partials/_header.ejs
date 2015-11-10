@@ -4,8 +4,8 @@
             <a href="/account">User: <%= req.user.email %></a> | <a href="/logout">Logout</a>
           <% }else{ %>
             <a href="/login">Login</a></li>
-          <% } %> | Cart</span>
-  <h1 class="text-center">Welcome to Sails-Shop</h1>
+          <% } %> | <a href="/cart">Cart (<%= req.cartItems %>)</a></span>
+  <h1 class="text-center">Welcome to <a href="/">Sails-Shop</a></h1>
   
   <p class="text-center">
     <% for(var i = 0; i < res.menu.length; i++){ %>

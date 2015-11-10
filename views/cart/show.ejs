@@ -1,0 +1,15 @@
+<div class="container">
+  <h1>Cart view</h1>
+  
+  <% if(products && products.length > 0){ %>
+    <% for(i = 0; i < products.length; i++){ %>
+      <div class="well">
+        <a href="/product/<%= products[i].slug %>"><b><%= products[i].name %></b></a> - <%= products[i].qty %>
+      </div>
+    <% } %>
+  <% }else{ %>
+    <div class="well">
+      No products added to the shopping cart
+    </div>
+  <% } %>
+</div>

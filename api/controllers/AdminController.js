@@ -7,7 +7,9 @@
 
 module.exports = {
 	index: function(req, res) {
-      return res.view('admin/index');
+      return res.view('admin/index',{
+        layout:'layouts/dashboardLayout'
+      });
     }
 };
 
