@@ -1,0 +1,33 @@
+<!-- HEADER -->
+  <div class="page-header">
+    <h1>Products <a href="/admin/product/add" class="btn btn-primary pull-right">Create new product</a></h1>
+  </div>
+  
+  <!-- SHOW categories -->
+  
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+            <th>name</th>
+            <th>stock</th>
+          <th>createdAt</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+      
+      <% for(var i in products ){ %>
+        <tr>
+			<td><%= products[i].name%></td>
+			<td><%= products[i].stock%></td>
+		
+      <td><%= utils.parseDate(products[i].createdAt) %></td>
+      <td><a href="/admin/product/edit/<%=products[i].id%>">Edit</a> - <a href="/admin/product/destroy/<%=products[i].id%>" onclick="return confirm('Are you sure?')">Delete</a></td>
+
+      </tr>
+      <% } %>
+
+      </tbody>
+    </table>
+  </div>

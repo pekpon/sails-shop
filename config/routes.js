@@ -1,4 +1,7 @@
 module.exports.routes = {
+  
+  //NORMAL ROUTES
+  
   'GET /': { controller: 'MainController', action: 'index' },
   
   'GET /login': {controller: 'AuthController', action: 'printLogin'},
@@ -7,7 +10,6 @@ module.exports.routes = {
   'GET /logout': {controller: 'AuthController', action: 'logout'},
   
   'GET /collections/:slug': {controller: 'ProductController', action: 'index'},
-  
   'GET /product/:slug': {controller: 'ProductController', action: 'show'},
   
   'POST /addtocart': { controller: 'CartController', action: 'add'},
@@ -15,17 +17,20 @@ module.exports.routes = {
   
   
   
-  'GET /admin': {controller: 'AdminController', action: 'index'},
   
-  'GET /admin/category': {controller: 'CategoryController', action: 'index'},
-  'GET /admin/category/add': {controller: 'CategoryController', action: 'add'},
-  'POST /admin/category/create': {controller: 'CategoryController', action: 'create'},
-  'GET /admin/category/:id': {controller: 'CategoryController', action: 'show'},
-  'GET /admin/category/edit/:id': {controller: 'CategoryController', action: 'edit'},
-  'POST /admin/category/update/:id': {controller: 'CategoryController', action: 'update'},
-  'GET /admin/category/destroy/:id': {controller: 'CategoryController', action: 'destroy'},
+  //ADMIN ROUTES
   
-  'GET /admin/product': {controller: 'ProductController', action: 'index'},
-  'GET /admin/product/add': {controller: 'ProductController', action: 'add'},
-  'POST /admin/product/create': {controller: 'ProductController', action: 'create'},
+  'GET /admin': {controller: 'admin/AdminController', action: 'index'},
+  
+  'GET /admin/category': {controller: 'admin/CategoryController', action: 'index'},
+  'GET /admin/category/add': {controller: 'admin/CategoryController', action: 'add'},
+  'POST /admin/category/create': {controller: 'admin/CategoryController', action: 'create'},
+  'GET /admin/category/:id': {controller: 'admin/CategoryController', action: 'show'},
+  'GET /admin/category/edit/:id': {controller: 'admin/CategoryController', action: 'edit'},
+  'POST /admin/category/update/:id': {controller: 'admin/CategoryController', action: 'update'},
+  'GET /admin/category/destroy/:id': {controller: 'admin/CategoryController', action: 'destroy'},
+  
+  'GET /admin/product': {controller: 'admin/ProductController', action: 'index'},
+  'GET /admin/product/add': {controller: 'admin/ProductController', action: 'add'},
+  'POST /admin/product/create': {controller: 'admin/ProductController', action: 'create'},
 };

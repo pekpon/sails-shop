@@ -19,61 +19,6 @@ module.exports = {
       });
     },
   
-    add: function(req,res){   
-      Category.find(function(err, categories){
-        
-        return res.view('admin/product/add',{
-          layout:'layouts/dashboardLayout',
-          product: {},
-          categories: categories
-        });  
-        
-      });
-    },
-
-    create: function(req, res) {
-      
-      var paramObj = {
-        name: req.param('name'),
-        description: req.param('description'),
-        slug: slugg(req.param('name')),
-        category: req.param('category'),
-        stock: req.param('stock')
-      }
-
-      Product.create(paramObj, function (err, product) {
-
-        if (err) {
-          sails.log.error("ProductController#create error");
-          sails.log.error(err);
-        } else {
-          var rootPath = sails.config.appPath;
-          
-          req.file('images')
-            .upload({
-              dirname: rootPath + '/assets/images/upload'
-            },
-            function whenDone(err, uploadedFiles) {
-              if (err) {
-                return res.serverError(err);
-              }else{
-                var images = [];
-                for(var i in uploadedFiles){
-                  var file = uploadedFiles[i].fd.split('/');
-                  images.push('/images/upload/' + file[8]);
-                }
-                product.images = images;
-                product.save();
-                return res.redirect('/admin/product/add');
-                
-              } 
-            });
-      
-        }
-      });
-      
-    },
-  
     show: function(req, res, next) {
       Product.findOne({slug: req.param('slug')}, function(err, product){
         if(err) return res.serverError(err);
@@ -82,7 +27,6 @@ module.exports = {
         else
           return res.view('404');
       });
-    },
-  
+    }
 };
 

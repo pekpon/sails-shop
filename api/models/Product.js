@@ -19,6 +19,8 @@ module.exports = {
       unique: true
     },
     stock: {type: 'int'},
+    price: {type: 'float'},
+    status: {type: 'string'},
     images: { type: 'array'},
     category: {
       model: 'category'

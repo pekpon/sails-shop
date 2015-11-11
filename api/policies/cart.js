@@ -5,7 +5,7 @@ module.exports = function(req, res, next) {
   
   if(cart){
     for(var i in cart){
-      qty += cart[i].qty;
+      qty += parseInt(cart[i].qty);
     }
   }
   

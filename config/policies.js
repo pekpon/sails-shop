@@ -1,31 +1,33 @@
 module.exports.policies = {
 
-
-  
   'AuthController': {
-    '*': 'category'
+    '*': ['category', 'cart']
   },
   
   'MainController': {
     '*': ['category', 'cart']
   },
   
-  'AdminController': {
-    '*': ['isAuthenticated']
-  },
-  
-  'CategoryController': {
-    '*': ['isAuthenticated']
-  },
-  
   'ProductController': {
-    '*': ['cart','category'],
-    'add': ['isAuthenticated'],
-    'create' : 'isAuthenticated'
+    '*': ['category', 'cart']
   },
   
   'CartController': {
-    '*': ['cart','category']
+    '*': ['category', 'cart']
+  },
+  
+  
+  
+  'admin/AdminController': {
+    '*': ['isAuthenticated']
+  },
+  
+  'admin/ProductController': {
+    '*': ['isAuthenticated']
+  },
+  
+  'admin/CategoryController': {
+    '*': ['isAuthenticated']
   },
 
 };
