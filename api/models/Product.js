@@ -20,6 +20,7 @@ module.exports = {
     },
     stock: {type: 'int'},
     price: {type: 'float'},
+    shipping: {type: 'float'},
     status: {type: 'string'},
     images: { type: 'array'},
     category: {

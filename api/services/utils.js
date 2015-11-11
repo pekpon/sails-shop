@@ -10,6 +10,16 @@ module.exports = {
     return moment(date).format('DD/MM/YYYY');
   },
 
+  getShipping: function (products){
+    var shipping = 0;
+    
+    for(var i in products){
+      if(products[i].shipping > shipping) shipping = products[i].shipping;
+    }
+    
+    return shipping;
+  },
+  
   getFeaturedColSize: function (featured){
     var size = "4";
     

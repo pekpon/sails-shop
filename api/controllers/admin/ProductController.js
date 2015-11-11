@@ -40,7 +40,8 @@ module.exports = {
         category: req.param('category'),
         stock: req.param('stock'),
         status: req.param('status'),
-        price: req.param('price')
+        price: req.param('price'),
+        shipping: req.param('shipping')
       }
 
       Product.create(paramObj, function (err, product) {
