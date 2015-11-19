@@ -32,6 +32,8 @@
     <h4 class="text-right">Subtotal: <%= total %>€</h4>
     <h4 class="text-right">Shipping: <%= utils.getShipping(products) %>€</h4><br>
     <h2 class="text-right">Total: <%= total + utils.getShipping(products) %>€</h2>
+    
+    <a href="/checkout" class="btn btn-primary">Checkout</a>
   <% }else{ %>
     <div class="well">
       No products added to the shopping cart

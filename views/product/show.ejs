@@ -10,7 +10,13 @@
       <%= product.description %>
     </div>
 
-    <a href="javascript:void(0)" onclick="addToCart('<%= product.id %>')" class="btn btn-success btn-block">COMPRAR</a>
+    <p>
+      <a href="javascript:void(0)" onclick="addToCart('<%= product.id %>')" class="btn btn-success btn-block">COMPRAR</a>
+    </p>
+    
+    <div class="alert alert-success" role="alert" style="display:none">
+      Producto añadido correctamente
+    </div>
   </div>
 </div>
 

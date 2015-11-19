@@ -14,6 +14,7 @@ module.exports.routes = {
   
   'POST /addtocart': { controller: 'CartController', action: 'add'},
   'GET /cart': { controller: 'CartController', action: 'show'},
+  'GET /cart/checkout': { controller: 'CartController', action: 'checkout'},
   
   
   

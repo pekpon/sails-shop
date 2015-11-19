@@ -84,6 +84,10 @@ module.exports = {
       }
     });
   },
+  
+  checkout: function (req, res) {
+    return res.view();
+  },
 
   /**
    * `CartController.delete()`
