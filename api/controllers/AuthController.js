@@ -18,6 +18,7 @@ module.exports = {
   
     login: function(req, res) {
 
+        console.log(req.url);
         passport.authenticate('local', function(err, user, info) {
             if ((err) || (!user)) {
                 return res.send({
@@ -27,7 +28,10 @@ module.exports = {
             }
             req.logIn(user, function(err) {
                 if (err) res.send(err);
-                return res.redirect('/');
+                if (req.param('page') == "checkout")
+                  return res.redirect('/cart/checkout');
+                else
+                  return res.redirect('/');
             });
 
         })(req, res);
