@@ -62,7 +62,7 @@ module.exports = {
    */
   add: function (req, res) {
     var productId = req.param('product');
-    var quantity = 1;
+    var quantity = req.param('quantity');;
     Product.findCart(productId, function(err, product) {
       if (err) {
         res.json({code:500});
