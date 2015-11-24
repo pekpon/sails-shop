@@ -32,7 +32,6 @@ module.exports = {
 
     create: function(req, res) {
       
-      console.log(req.allParams);
       var paramObj = {
         name: req.param('name'),
         description: req.param('description'),
@@ -41,7 +40,15 @@ module.exports = {
         stock: req.param('stock'),
         status: req.param('status'),
         price: req.param('price'),
-        shipping: req.param('shipping')
+        shipping: req.param('shipping'),
+        options: []
+      }
+      
+      for(var i in req.param('oname')){
+        if(req.param('oname')[i]){
+          var stock = (req.param('ostock')[i] > 0) ? req.param('ostock')[i] : 0;
+          paramObj.options.push({name: req.param('oname')[i], stock: stock});
+        }
       }
 
       Product.create(paramObj, function (err, product) {

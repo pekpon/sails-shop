@@ -25,6 +25,10 @@ module.exports = {
     images: { type: 'array'},
     category: {
       model: 'category'
+    },
+    
+    options: {
+      type: 'array'
     }
   
   },

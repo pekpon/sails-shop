@@ -86,7 +86,22 @@ module.exports = {
   },
   
   checkout: function (req, res) {
-    return res.view();
+    var cart = req.session.cart;
+    var products = [];
+    
+    async.each(cart, function(productIt, callback) {
+      Product.findOne(productIt.id, function(err, product){
+        product.qty = productIt.qty;
+        products.push(product);
+        callback();
+      });
+    }, function(err){
+        if( err ) {
+          return err;
+        } else {
+          return res.view({products: products});
+        }
+    });
   },
 
   /**

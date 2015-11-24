@@ -1,0 +1,65 @@
+<div class="container">
+  <h1>Account</h1>
+  
+  <div class="row">
+    <div class="col-sm-3">
+      
+      <div class="list-group">
+        <a href="/account" class="list-group-item active">
+          User info
+        </a>
+        <a href="/account/oders" class="list-group-item">Orders</a>
+      </div>
+      
+    </div>
+    <div class="col-sm-9">
+     
+      <% if (req.session.flash && req.session.flash.success) { %>
+        <div class="alert alert-success" role="alert">
+          <span class="sr-only">Success:</span>
+          <%= req.flash('success') %>
+        </div>
+      <% } %>
+      
+      <form action="/account" method="POST">
+      <div class="form-group">
+        <label for="exampleInputEmail1">Name</label>
+        <input type="text" name="name" class="form-control" id="" placeholder="Name" value="<%= user.name ? user.name : '' %>">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Surname</label>
+        <input type="text" name="surname" class="form-control" id="" placeholder="Surname" value="<%= user.surname ? user.surname : '' %>">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Address</label>
+        <input type="text" name="address" class="form-control" id="" placeholder="Address" value="<%= user.address ? user.address : '' %>">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Postal Code</label>
+        <input type="int" name="cp" class="form-control" id="" placeholder="Postal Code" value="<%= user.cp ? user.cp : '' %>">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1">City</label>
+        <input type="text" name="city" class="form-control" id="" placeholder="City" value="<%= user.city ? user.city : '' %>">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Province</label>
+        <input type="text" name="province" class="form-control" id="" placeholder="Province" value="<%= user.province ? user.province : '' %>">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Country</label>
+        <input type="text" name="country" class="form-control" id="" placeholder="Country" value="<%= user.country ? user.country : '' %>">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Phone</label>
+        <input type="text" name="phone" class="form-control" id="" placeholder="Phone" value="<%= user.phone ? user.phone : '' %>">
+      </div>
+
+      <input type="submit" class="btn btn-primary" value="Save">
+      </form>
+      
+    </div>
+  </div>
+  
+  
+</div>

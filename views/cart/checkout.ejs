@@ -14,9 +14,11 @@
       
     </div>
   -->
+  <% if(!req.user){ %>
   <div class="alert alert-info" role="alert">
-         Have an user account? Please <a href="/login?page=checkout">Log In</a>
-       </div>
+    Have an user account? Please <a href="/login?page=checkout">Log In</a>
+  </div>
+  <% } %>
   
   <div class="row">
     <div class="col-sm-9">
@@ -101,10 +103,10 @@
           <h3 class="panel-title">Your order</h3>
         </div>
         <div class="panel-body">
-          <div>Products: <span class="pull-right">19.99€</span></div>
-          <div>Shipping: <span class="pull-right">7.99€</span></div>
+          <div>Products: <span class="pull-right"><%= utils.getProductsTotal(products) %>€</span></div>
+          <div>Shipping: <span class="pull-right"><%= utils.getShipping(products) %>€</span></div>
           <hr>
-          <b>Total: <span class="pull-right">26.99€</span></b>
+          <b>Total: <span class="pull-right"><%= utils.getOrderTotal(products) %>€</span></b>
           <hr>
           <a href="" class="btn btn-primary btn-block">Buy now</a>
         </div>

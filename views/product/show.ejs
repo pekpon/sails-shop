@@ -8,6 +8,14 @@
   <div class="col-sm-6">
     <div class="well">
       <%= product.description %>
+      <br>
+      <% if(product.options){ %>
+      <select name="" id="">
+       <% for(var i = 0; i < product.options.length; i++){ %>
+        <option value=""><%= product.options[i].name %></option>
+        <% } %>
+      </select>
+      <% } %>
     </div>
 
     <p>

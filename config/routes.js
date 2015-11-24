@@ -16,7 +16,8 @@ module.exports.routes = {
   'GET /cart': { controller: 'CartController', action: 'show'},
   'GET /cart/checkout': { controller: 'CartController', action: 'checkout'},
   
-  
+  'GET /account': { controller: 'UserController', action: 'account'},
+  'POST /account': { controller: 'UserController', action: 'update'},
   
   
   //ADMIN ROUTES

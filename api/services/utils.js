@@ -20,6 +20,20 @@ module.exports = {
     return shipping;
   },
   
+  getProductsTotal: function (products){
+    var total = 0;
+    
+    for(var i in products)
+      total += products[i].price * products[i].qty;
+    
+    return total;
+  },
+  
+  getOrderTotal: function (products){
+    var total = this.getProductsTotal(products) + this.getShipping(products);
+    return Math.round(total * 100) / 100;
+  },
+  
   getFeaturedColSize: function (featured){
     var size = "4";
     
