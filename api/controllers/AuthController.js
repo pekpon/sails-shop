@@ -20,7 +20,7 @@ module.exports = {
 
         passport.authenticate('local', function(err, user, info) {
             if ((err) || (!user)) {
-                return res.send({
+                return res.view('auth/login', {
                     message: info.message,
                     user: user
                 });
@@ -28,9 +28,9 @@ module.exports = {
             req.logIn(user, function(err) {
                 if (err) res.send(err);
                 if (req.param('page') == "checkout")
-                  return res.redirect('/cart/checkout');
+                    return res.redirect('/cart/checkout');
                 else
-                  return res.redirect('/');
+                    return res.redirect('/');
             });
 
         })(req, res);
