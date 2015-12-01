@@ -78,5 +78,11 @@ module.exports = {
     }
 
     return lang;
+  },
+  
+  getMenu: function(){
+    Category.find(function (err, categories){
+      return categories;
+    });
   }
 };

@@ -6,8 +6,9 @@
  */
 
 var slugg = require('slugg');
+var _ = require('lodash');
 
-module.exports = {
+var ProductController = {
   
 	index: function(req, res, next) {
       Product.find(function(err, products){
@@ -59,7 +60,7 @@ module.exports = {
         } else {
           var rootPath = sails.config.appPath;
           
-          req.file('images')
+          req.file('imagesUploader')
             .upload({
               dirname: rootPath + '/assets/images/upload'
             },
@@ -82,7 +83,72 @@ module.exports = {
         }
       });
       
-    }
+    },
   
+    edit: function(req, res, data) {
+      Product.findOne(req.param('id'), function(err, product){
+        Category.find(function(err, categories){
+          if(req.paramObj)
+            product = req.paramObj;
+          return res.view('admin/product/edit',{
+            layout:'layouts/dashboardLayout',
+            product: product,
+            categories: categories
+          });  
+        });
+      });
+
+    },
+  
+    update: function(req, res) {
+      
+      var images = req.param('images[]') ? req.param('images[]') : [];
+      
+      var paramObj = {
+        name: req.param('name'),
+        description: req.param('description'),
+        slug: slugg(req.param('name')),
+        category: req.param('category'),
+        stock: req.param('stock'),
+        status: req.param('status'),
+        price: req.param('price'),
+        shipping: req.param('shipping'),
+        options: [],
+        images: images
+      }
+
+      Product.update(req.param('id'), paramObj, function (err,product) {
+        if (err) {
+          sails.log.error("ProductController#update error");        
+          sails.log.error(err);
+          
+          req.paramObj = paramObj;
+          req.paramObj.id = req.param('id');
+          
+          ProductController.edit(req, res);
+        } else {
+          
+          var rootPath = sails.config.appPath;
+          req.file('imagesUploader')
+            .upload({
+              dirname: rootPath + '/assets/images/upload'
+            },
+            function whenDone(err, uploadedFiles) {
+              if (err) {
+                return res.serverError(err);
+              }else{
+                for(var i in uploadedFiles){
+                  var file = uploadedFiles[i].fd.split('/');
+                  product[0].images.push('/images/upload/' + file[8]);
+                }
+                product[0].save();
+                return res.redirect('/admin/product');
+              } 
+            });
+        }
+      });
+      
+    },
 };
 
+module.exports = ProductController;

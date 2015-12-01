@@ -12,5 +12,9 @@
       <a href="/collections/<%= res.menu[i].slug %>"><%= res.menu[i].name %></a> <% if(i < res.menu.length - 1) { %>|<% } %>
     <% } %>
   </p>
-  
+  <p class="text-center">
+    <% for(var i = 0; i < utils.getMenu.length; i++){ %>
+      <a href="/collections/<%= res.menu[i].slug %>"><%= res.menu[i].name %></a> <% if(i < res.menu.length - 1) { %>|<% } %>
+    <% } %>
+  </p>
 </div>  

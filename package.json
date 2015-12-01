@@ -35,7 +35,8 @@
     "moment":"latest",
     "sails-mongo": "0.11.4",
     "slugg":"latest",
-    "async":"latest"
+    "async":"latest",
+    "lodash":"latest"
   },
   "scripts": {
     "start": "node app.js",
