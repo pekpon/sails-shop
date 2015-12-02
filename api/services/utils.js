@@ -34,6 +34,16 @@ module.exports = {
     return Math.round(total * 100) / 100;
   },
   
+  getOptions: function (products){
+    var html = "";
+    
+    for(var i in products){
+      html += '<p>Name: <input type="text" name="oname" placeholder="Option" value="'+products[i].name+'" required> Stock: <input type="number" name="ostock" class="" id="" placeholder="Stock" min="0" value="'+products[i].stock+'" required> <a href="javascript:void(0)" onclick="removeOption(this)">Remove</a></p>';
+    }
+    
+    return html;
+  },
+  
   getFeaturedColSize: function (featured){
     var size = "4";
     

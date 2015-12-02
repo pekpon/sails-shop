@@ -3,7 +3,9 @@
 
 <div class="row">
   <div class="col-sm-6">
-    <img src="<%= image.getFirst(product.images) %>" class="img-responsive" alt="">
+    <% for(var i = 0; i < product.images.length; i++){ %>
+      <img src="<%= product.images[i] %>" class="img-responsive" alt=""><br>
+    <% } %>
   </div>
   <div class="col-sm-6">
     <div class="well">

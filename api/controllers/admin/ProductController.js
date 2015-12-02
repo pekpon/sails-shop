@@ -46,12 +46,20 @@ var ProductController = {
         images: []
       }
       
-      for(var i in req.param('oname')){
-        if(req.param('oname')[i]){
-          var stock = (req.param('ostock')[i] > 0) ? req.param('ostock')[i] : 0;
-          paramObj.options.push({name: req.param('oname')[i], stock: stock});
+      
+      if(req.param('oname')){
+        if(typeof req.param('oname') == "object"){
+          //Two or more options
+          for(var i in req.param('oname')){
+            paramObj.options.push({name: req.param('oname')[i], stock: req.param('ostock')[i]});
+          }
+        }else{
+          //One option
+          paramObj.options.push({name: req.param('oname'), stock: req.param('ostock')});
         }
       }
+      
+      
 
       Product.create(paramObj, function (err, product) {
         if (err) {
@@ -101,6 +109,18 @@ var ProductController = {
         shipping: parseFloat(req.param('shipping')),
         options: [],
         images: images
+      }
+      
+       if(req.param('oname')){
+        if(typeof req.param('oname') == "object"){
+          //Two or more options
+          for(var i in req.param('oname')){
+            paramObj.options.push({name: req.param('oname')[i], stock: req.param('ostock')[i]});
+          }
+        }else{
+          //One option
+          paramObj.options.push({name: req.param('oname'), stock: req.param('ostock')});
+        }
       }
 
       Product.update(req.param('id'), paramObj, function (err,product) {

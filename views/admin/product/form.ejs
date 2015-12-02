@@ -19,10 +19,14 @@
  
 <div class="form-group">
   <label for="inputslug">options</label>
-  <p>Name: <input type="text" name="oname" class="" id="" placeholder="Option"> Stock: <input type="text" name="ostock" class="" id="" placeholder="Stock"></p>
-  <p>Name: <input type="text" name="oname" class="" id="" placeholder="Option"> Stock: <input type="text" name="ostock" class="" id="" placeholder="Stock"></p>
-  <p>Name: <input type="text" name="oname" class="" id="" placeholder="Option"> Stock: <input type="text" name="ostock" class="" id="" placeholder="Stock"></p>
-  <p>Name: <input type="text" name="oname" class="" id="" placeholder="Option"> Stock: <input type="text" name="ostock" class="" id="" placeholder="Stock"></p>
+  <div class="well">
+    <a href="javascriot:void(0)" onclick="addOption()">Add option</a>
+    <div class="options">
+      <%if(typeof product.options !== "undefined"){%>
+        <%- utils.getOptions(product.options) %>
+      <%}%>
+    </div>
+  </div>
 </div>
   
 
@@ -70,6 +74,7 @@
 <% } %>
 
 <div class="form-group">
+<label for="inputname">Add images</label>
 <input type="file" name="imagesUploader" multiple>
 </div>
 
