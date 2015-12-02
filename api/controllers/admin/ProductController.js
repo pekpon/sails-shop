@@ -38,11 +38,12 @@ var ProductController = {
         description: req.param('description'),
         slug: slugg(req.param('name')),
         category: req.param('category'),
-        stock: req.param('stock'),
+        stock: parseInt(req.param('stock')),
         status: req.param('status'),
-        price: req.param('price'),
-        shipping: req.param('shipping'),
-        options: []
+        price: parseFloat(req.param('price')),
+        shipping: parseFloat(req.param('shipping')),
+        options: [],
+        images: []
       }
       
       for(var i in req.param('oname')){
@@ -53,33 +54,18 @@ var ProductController = {
       }
 
       Product.create(paramObj, function (err, product) {
-
         if (err) {
-          sails.log.error("ProductController#create error");
           sails.log.error(err);
-        } else {
-          var rootPath = sails.config.appPath;
-          
-          req.file('imagesUploader')
-            .upload({
-              dirname: rootPath + '/assets/images/upload'
-            },
-            function whenDone(err, uploadedFiles) {
-              if (err) {
-                return res.serverError(err);
-              }else{
-                var images = [];
-                for(var i in uploadedFiles){
-                  var file = uploadedFiles[i].fd.split('/');
-                  images.push('/images/upload/' + file[8]);
-                }
-                product.images = images;
-                product.save();
-                return res.redirect('/admin/product');
-                
-              } 
-            });
-      
+        } else {      
+          //UPLOAD
+          image.upload(req, product, function(err, product){
+            if(err){
+              console.log('ERROR IMAGE');
+              console.log(err);
+            }else{
+              return res.redirect('/admin/product'); 
+            }
+          });
         }
       });
       
@@ -109,10 +95,10 @@ var ProductController = {
         description: req.param('description'),
         slug: slugg(req.param('name')),
         category: req.param('category'),
-        stock: req.param('stock'),
+        stock: parseInt(req.param('stock')),
         status: req.param('status'),
-        price: req.param('price'),
-        shipping: req.param('shipping'),
+        price: parseFloat(req.param('price')),
+        shipping: parseFloat(req.param('shipping')),
         options: [],
         images: images
       }
@@ -128,26 +114,30 @@ var ProductController = {
           ProductController.edit(req, res);
         } else {
           
-          var rootPath = sails.config.appPath;
-          req.file('imagesUploader')
-            .upload({
-              dirname: rootPath + '/assets/images/upload'
-            },
-            function whenDone(err, uploadedFiles) {
-              if (err) {
-                return res.serverError(err);
-              }else{
-                for(var i in uploadedFiles){
-                  var file = uploadedFiles[i].fd.split('/');
-                  product[0].images.push('/images/upload/' + file[8]);
-                }
-                product[0].save();
-                return res.redirect('/admin/product');
-              } 
-            });
+          //UPLOAD
+          image.upload(req, product[0], function(err, product){
+            if(err){
+              console.log('ERROR IMAGE');
+              console.log(err);
+            }else{
+              return res.redirect('/admin/product'); 
+            }
+          });
+          
         }
       });
       
+    },
+  
+    destroy: function(req, res, next) {
+      Product.destroy(req.param('id'), function (err) {
+        if (err) {
+          sails.log.error("ProductController#destroy error");        
+          res.serverError();
+        } else {
+          res.redirect('/admin/product');
+        }
+      });
     },
 };
 
