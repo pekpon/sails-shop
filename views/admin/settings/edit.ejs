@@ -1,0 +1,36 @@
+<style>
+  .buttonsContainer{
+    background: #f0f0f0;
+    border-top: 2px solid #eee;
+    padding: 20px;
+	margin-bottom: 50px;
+  }
+</style>
+
+
+ <!-- HEADER -->
+  <div class="page-header">
+    <h1>Edit settings</h1>
+  </div>
+  
+  <% if( req.session.flash && req.session.flash.error ){ %>
+    <% var error = req.flash('error') %>
+    <div class="alert alert-danger" role="alert">
+    <b>Error</b>
+     <ul>
+      <% for(var i in error){  %>
+        <li><%= error[i] %></li>
+      <% } %>
+      </ul>
+    </div>
+  <% } %>
+  
+  <form role="form" action="/settings/<%=settings.id%>" method="put">
+
+  <%- partial('form.ejs', {settings:settings}) %>
+  
+  <div class="buttonsContainer">
+    <button type="submit" class="btn btn-primary">Update</button>
+  </div>
+</form>
+    

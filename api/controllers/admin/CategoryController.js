@@ -122,7 +122,7 @@ module.exports = {
 
     var paramObj = {
         name: req.param('name'),
-        slug: req.param('slug')
+        slug: slugg(req.param('name'))
     }
 
     Category.update(req.param('id'), paramObj, function (err,category) {
