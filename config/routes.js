@@ -12,9 +12,8 @@ module.exports.routes = {
   'GET /collections/:slug': {controller: 'ProductController', action: 'index'},
   'GET /product/:slug': {controller: 'ProductController', action: 'show'},
   
-  'POST /addtocart': { controller: 'CartController', action: 'add'},
-  'GET /cart': { controller: 'CartController', action: 'show'},
-  'GET /cart/checkout': { controller: 'CartController', action: 'checkout'},
+  'GET /cart/checkout': { controller: 'CartController', action: 'viewCheckOut'},
+  'GET /cart/show': { controller: 'CartController', action: 'viewCartDetails'},
   
   'GET /account': { controller: 'UserController', action: 'account'},
   'POST /account': { controller: 'UserController', action: 'update'},

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="sailsShop">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -22,7 +22,7 @@
     
   </head>
 
-  <body>
+  <body ng-controller="shopController" >
     <%- partial ('../partials/_header.ejs') %>
    
     <%- body %>
@@ -82,6 +82,7 @@
     <script src="/js/dependencies/sails.io.js"></script>
     <script src="/js/dependencies/jquery.min.js"></script>
     <script src="/js/dependencies/bootstrap.min.js"></script>
+    <script src="/js/dependencies/angular.js"></script>
     <script src="/js/functions.js"></script>
     <!--SCRIPTS END-->
   </body>
