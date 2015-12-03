@@ -1,30 +1,32 @@
 <div class="form-group">
   <label for="inputname">name</label>
-  <input type="text" name="name" class="form-control" id="" placeholder="Enter name" value="<%if(typeof product.name !== "undefined"){%><%=product.name%><%}%>" >
+  <input type="text" name="name" class="form-control" id="" placeholder="Enter name" value="<%if(typeof product.name !== "undefined"){%><%=product.name%><%}%>" required>
 </div>
 
 <div class="form-group">
   <label for="inputslug">description</label>
-  <textarea name="description" class="form-control" id="">
-    <%if(typeof product.description !== "undefined"){%><%=product.description%><%}%>
-  </textarea>
+  <textarea name="description" class="form-control" id="" required><%if(typeof product.description !== "undefined"){%><%=product.description%><%}%></textarea>
 </div>
 
 <hr>
 
 <div class="form-group">
-  <label for="inputslug">status</label>
+  <label for="inputslug">status</label><br>
   <input type="radio" name="status" value="active" checked> Active <br>
-  <input type="radio" name="status" value="sold_out" checked> Sold Out <br>
-  <input type="radio" name="status" value="disabled" checked> Disabled <br>
+  <input type="radio" name="status" value="sold_out"> Sold Out <br>
+  <input type="radio" name="status" value="disabled"> Disabled <br>
 </div>
  
 <div class="form-group">
   <label for="inputslug">options</label>
-  <p>Name: <input type="text" name="oname" class="" id="" placeholder="Option"> Stock: <input type="text" name="ostock" class="" id="" placeholder="Stock"></p>
-  <p>Name: <input type="text" name="oname" class="" id="" placeholder="Option"> Stock: <input type="text" name="ostock" class="" id="" placeholder="Stock"></p>
-  <p>Name: <input type="text" name="oname" class="" id="" placeholder="Option"> Stock: <input type="text" name="ostock" class="" id="" placeholder="Stock"></p>
-  <p>Name: <input type="text" name="oname" class="" id="" placeholder="Option"> Stock: <input type="text" name="ostock" class="" id="" placeholder="Stock"></p>
+  <div class="well">
+    <a href="javascriot:void(0)" onclick="addOption()">Add option</a>
+    <div class="options">
+      <%if(typeof product.options !== "undefined"){%>
+        <%- utils.getOptions(product.options) %>
+      <%}%>
+    </div>
+  </div>
 </div>
   
 
@@ -39,21 +41,41 @@
 
 <div class="form-group">
   <label for="inputname">stock</label>
-  <input type="int" name="stock" class="form-control" id="" placeholder="Enter stock" value="<%if(typeof product.stock !== "undefined"){%><%=product.stock%><%}%>" >
+  <input type="number" min=0 name="stock" class="form-control" id="" placeholder="Enter stock" value="<%if(typeof product.stock !== "undefined"){%><%=product.stock%><%}else{%>0<%}%>" required>
 </div>
 
 <div class="form-group">
   <label for="inputname">price</label>
-  <input type="text" name="price" class="form-control" id="" placeholder="Enter price" value="<%if(typeof product.price !== "undefined"){%><%=product.price%><%}%>" >
+  <input type="number" min=0 step="0.01" name="price" class="form-control" id="" placeholder="Enter price" value="<%if(typeof product.price !== "undefined"){%><%=product.price%><%}else{%>0<%}%>" required>
 </div>
 
 <div class="form-group">
   <label for="inputname">shipping</label>
-  <input type="text" name="shipping" class="form-control" id="" placeholder="Enter shipping" value="<%if(typeof product.shipping !== "undefined"){%><%=product.shipping%><%}%>" >
+  <input type="number" min=0 step="0.01" name="shipping" class="form-control" id="" placeholder="Enter shipping" value="<%if(typeof product.shipping !== "undefined"){%><%=product.shipping%><%}else{%>0<%}%>" required>
 </div>
 
+<%if(product.images && typeof product.images !== "undefined"){%>
+<h3>Images: <%= product.images.length %></h3>
+
+<% if(product.images.length){%>
+<div class="well">
+ <div class="row">
+  <% for(var i = 0; i < product.images.length; i++){ %>
+    <div id="img<%= i%>" class="col-sm-3">
+      <img src="<%= product.images[i] %>" class="img-thumbnail img-responsive">
+      <input type="hidden" name="images[]" value="<%= product.images[i] %>">
+      <br>
+      <a href="javascript:$('#img<%= i%>').remove()">Delete</a>
+    </div>
+  <% } %>
+  </div>
+</div>
+<% } %>
+<% } %>
+
 <div class="form-group">
-<input type="file" name="images" multiple>
+<label for="inputname">Add images</label>
+<input type="file" name="imagesUploader" multiple>
 </div>
 
 

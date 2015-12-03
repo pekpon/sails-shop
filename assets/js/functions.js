@@ -1,4 +1,13 @@
 /* JS FUNCTIONS */
+function addOption(){
+  $('.options').append('<p>Name: <input type="text" name="oname" class="" id="" placeholder="Option" required> Stock: <input type="number" name="ostock" class="" id="" placeholder="Stock" value="0" min="0" required> <a href="javascript:void(0)" onclick="removeOption(this)">Remove</a></p>');
+}
+
+function removeOption(e){
+  $(e).parent().remove();
+}
+
+
 AsyncForEach = function (array, fn, callback) {
     array = array.slice(0);
     var counter=-1;
@@ -19,8 +28,6 @@ AsyncForEach = function (array, fn, callback) {
         callback();
     }
 };
-
-
 
 
 var sailsShop = angular.module('sailsShop', []);

@@ -1,3 +1,4 @@
+
 <div class="container">
     <span class="loginBox pull-right">
 	    <% if(req.isAuthenticated()){ %>
@@ -33,13 +34,14 @@
 		</a>
 	</span>
 	<h1 class="text-center">Welcome to <a href="/">Sails-Shop</a></h1>
-	<p class="text-center">
+	 <p class="text-center">
 	    <% for(var i = 0; i < res.menu.length; i++){ %>
-	        <a href="/collections/<%= res.menu[i].slug %>">
-	            <%= res.menu[i].name %>
-	        </a>
-	        <% if(i < res.menu.length - 1) { %>|
-	            <% } %>
-                <% } %>
-	</p>
+	      <a href="/collections/<%= res.menu[i].slug %>"><%= res.menu[i].name %></a> <% if(i < res.menu.length - 1) { %>|<% } %>
+	    <% } %>
+	  </p>
+	  <p class="text-center">
+	    <% for(var i = 0; i < utils.getMenu.length; i++){ %>
+	      <a href="/collections/<%= res.menu[i].slug %>"><%= res.menu[i].name %></a> <% if(i < res.menu.length - 1) { %>|<% } %>
+	    <% } %>
+	  </p>
 </div>

@@ -10,6 +10,29 @@ module.exports = {
     }
     
     return image;
+  },
+  
+    
+  upload: function(req, product, callback){
+    var rootPath = sails.config.appPath;
+          
+      req.file('imagesUploader').upload({
+        dirname: rootPath + '/assets/images/upload'
+      },
+      function whenDone(err, uploadedFiles) {
+        if (err) {
+          sails.log.error(err);
+          callback(err, null);
+        }else{
+          for(var i in uploadedFiles){
+            var file = uploadedFiles[i].fd.split('/');
+            product.images.push('/images/upload/' + file[8]);
+          }
+          product.save();
+          
+          callback(null, product);
+        } 
+      });
   }
   
 }

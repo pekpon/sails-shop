@@ -34,4 +34,6 @@ module.exports.routes = {
   'GET /admin/product': {controller: 'admin/ProductController', action: 'index'},
   'GET /admin/product/add': {controller: 'admin/ProductController', action: 'add'},
   'POST /admin/product/create': {controller: 'admin/ProductController', action: 'create'},
+  'POST /admin/product/update/:id': {controller: 'admin/ProductController', action: 'update'},
+  
 };
