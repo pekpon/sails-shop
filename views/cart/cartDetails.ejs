@@ -3,8 +3,7 @@
 <h1>Cart view</h1>
     <div class="row">
         <div class="col-sm-12 col-md-10 col-md-offset-1">
-          <% if(typeof cart != "undefined" && cart.length > 0){ %>
-            <table class="table table-hover">
+            <table class="table table-hover" ng-show="cart.length > 0">
                 <thead>
                     <tr>
                         <th>Product</th>
@@ -15,40 +14,37 @@
                     </tr>
                 </thead>
                 <tbody>
-                <% var total = 0 %>
-                <% for(i = 0; i < cart.length; i++){ %>
-                    <tr>
+                    <tr ng-repeat="item in cart">
                         <td class="col-sm-8 col-md-6">
                         <div class="media">
                             <a class="thumbnail pull-left" href="#" style="margin-right:10px;"> 
-                              <img class="media-object" src="<%= image.getFirst(cart[i].product.images) %>" style="width: 72px;"> 
+                              <img class="media-object" src="{{item.product.images[0]}}" style="width: 72px;"> 
                             </a>
                             <div class="media-body">
-                                <h4 class="media-heading"><a href="#"><%= cart[i].product.name %></a></h4>
+                                <h4 class="media-heading"><a href="#">{{item.product.name}}</a></h4>
                                 <h5 class="media-heading"> <a href="#"></a></h5>
                                 <span>Status: </span><span class="text-success"><strong>In Stock</strong></span>
                                 <!-- <span>Status: </span><span class="text-warning"><strong>Leaves warehouse in 2 - 3 weeks</strong></span> -->
                             </div>
                         </div></td>
                         <td class="col-sm-1 col-md-1" style="text-align: center">
-                        <input type="number" class="form-control" value="<%= cart[i].qty %>">
+                        <input type="number" class="form-control" ng-model = "cart[$index].qty" ng-change="saveCartItem($index)" value="{{item.qty}}">
                         </td>
-                        <td class="col-sm-1 col-md-1 text-center"><strong><%= cart[i].product.price.toFixed(2) %> €</strong></td>
-                        <% var totalLine =  cart[i].product.price * cart[i].qty %>
-                        <td class="col-sm-1 col-md-1 text-center"><strong><%= totalLine.toFixed(2) %> €</strong></td>
+                        <td class="col-sm-1 col-md-1 text-center"><strong>{{(item.product.price | number:2) + "€"}}</strong></td>
+              
+                        <td class="col-sm-1 col-md-1 text-center"><strong>{{(item.product.price * item.qty | number:2) + "€"}}</strong></td>
                         <td class="col-sm-1 col-md-1">
-                        <button type="button" class="btn btn-danger">
+                        <button type="button" class="btn btn-danger" ng-click="removeCart($index)">
                             <span class="glyphicon glyphicon-trash"></span> Remove
                         </button></td>
                     </tr>
-                    <% total += totalLine %>
-                  <% } %>
+                    
                     <tr>
                         <td>   </td>
                         <td>   </td>
                         <td>   </td>
                         <td><h5>Subtotal</h5></td>
-                        <td class="text-right"><h5><strong><%= total.toFixed(2) %> €</strong></h5></td>
+                        <td class="text-right"><h5><strong>{{(totalOrder | number:2) + "€"}}</strong></h5></td>
                     </tr>
                     <tr>
                         <td>   </td>
@@ -62,7 +58,7 @@
                         <td>   </td>
                         <td>   </td>
                         <td><h3>Total</h3></td>
-                        <td class="text-right"><h3><strong><%= utils.getOrderTotal(cart).toFixed(2) %> €</strong></h3></td>
+                        <td class="text-right"><h3><strong>{{(totalOrder + <%= utils.getOrderTotal(cart).toFixed(2) %>| number:2) + "€"}}</strong></h3></td>
                     </tr>
                     <tr>
                         <td>   </td>
@@ -79,11 +75,10 @@
                     </tr>
                 </tbody>
             </table>
-            <% }else{ %>
-            <div class="well">
+            
+            <div class="well" ng-show="cart.length < 1">
               No products added to the shopping cart
             </div>
-          <% } %>
         </div>
     </div>
 </div>

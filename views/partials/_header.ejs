@@ -18,7 +18,7 @@
 							<img src="{{item.product.images[0]}}" alt="" width="50"/>
 							<span class="item-info">
 								<span>{{item.product.name}}</span>
-            					<span>{{item.qty}} x {{item.product.price}}</span>
+            					<span>{{item.qty}} x {{(item.product.price | number:2) + "€"}}</span>
             				</span>
             			</span>
             			<span class="item-right">
