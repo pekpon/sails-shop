@@ -10,29 +10,26 @@ module.exports = {
     return moment(date).format('DD/MM/YYYY');
   },
 
-  getShipping: function (products){
-    var shipping = 0;
-    
-    for(var i in products){
-      if(products[i].shipping > shipping) shipping = products[i].shipping;
-    }
-    
-    return shipping;
-  },
+  	getShipping: function (cart){
+	    var shipping = 0;
+	    for(var i in cart){
+	      	if(cart[i].product.shipping > shipping) shipping = cart[i].product.shipping;
+	    }
+	    return shipping;
+  	},
   
-  getProductsTotal: function (products){
-    var total = 0;
-    
-    for(var i in products)
-      total += products[i].price * products[i].qty;
-    
-    return total;
-  },
-  
-  getOrderTotal: function (products){
-    var total = this.getProductsTotal(products) + this.getShipping(products);
-    return Math.round(total * 100) / 100;
-  },
+	getProductsTotal: function (cart){
+		var total = 0;
+		for(var i in cart){
+			total += cart[i].product.price * cart[i].qty;
+		}
+		return total;
+	},
+
+	getOrderTotal: function (cart){
+		var total = this.getProductsTotal(cart) + this.getShipping(cart);
+		return Math.round(total * 100) / 100;
+	},
   
   getFeaturedColSize: function (featured){
     var size = "4";
