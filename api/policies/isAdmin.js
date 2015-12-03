@@ -1,3 +1,8 @@
 module.exports = function(req, res, next) {
-   return next();
+   if (req.user.is_admin) {
+        return next();
+    }
+    else{
+        return res.redirect('/');
+    }
 };

@@ -8,6 +8,9 @@
 var bcrypt = require('bcryptjs');
 
 module.exports = {
+  
+    tableName: 'users',
+  
     attributes: {
         email: {
             type: 'email',
@@ -28,6 +31,10 @@ module.exports = {
         province: { type: 'string'},
         phone: { type: 'string'},
         country: { type: 'string'},
+        is_admin : {
+            type : "boolean",
+            defaultsTo : false
+        },
       
         toJSON: function() {
             var obj = this.toObject();

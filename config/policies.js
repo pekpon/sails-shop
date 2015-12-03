@@ -23,15 +23,15 @@ module.exports.policies = {
   
   
   'admin/AdminController': {
-    '*': ['isAuthenticated']
+    '*': ['isAuthenticated', 'isAdmin']
   },
   
   'admin/ProductController': {
-    '*': ['isAuthenticated']
+    '*': ['isAuthenticated', 'isAdmin']
   },
   
   'admin/CategoryController': {
-    '*': ['isAuthenticated']
+    '*': ['isAuthenticated', 'isAdmin']
   },
 
 };
