@@ -40,9 +40,7 @@
                     </tr>
                     
                     <tr>
-                        <td>   </td>
-                        <td>   </td>
-                        <td>   </td>
+                        <td colspan=3>  </td>
                         <td><h5>Subtotal</h5></td>
                         <td class="text-right"><h5><strong>{{(totalOrder | number:2) + "€"}}</strong></h5></td>
                     </tr>
@@ -54,24 +52,20 @@
                         <td class="text-right"><h5><strong><%= utils.getShipping(cart).toFixed(2) %> €</strong></h5></td>
                     </tr>
                     <tr>
-                        <td>   </td>
-                        <td>   </td>
-                        <td>   </td>
+                        <td colspan=3>  </td>
                         <td><h3>Total</h3></td>
                         <td class="text-right"><h3><strong>{{(totalOrder + <%= utils.getOrderTotal(cart).toFixed(2) %>| number:2) + "€"}}</strong></h3></td>
                     </tr>
                     <tr>
-                        <td>   </td>
-                        <td>   </td>
-                        <td>   </td>
+                       <td colspan=3>  </td>
                         <td>
-                        <button type="button" class="btn btn-default">
+                        <a href="javascript:history.back()" type="button" class="btn btn-default">
                             <span class="glyphicon glyphicon-shopping-cart"></span> Continue Shopping
-                        </button></td>
+                        </a></td>
                         <td>
-                        <button type="button" class="btn btn-success">
+                        <a href="/cart/checkout" type="button" class="btn btn-success">
                             Checkout <span class="glyphicon glyphicon-play"></span>
-                        </button></td>
+                        </a></td>
                     </tr>
                 </tbody>
             </table>
