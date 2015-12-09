@@ -66,7 +66,7 @@ module.exports = {
 			if (err) {
 				return res.serverError(err);
             }else {
-            	return res.view('cart/checkout', {cart: model});
+            	return res.view('cart/checkOut', {cart: model});
             }
 		});
 	},
