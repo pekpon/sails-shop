@@ -8,8 +8,11 @@
 module.exports = {
   
   indexAdmin: function(req, res) {
-      return res.view('admin/settings/index',{
-        layout:'layouts/dashboardLayout'
+      Settings.find(function(err, settings){
+        return res.view('admin/settings/index',{
+          layout:'layouts/dashboardLayout',
+          settings: settings
+        });
       });
     },
   

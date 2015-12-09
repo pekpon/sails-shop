@@ -1,5 +1,35 @@
-<form role="form" action="/user" method="post">
-  <input type="text" name="email" placeholder="Email">
-  <input type="password" name="password" placeholder="Password">
-  <button type="submit">Sign up</button>
-</form>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4 col-sm-offset-4">
+	    	<%if (typeof message != "undefined") {%>
+		    	<div class="alert alert-danger" role="alert" id="success-alert">					
+					<%-message %>
+				</div>
+				<script type="text/javascript">
+					window.onload = function (){
+						$("#success-alert").fadeTo(2000, 500).slideUp(500, function(){
+	    					$("#success-alert").alert('close');
+						});
+					}
+				</script>
+			<% } %>   
+			<div class="panel panel-default">
+                <div class="panel-body">
+                    <h1>Sign Up</h1>
+                    <form role="form" action="/user" method="post">
+                        <p>
+                            <input type="email" class="form-control" name="email" placeholder="Email" required>
+                        </p>
+                        <p>
+                            <input type="password" class="form-control" name="password" placeholder="Password" required>
+                        </p>
+                        <p>
+                            <button type="submit" class="btn btn-primary">Sign up</button>
+                        </p>
+                    </form>
+                </div>
+            </div>
+            <p>Have an account? <a href="/login">Login</a></p>
+        </div>
+    </div>
+</div>

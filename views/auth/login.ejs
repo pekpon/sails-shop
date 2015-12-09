@@ -18,10 +18,10 @@
                     <h1>Login</h1>
                     <form role="form" action="/login" method="post">
                         <p>
-                            <input type="text" class="form-control" name="email" placeholder="Email">
+                            <input type="email" class="form-control" name="email" placeholder="Email" required>
                         </p>
                         <p>
-                            <input type="password" class="form-control" name="password" placeholder="Password">
+                            <input type="password" class="form-control" name="password" placeholder="Password" required>
                         </p>
                         <p>
                             <button type="submit" class="btn btn-primary">Sign in</button>
@@ -29,6 +29,7 @@
                     </form>
                 </div>
             </div>
+            <p>Haven't account? <a href="/signup">Register</a></p>
         </div>
     </div>
 </div>

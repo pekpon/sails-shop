@@ -4,3 +4,22 @@
 </div>
 
 <a href="settings/add">Add new</a>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Key</th>
+      <th>Value</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+<% for(var i = 0; i < settings.length; i++){ %>
+  <tr>
+    <td><%= settings[i].key %></td>
+    <td><%= settings[i].value %></td>
+    <td><a href="">Edit</a></td>
+  </tr>
+<% } %>
+  </tbody>
+</table>
