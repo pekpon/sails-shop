@@ -10,11 +10,13 @@ var slugg = require('slugg');
 module.exports = {
   
 	index: function(req, res, next) {
-       Category.find({ slug: req.param('slug') }).populate('products').exec(function(err, products) {
+       Category.find({ slug: req.param('slug') }).populate('products').exec(function(err, data) {
           if (err) {
               throw err;
           } else {
-              return res.view({ products: products[0].products });
+            if ( data.length >0 ){
+              return res.view({ products: data[0].toJSON().products });
+            }
           }
       });
     },
