@@ -24,7 +24,7 @@ module.exports = {
     status: {type: 'string'},
     images: { type: 'array'},
     category: {
-      model: 'category'
+      model: 'Category'
     },
     
     options: {

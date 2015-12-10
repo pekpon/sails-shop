@@ -10,19 +10,12 @@ var slugg = require('slugg');
 module.exports = {
   
 	index: function(req, res, next) {
-      Category.findOne({slug: req.param('slug')}, function(err, cat){
-        if(err){
-          throw err;
-        }else{
-          Product.find({category:cat.id},function(err2, products){
-            if(err2) {
-              throw err2;
-            }else{
-              return res.view({products: products}); 
-            }
-          });
-        }
-      
+      Category.findOne({slug: req.param('slug')}, function(err, category){
+        if(err) return err;
+      Product.find({category: category}, function(err, products){
+        if(err) return err;
+        return res.view({products: products});
+      });
       });
     },
   

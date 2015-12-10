@@ -20,7 +20,7 @@
 <div class="form-group">
   <label for="inputslug">options</label>
   <div class="well">
-    <a href="javascriot:void(0)" onclick="addOption()" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-plus"></i> Add option</a>
+    <button type="button" onclick="addOption()" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-plus"></i> Add option</button>
     <div class="options">
       <%if(typeof product.options !== "undefined"){%>
         <%- utils.getOptions(product.options) %>
