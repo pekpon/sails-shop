@@ -1,10 +1,58 @@
 /* JS FUNCTIONS */
+$(function(){
+  
+  //SETTINGS FORM AJAX
+  $("#addSettings").submit(function(event) {
+      event.preventDefault();
+      $.post('/settings', $('#addSettings').serialize(), function(data){
+        window.location.replace("/admin/settings");
+      });
+  });
+  $("#editSettings").submit(function(event) {
+      event.preventDefault();
+      $.ajax({
+        url: $('#editSettings').attr('action'),
+        type: 'PUT',
+        data: $('#editSettings').serialize(),
+        success: function(data) {
+          window.location.replace("/admin/settings");
+        }
+      });
+  })
+    $('.deleteSettings').click(function(){
+        var r = confirm("Are you sure?");
+        if(r){
+          $.ajax({
+            url: '/settings/'+$(this).attr('id'),
+            type: 'DELETE',
+            success: function(data) {
+              window.location.replace("/admin/settings");
+            }
+          });
+        }
+    });
+  
+});
+
+
 function addOption(){
-  $('.options').append('<p>Name: <input type="text" name="oname" class="" id="" placeholder="Option" required> Stock: <input type="number" name="ostock" class="" id="" placeholder="Stock" value="0" min="0" required> <a href="javascript:void(0)" onclick="removeOption(this)">Remove</a></p>');
+  $('.options').append('<div class="row op"><div class="col-sm-7"><input type="text" name="oname" class="form-control col-sm-3" placeholder="Option" required></div><div class="col-sm-3"><input type="number" name="ostock" class="form-control" placeholder="Stock" value="0" min="0" required></div><div class="col-sm-2"><a href="javascript:void(0)" onclick="removeOption(this)" class="btn btn-danger btn-block"><i class="glyphicon glyphicon-trash"></i></a></div></div>');
+  disableStock();
+}
+
+function disableStock(){
+  $('#stockProduct').val(0);
+  $('#stockProduct').prop('disabled', true);
+}
+function enableStock(){
+  if($('.op').length < 1)
+    $('#stockProduct').prop('disabled', false);
+    
 }
 
 function removeOption(e){
-  $(e).parent().remove();
+  $(e).parent().parent().remove();
+  enableStock();
 }
 
 

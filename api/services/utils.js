@@ -35,7 +35,7 @@ module.exports = {
     var html = "";
     
     for(var i in products){
-      html += '<p>Name: <input type="text" name="oname" placeholder="Option" value="'+products[i].name+'" required> Stock: <input type="number" name="ostock" class="" id="" placeholder="Stock" min="0" value="'+products[i].stock+'" required> <a href="javascript:void(0)" onclick="removeOption(this)">Remove</a></p>';
+      html += '<div class="row"><div class="col-sm-7"><input type="text" name="oname" class="form-control col-sm-3" placeholder="Option" value="'+products[i].name+'" required></div><div class="col-sm-3"><input type="number" name="ostock" class="form-control" placeholder="Stock" value="'+products[i].stock+'" min="0" required></div><div class="col-sm-2"><a href="javascript:void(0)" onclick="removeOption(this)" class="btn btn-danger btn-block"><i class="glyphicon glyphicon-trash"></i></a></div></div>';
     }
     
     return html;

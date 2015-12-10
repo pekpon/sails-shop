@@ -1,8 +1,8 @@
 <div class="form-group">
   <label for="">Key</label>
-  <input type="text" name="key" class="form-control" placeholder="Key">
+  <input type="text" name="key" class="form-control" placeholder="Key" value="<%if(typeof settings.key !== "undefined"){%><%=settings.key%><%}%>" required>
 </div>
 <div class="form-group">
   <label for="">Value</label>
-  <input type="text" name="value" class="form-control" placeholder="Value">
+  <input type="text" name="value" class="form-control" placeholder="Value" value="<%if(typeof settings.value !== "undefined"){%><%=settings.value%><%}%>" required>
 </div>

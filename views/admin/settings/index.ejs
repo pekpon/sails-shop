@@ -1,10 +1,7 @@
-<div class="jumbotron">
-  <h1>Settings</h1>
-  <p>Sails-shop settings</p>
-</div>
-
-<a href="settings/add">Add new</a>
-
+<div class="page-header">
+    <h1>Settings <a href="settings/add" class="btn btn-primary pull-right">Add settings</a></h1>
+  </div>
+  
 <table class="table table-striped">
   <thead>
     <tr>
@@ -18,7 +15,7 @@
   <tr>
     <td><%= settings[i].key %></td>
     <td><%= settings[i].value %></td>
-    <td><a href="">Edit</a></td>
+    <td><a href="/admin/settings/edit/<%= settings[i].id %>">Edit</a> - <a href="javascript:void(0)" class="deleteSettings" id="<%= settings[i].id %>">Delete</a></td>
   </tr>
 <% } %>
   </tbody>

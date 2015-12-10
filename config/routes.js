@@ -24,6 +24,7 @@ module.exports.routes = {
   'GET /admin': {controller: 'admin/AdminController', action: 'index'},
   'GET /admin/settings': {controller: 'SettingsController', action: 'indexAdmin'},
   'GET /admin/settings/add': {controller: 'SettingsController', action: 'addAdmin'},
+  'GET /admin/settings/edit/:id': {controller: 'SettingsController', action: 'editAdmin'},
   
   'GET /admin/category': {controller: 'admin/CategoryController', action: 'index'},
   'GET /admin/category/add': {controller: 'admin/CategoryController', action: 'add'},

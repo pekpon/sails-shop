@@ -21,7 +21,16 @@ module.exports = {
         layout:'layouts/dashboardLayout',
         settings: {}
       });
-    }
+    },
+  
+  editAdmin: function(req, res) {
+    Settings.findOne(req.param('id'), function(err, settings){
+      return res.view('admin/settings/edit',{
+        layout:'layouts/dashboardLayout',
+        settings: settings
+      });
+    });
+  },
 	
 };
 

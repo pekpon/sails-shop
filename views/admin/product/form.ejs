@@ -20,7 +20,7 @@
 <div class="form-group">
   <label for="inputslug">options</label>
   <div class="well">
-    <a href="javascriot:void(0)" onclick="addOption()">Add option</a>
+    <a href="javascriot:void(0)" onclick="addOption()" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-plus"></i> Add option</a>
     <div class="options">
       <%if(typeof product.options !== "undefined"){%>
         <%- utils.getOptions(product.options) %>
@@ -41,7 +41,7 @@
 
 <div class="form-group">
   <label for="inputname">stock</label>
-  <input type="number" min=0 name="stock" class="form-control" id="" placeholder="Enter stock" value="<%if(typeof product.stock !== "undefined"){%><%=product.stock%><%}else{%>0<%}%>" required>
+  <input id="stockProduct" type="number" min=0 name="stock" class="form-control" id="" placeholder="Enter stock" value="<%if(typeof product.stock !== "undefined"){%><%=product.stock%><%}else{%>0<%}%>" required>
 </div>
 
 <div class="form-group">
@@ -51,7 +51,7 @@
 
 <div class="form-group">
   <label for="inputname">shipping</label>
-  <input type="number" min=0 step="0.01" name="shipping" class="form-control" id="" placeholder="Enter shipping" value="<%if(typeof product.shipping !== "undefined"){%><%=product.shipping%><%}else{%>0<%}%>" required>
+  <input type="number" min=0 step="0.01" name="shipping" class="form-control" id="" placeholder="Enter shipping" value="<%if(typeof product.shipping !== "undefined"){%><%=product.shipping%><%}else{%><%= res.settings.shipping %><%}%>" required>
 </div>
 
 <%if(product.images && typeof product.images !== "undefined"){%>

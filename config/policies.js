@@ -27,7 +27,7 @@ module.exports.policies = {
   },
   
   'admin/ProductController': {
-    '*': ['isAuthenticated', 'isAdmin']
+    '*': ['isAuthenticated', 'isAdmin', 'settings']
   },
   
   'admin/CategoryController': {
