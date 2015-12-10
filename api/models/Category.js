@@ -12,8 +12,11 @@ module.exports = {
   attributes: {
   
     name : { type: 'string'},
-    slug : { type: 'string'}
-  
+    slug : { type: 'string'},
+  	products: {
+		collection: 'product',
+		via: 'category'
+	}
   }
   
 };
