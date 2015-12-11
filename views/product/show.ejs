@@ -12,11 +12,7 @@
      <h2><%= product.price %>€</h2>
       <%= product.description %>
       <br>
-<<<<<<< HEAD
       <% if(product.options && product.options.length > 0){ %>
-=======
-      <% if(product.options.length > 0){ %>
->>>>>>> fe6110f47ba098eced8b9b1d88f7815e9e8bc8c3
       <select name="" id="">
        <% for(var i = 0; i < product.options.length; i++){ %>
         <option value=""><%= product.options[i].name %></option>
@@ -26,19 +22,11 @@
     </div>
 
     <p>
-<<<<<<< HEAD
-      <a href="javascript:void(0)" ng-click="addToCart('<%= product.id %>', 1)" class="btn btn-success btn-block">Buy</a>
-    </p>
-    
-    <div class="alert alert-success" role="alert" style="display:none">
-      Product added correctly
-=======
-      <a href="javascript:void(0)" ng-click="cart.addItem('<%= product.id %>', 1)" class="btn btn-success btn-block">COMPRAR</a>
+      <a href="javascript:void(0)" ng-click="cart.addItem('<%= product.id %>', 1)" class="btn btn-success btn-block">BUY</a>
     </p>
     
     <div class="alert alert-warning" role="alert" ng-show="cart.inCart(<%= product.id %>).length>0">
       This item is in your cart. <a href="#" ng-click="cart.removeItem(cart.inCart(<%= product.id %>)[0])"> Remove </a>
->>>>>>> fe6110f47ba098eced8b9b1d88f7815e9e8bc8c3
     </div>
   </div>
 </div>
