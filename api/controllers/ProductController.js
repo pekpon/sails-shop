@@ -14,9 +14,9 @@ module.exports = {
           if (err) {
               throw err;
           } else {
-            if ( data.length >0 ){
-              return res.view({ products: data[0].toJSON().products });
-            }
+            var response = [];
+            if ( data.length >0 ){ response = data[0].toJSON().products; }
+            return res.view({ products: response });
           }
       });
     },

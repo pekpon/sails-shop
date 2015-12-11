@@ -12,118 +12,142 @@
       </form>
       
     </div>
-  --><hr size="30">
-    <% if(!req.user){ %>
-
-        <% } %>
-            <div class="row">
-              <div class="col-sm-8 ">
+  -->
+    <hr size="30">
+    <div class="row">
+        <div class="col-sm-8 ">
+            <% if( !req.isAuthenticated() ){ %>
                 <div class="row">
-                  <div class="col-sm-6 ">
-                    <%if (typeof message != "undefined") {%>
-                        <div class="alert alert-danger" role="alert" id="success-alert">
-                            <%-message %>
-                        </div>
-                        <script type="text/javascript">
-                        window.onload = function() {
-                            $("#success-alert").fadeTo(2000, 500).slideUp(500, function() {
-                                $("#success-alert").alert('close');
-                            });
-                        }
-                        </script>
-                    <% } %>
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <h1 style="margin-top:5px;">Login</h1>
-                            <form role="form" action="/login" method="post">
-                                <p>
-                                    <input type="text" class="form-control" name="email" placeholder="Email">
-                                </p>
-                                <p>
-                                    <input type="password" class="form-control" name="password" placeholder="Password">
-                                </p>
-                                <hr>
-                                <p>
-                                    <button type="submit" class="btn btn-primary  btn-block">Sign in</button>
-                                </p>
-                            </form>
-                        </div>
+                    <div class="col-sm-6 ">
+                        <%if (typeof message != "undefined") {%>
+                            <div class="alert alert-danger" role="alert" id="success-alert">
+                                <%-message %>
+                            </div>
+                            <script type="text/javascript">
+                            window.onload = function() {
+                                $("#success-alert").fadeTo(2000, 500).slideUp(500, function() {
+                                    $("#success-alert").alert('close');
+                                });
+                            }
+                            </script>
+                            <% } %>
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <h1 style="margin-top:5px;">Login</h1>
+                                        <form role="form" action="/login" method="post">
+                                            <p>
+                                                <input type="text" class="form-control" name="email" placeholder="Email">
+                                            </p>
+                                            <p>
+                                                <input type="password" class="form-control" name="password" placeholder="Password">
+                                            </p>
+                                            <hr>
+                                            <p>
+                                                <button type="submit" class="btn btn-primary  btn-block">Sign in</button>
+                                            </p>
+                                        </form>
+                                    </div>
+                                </div>
                     </div>
                 </div>
-                </div>
                 <hr style="margin-top:0px;">
-                <div class="row">
-
+                <% } %>
+                    <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="">Name</label>
-                                <input type="text" name="name" class="form-control" id="" placeholder="Name">
+                                <input type="text" name="name" class="form-control" ng-model="checkout.name" 
+                                <% if (req.isAuthenticated() && req.user.name) { %> 
+                                    ng-init="checkout.name = '<%=req.user.name %>'"
+                                <% }%>
+                                placeholder="Name">
                             </div>
                             <div class="form-group">
                                 <label for="">Email</label>
-                                <input type="email" name="email" class="form-control" id="" placeholder="Email">
+                                <input type="email" name="email" class="form-control" ng-model="checkout.email" 
+                                <% if (req.isAuthenticated() && req.user.email) { %> 
+                                    ng-init="checkout.email = '<%=req.user.email %>'"
+                                <% }%>
+                                placeholder="Email">
                             </div>
                             <div class="form-group">
                                 <label for="">Address</label>
-                                <input type="text" name="address" class="form-control" id="" placeholder="Address">
+                                <input type="text" name="address" class="form-control" ng-model="checkout.address" 
+                                <% if (req.isAuthenticated() && req.user.address) { %> 
+                                    ng-init="checkout.address = '<%=req.user.address %>'"
+                                <% }%>
+                                placeholder="Address">
                             </div>
                             <div class="form-group">
                                 <label for="">Postal Code</label>
-                                <input type="text" name="cp" class="form-control" id="" placeholder="Postal Code">
+                                <input type="text" name="cp" class="form-control" ng-model="checkout.cp" 
+                                <% if (req.isAuthenticated() && req.user.cp) { %> 
+                                    ng-init="checkout.cp = '<%=req.user.cp %>'"
+                                <% }%>
+                                placeholder="Postal Code">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="">Surname</label>
-                                <input type="text" name="surname" class="form-control" id="" placeholder="Surname">
+                                <input type="text" name="surname" class="form-control" ng-model="checkout.surname" 
+                                <% if (req.isAuthenticated() && req.user.surname) { %> 
+                                    ng-init="checkout.surname = '<%=req.user.surname %>'"
+                                <% }%>
+                                placeholder="Surname">
                             </div>
                             <div class="form-group">
                                 <label for="">Phone</label>
-                                <input type="text" name="phone" class="form-control" id="" placeholder="Phone">
+                                <input type="text" name="phone" class="form-control" ng-model="checkout.phone" 
+                                <% if (req.isAuthenticated() && req.user.phone) { %> 
+                                    ng-init="checkout.phone = '<%=req.user.phone %>'"
+                                <% }%>
+                                placeholder="Phone">
                             </div>
                             <div class="form-group">
                                 <label for="">City</label>
-                                <input type="text" class="form-control" name="city" id="" placeholder="City">
+                                <input type="text" class="form-control" name="city" ng-model="checkout.city" 
+                                <% if (req.isAuthenticated() && req.user.city) { %> 
+                                    ng-init="checkout.city = '<%=req.user.city %>'"
+                                <% }%>
+                                placeholder="City">
                             </div>
                             <div class="form-group">
                                 <label for="">Country</label>
-                                <input type="text" name="country" class="form-control" id="" placeholder="Country">
+                                <input type="text" name="country" class="form-control" ng-model="checkout.country" 
+                                <% if (req.isAuthenticated() && req.user.country) { %> 
+                                    ng-init="checkout.country = '<%=req.user.country %>'"
+                                <% }%>
+                                placeholder="Country">
                             </div>
                         </div>
-
-                </div>
-              </div>
-              <div class="col-sm-4 ">
-              <div class="col-sm-12">
+                    </div>
+        </div>
+        <div class="col-sm-4 ">
+            <div class="col-sm-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title">Your order</h3>
                     </div>
                     <div class="panel-body">
                         <div>Products: <span class="pull-right">{{(totalOrder | number:2) + "€"}}</span></div>
-                        <div style="margin-top:10px;">Shipping: 
-                      
-                        <span class="pull-right" > <input type="radio" checked> Normal shipping - <b><%= utils.getShipping(cart).toFixed(2) %> €</b></span>
+                        <div style="margin-top:10px;">Shipping:
+                            <span class="pull-right"> <input type="radio" checked> Normal shipping - <b><%= utils.getShipping(cart).toFixed(2) %> €</b></span>
                         </div>
                         <hr>
-                        <b>Total: <span class="pull-right">{{(totalOrder + <%= utils.getOrderTotal(cart).toFixed(2) %>| number:2) + "€"}}</span></b>
+                        <b>Total: <span class="pull-right">{{(totalOrder + <%= utils.getShipping(cart).toFixed(2) %>| number:2) + "€"}}</span></b>
                         <hr>
                         <div class="row">
-                           <div class="col-lg-6">
-                             <button class="btn btn-success btn-block" disabled="disabled">Credit card</button>
-                           </div>
-                           <div class="col-lg-6">
-                              <button class="btn btn-warning btn-block" disabled="disabled">PayPal</button>
-                           </div>
+                            <div class="col-lg-6">
+                                <button class="btn btn-success btn-block" ng-disabled="!checkout.email || !checkout.name || !checkout.surname || !checkout.address || !checkout.city || !checkout.cp || !checkout.country || !checkout.phone">Credit card</button>
+                            </div>
+                            <div class="col-lg-6">
+                                <button class="btn btn-warning btn-block" ng-disabled="!checkout.email || !checkout.name || !checkout.surname || !checkout.address || !checkout.city || !checkout.cp || !checkout.country || !checkout.phone">PayPal</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-              </div>
-
-                
-
-            
-            </div>
-            
+        </div>
+    </div>
 </div>
