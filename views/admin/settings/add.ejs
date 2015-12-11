@@ -23,7 +23,7 @@
     </div>
   <% } %>
   
-  <form role="form" id="addSettings" action="/settings" method="post">
+  <form role="form" class="ajaxForm" action="/settings" method="post" data-redirect="/admin/settings">
 
   <%- partial('form.ejs', {settings:settings}) %>
   

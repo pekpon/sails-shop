@@ -12,7 +12,7 @@
      <h2><%= product.price %>€</h2>
       <%= product.description %>
       <br>
-      <% if(product.options){ %>
+      <% if(product.options && product.options.length > 0){ %>
       <select name="" id="">
        <% for(var i = 0; i < product.options.length; i++){ %>
         <option value=""><%= product.options[i].name %></option>
@@ -22,11 +22,11 @@
     </div>
 
     <p>
-      <a href="javascript:void(0)" ng-click="addToCart('<%= product.id %>', 1)" class="btn btn-success btn-block">COMPRAR</a>
+      <a href="javascript:void(0)" ng-click="addToCart('<%= product.id %>', 1)" class="btn btn-success btn-block">Buy</a>
     </p>
     
     <div class="alert alert-success" role="alert" style="display:none">
-      Producto añadido correctamente
+      Product added correctly
     </div>
   </div>
 </div>

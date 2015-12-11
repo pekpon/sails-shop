@@ -2,6 +2,17 @@
     <h1>Settings <a href="settings/add" class="btn btn-primary pull-right">Add settings</a></h1>
   </div>
   
+<% if(defaultValues && defaultValues.length > 0){%>
+  <div class="alert alert-danger" role="alert">
+    <p><b>Ops!</b> There are missing settings:</p>
+    <ul>
+    <% for(var i = 0; i < defaultValues.length; i++){%>
+      <li>- <%= defaultValues[i] %> - <a href="/admin/settings/add?key=<%= defaultValues[i] %>">Add</a></li>
+    <% } %>
+    </ul>
+  </div>
+<%}%>
+  
 <table class="table table-striped">
   <thead>
     <tr>
@@ -15,7 +26,7 @@
   <tr>
     <td><%= settings[i].key %></td>
     <td><%= settings[i].value %></td>
-    <td><a href="/admin/settings/edit/<%= settings[i].id %>">Edit</a> - <a href="javascript:void(0)" class="deleteSettings" id="<%= settings[i].id %>">Delete</a></td>
+    <td><a href="/admin/settings/edit/<%= settings[i].id %>">Edit</a> - <button type="button" class="ajaxDelete btn btn-default btn-xs" id="<%= settings[i].id %>" data-model="settings">Delete</button></td>
   </tr>
 <% } %>
   </tbody>

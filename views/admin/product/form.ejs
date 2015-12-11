@@ -31,10 +31,10 @@
   
 
 <div class="form-group">
-  <label for="inputslug">category</label>
+  <label for="inputslug">category</label><br>
   <select name="category">
     <% for(var i = 0; i < categories.length; i++){ %>
-      <option value="<%= categories[i].id%>"><%= categories[i].name%></option>
+      <option value="<%= categories[i].id%>" <%if(product.category == categories[i].id){%>selected<%}%>><%= categories[i].name%></option>
     <% } %>
   </select>
 </div>

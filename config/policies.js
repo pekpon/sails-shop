@@ -33,5 +33,9 @@ module.exports.policies = {
   'admin/CategoryController': {
     '*': ['isAuthenticated', 'isAdmin']
   },
+  
+  'SettingsController': {
+    '*': ['isAuthenticated', 'isAdmin']
+  },
 
 };

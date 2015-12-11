@@ -2,36 +2,30 @@
 $(function(){
   
   //SETTINGS FORM AJAX
-  $("#addSettings").submit(function(event) {
-      event.preventDefault();
-      $.post('/settings', $('#addSettings').serialize(), function(data){
-        window.location.replace("/admin/settings");
-      });
-  });
-  $("#editSettings").submit(function(event) {
+  $(".ajaxForm").submit(function(event) {
       event.preventDefault();
       $.ajax({
-        url: $('#editSettings').attr('action'),
-        type: 'PUT',
-        data: $('#editSettings').serialize(),
-        success: function(data) {
-          window.location.replace("/admin/settings");
+        url: $(this).attr('action'),
+        type: $(this).attr('method'),
+        data: $(this).serialize(),
+        success: function(dat) {
+          window.location.replace($(".ajaxForm").data('redirect'));
         }
       });
-  })
-    $('.deleteSettings').click(function(){
+  });
+    $('.ajaxDelete').click(function(){
         var r = confirm("Are you sure?");
         if(r){
           $.ajax({
-            url: '/settings/'+$(this).attr('id'),
+            url: '/'+$(this).data('model')+'/'+$(this).attr('id'),
             type: 'DELETE',
             success: function(data) {
-              window.location.replace("/admin/settings");
+              window.location.replace("/admin/"+$('.ajaxDelete').data('model'));
             }
           });
         }
     });
-  
+
 });
 
 
