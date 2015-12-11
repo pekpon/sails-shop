@@ -54,7 +54,7 @@
                     <tr>
                         <td colspan=3>  </td>
                         <td><h3>Total</h3></td>
-                        <td class="text-right"><h3><strong>{{(totalOrder + <%= utils.getOrderTotal(cart).toFixed(2) %>| number:2) + "€"}}</strong></h3></td>
+                        <td class="text-right"><h3><strong>{{(totalOrder + <%= utils.getShipping(cart).toFixed(2) %> | number:2) + "€"}}</strong></h3></td>
                     </tr>
                     <tr>
                        <td colspan=3>  </td>
