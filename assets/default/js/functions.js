@@ -75,10 +75,10 @@ AsyncForEach = function (array, fn, callback) {
 
 var sailsShop = angular.module('sailsShop', []);
 
-sailsShop.run([ 'ngCart', function (ngCart) {
-    ngCart.init();
+sailsShop.run([ 'ngCart', function (ngCarto) {
+   // ngCarto.init();
 }]);
-sailsShop.service('ngCart', function($rootScope){
+sailsShop.service('ngCarto', function($rootScope){
     this.init = function(){
         this.$cart = {
             amount : 0,
@@ -134,6 +134,7 @@ sailsShop.service('ngCart', function($rootScope){
     }
 
     this.saveItem = function(index){
+        var _self = this;
         io.socket.put("/cart/" +  _self.$cart.items[index].id, {qty:  _self.$cart.items[index].qty}, function (data, jwres){
             
         })
@@ -160,10 +161,102 @@ sailsShop.service('ngCart', function($rootScope){
     }
    
 });
+sailsShop.service('ngCart', function($rootScope){
+
+
+    var cart = {
+        amount : 0,
+        count : 0,
+        items : [],
+
+        addItem: function(id, quantity){
+            var _self = this;
+            if (quantity == undefined) { quantity = 1; }
+            io.socket.post("/cart", {product: id, qty: quantity}, function (data, jwres){
+                var result = $.grep(_self.items, function(e){ return e.product.id == data.product.id; });
+                if (result.length > 0) {
+                    var index = _self.items.indexOf(result[0]);
+                    _self.items[index].qty = parseInt(_self.items[index].qty) + parseInt(quantity);
+                    $rootScope.$broadcast('ngCart:itemUpdated', _self.items[index]);
+                }else{
+                    _self.items.push(data);
+                    $rootScope.$broadcast('ngCart:itemAdded', data);
+                }
+                _self.recalculeItemsInCart();
+            });
+        },
+
+        removeItem: function (item) {
+            var _self = this;
+            var index = _self.items.indexOf(item);
+            io.socket.delete("/cart", {id: _self.items[index].id}, function (data, jwres){
+                if (index > -1) {
+                    _self.items.splice(index, 1);
+                    _self.recalculeItemsInCart();
+                }
+            });
+        },
+
+        removeItemByIndex: function (index) {
+            var _self = this;
+             _self.removeItem(_self.items[index]);
+        },
+
+        saveItem: function(index){
+            var _self = this;
+            io.socket.put("/cart/" +  _self.items[index].id, {qty:  parseInt(_self.items[index].qty)}, function (data, jwres){
+                _self.recalculeItemsInCart();
+            })
+        },
+
+        inCart: function (productID) {
+            var _self = this;
+            return $.grep(_self.items, function(e){ return e.product.id == productID; });
+        },
+
+        recalculeItemsInCart: function(){
+            var _self = this;
+            var total = 0;
+            var totalOrder = 0;
+            AsyncForEach(_self.items, 
+                function(item, index, next){
+                    total += parseInt(item.qty);
+                    totalOrder += parseInt(item.qty) * item.product.price;
+                    next()
+                }, 
+                function (){
+                    _self.count = total;
+                    _self.amount = totalOrder;
+                    $rootScope.$broadcast('ngCart:change', {});
+            });
+        }
+
+    };
+    
+
+    var reload = function (){
+        var _self = this;
+        io.socket.get("/cart", function (data, jwres){
+            AsyncForEach (data, function(item, index, next){
+                item.qty = parseInt(item.qty);
+                cart.items.push(item);
+                next();
+            }, function(){
+                cart.recalculeItemsInCart();
+            })
+        });
+    }
+
+    reload();
+
+    return cart;
+   
+});
 sailsShop.controller('shopController', function($scope, ngCart, $rootScope) {
     $scope.cart = ngCart;
 
     $rootScope.$on('ngCart:change', function(){
+        console.log('recalcule');
         $scope.$apply();
     });
 });
