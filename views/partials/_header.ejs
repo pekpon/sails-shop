@@ -31,6 +31,15 @@
 		        <li class="divider"></li>
 		        <li><a class="text-center" href="/cart/show">View Cart</a></li>
     		</ul>
+    		<ul ng-show="cart.getCart().items.length==0" class="dropdown-menu dropdown-cart" role="menu">
+        		<li>
+            		<span class="item">
+						<p class="text-center">Your cart is empty</p>
+            		</span>
+        		</li>
+		        <li class="divider" ng-hide="cart.getCart().items.length==0"></li>
+		        <li ng-hide="cart.getCart().items.length==0"><a class="text-center" href="/cart/show">View Cart</a></li>
+    		</ul>
 		</div>
 	</span>
 	<h1 class="text-center">Welcome to <a href="/">Sails-Shop</a></h1>
