@@ -89,7 +89,17 @@ module.exports.views = {
   *                                                                           *
   ****************************************************************************/
 
-  partials: false
+  partials: false,
+  
+  /****************************************************************************
+  *                                                                           *
+  * Themes are custom views and assets for your sails-shop. If you want to    *
+  * override the default views, create a custom folder into /views and        *
+  * /assets and modify it,                                                    *
+  *                                                                           *
+  ****************************************************************************/
+  
+  theme: 'default'
 
 
 };

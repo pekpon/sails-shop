@@ -29,3 +29,10 @@ node_modules
 
 .DS_Store
 assets/images/upload/*
+
+# Excude custom assets and views
+views/*
+!views/default
+
+assets/*
+!assets/default

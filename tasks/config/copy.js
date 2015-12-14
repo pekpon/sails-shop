@@ -14,12 +14,14 @@
  * 		https://github.com/gruntjs/grunt-contrib-copy
  */
 module.exports = function(grunt) {
+  
+    var sailsconfig = require("./../../config/views.js");
 
 	grunt.config.set('copy', {
 		dev: {
 			files: [{
 				expand: true,
-				cwd: './assets',
+				cwd: './assets/'+sailsconfig.views.theme+"/",
 				src: ['**/*.!(coffee|less)'],
 				dest: '.tmp/public'
 			}]
