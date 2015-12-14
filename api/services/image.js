@@ -26,7 +26,7 @@ module.exports = {
         }else{
           for(var i in uploadedFiles){
             var file = uploadedFiles[i].fd.split('/');
-            product.images.push('/images/upload/' + file[9]);
+            product.images.push('/images/upload/' + file[file.length-1]);
           }
           product.save();
           
