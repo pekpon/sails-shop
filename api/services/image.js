@@ -17,7 +17,7 @@ module.exports = {
     var rootPath = sails.config.appPath;
           
       req.file('imagesUploader').upload({
-        dirname: rootPath + '/assets/images/upload'
+        dirname: rootPath + '/assets/'+ sails.config.views.theme +'/images/upload'
       },
       function whenDone(err, uploadedFiles) {
         if (err) {
@@ -26,7 +26,7 @@ module.exports = {
         }else{
           for(var i in uploadedFiles){
             var file = uploadedFiles[i].fd.split('/');
-            product.images.push('/images/upload/' + file[8]);
+            product.images.push('/images/upload/' + file[9]);
           }
           product.save();
           
