@@ -12,11 +12,13 @@
  *
  */
 module.exports = function(grunt) {
+  
+    var sailsconfig = require("./../../config/views.js");
 
 	grunt.config.set('sync', {
 		dev: {
 			files: [{
-				cwd: './assets',
+				cwd: './assets/' + sailsconfig.views.theme,
 				src: ['**/*.!(coffee)'],
 				dest: '.tmp/public'
 			}]
