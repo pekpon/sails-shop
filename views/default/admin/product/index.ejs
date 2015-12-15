@@ -8,6 +8,7 @@
     <table class="table table-striped">
       <thead>
         <tr>
+             <th>img</th>
             <th>name</th>
             <th>stock</th>
           <th>createdAt</th>
@@ -18,6 +19,7 @@
       
       <% for(var i in products ){ %>
         <tr>
+            <td style="width:10%"><img src="<%= image.getSize(image.getFirst(products[i].images), 'crop-small') %>" class="img-responsive" alt=""></td>
 			<td><%= products[i].name%></td>
 			<td><%= products[i].stock%></td>
 		

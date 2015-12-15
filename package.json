@@ -36,7 +36,8 @@
     "sails-mongo": "0.11.4",
     "slugg":"latest",
     "async":"latest",
-    "lodash":"latest"
+    "lodash":"latest",
+    "jimp":"0.2.21"
   },
   "scripts": {
     "start": "node app.js",

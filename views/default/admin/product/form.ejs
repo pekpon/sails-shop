@@ -62,7 +62,7 @@
  <div class="row">
   <% for(var i = 0; i < product.images.length; i++){ %>
     <div id="img<%= i%>" class="col-sm-3">
-      <img src="<%= product.images[i] %>" class="img-thumbnail img-responsive">
+      <img src="<%= image.getSize(product.images[i], 'crop-small') %>" class="img-thumbnail img-responsive">
       <input type="hidden" name="images[]" value="<%= product.images[i] %>">
       <br>
       <a href="javascript:$('#img<%= i%>').remove()">Delete</a>
