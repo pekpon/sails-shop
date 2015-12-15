@@ -75,94 +75,30 @@ AsyncForEach = function (array, fn, callback) {
 
 var sailsShop = angular.module('sailsShop', []);
 
-sailsShop.run([ 'ngCart', function (ngCarto) {
-   // ngCarto.init();
-}]);
-sailsShop.service('ngCarto', function($rootScope){
-    this.init = function(){
-        this.$cart = {
-            amount : 0,
-            count : 0,
-            items : []
-        };
-        this.load();
-    }
-    
-    this.load = function (){
-        var _self = this;
-        io.socket.get("/cart", function (data, jwres){
-            _self.$cart.items = data;
-            _self.recalculeItemsInCart();
-        });
-    }
-
-    this.addItem = function(id, quantity){
-        var _self = this;
-        if (quantity == undefined) { quantity = 1; }
-        io.socket.post("/cart", {product: id, qty: quantity}, function (data, jwres){
-            var result = $.grep(_self.$cart.items, function(e){ return e.product.id == data.product.id; });
-            if (result.length > 0) {
-                var index = _self.$cart.items.indexOf(result[0]);
-                _self.$cart.items[index].qty = parseInt(_self.$cart.items[index].qty) + parseInt(quantity);
-                $rootScope.$broadcast('ngCart:itemUpdated', _self.$cart.items[index]);
-            }else{
-                _self.$cart.items.push(data);
-                $rootScope.$broadcast('ngCart:itemAdded', data);
-            }
-            _self.recalculeItemsInCart();
-        });
-    }
-
-    this.getCart = function(){
-        return this.$cart;
-    }
-
-    this.removeItem = function (item) {
-        var _self = this;
-        var index = _self.$cart.items.indexOf(item);
-        io.socket.delete("/cart", {id: _self.$cart.items[index].id}, function (data, jwres){
-            if (index > -1) {
-                _self.$cart.items.splice(index, 1);
-                _self.recalculeItemsInCart();
-            }
-        });
-    }
-
-    this.removeItemByIndex = function (index) {
-        var _self = this;
-         _self.removeItem(_self.$cart.items[index]);
-    }
-
-    this.saveItem = function(index){
-        var _self = this;
-        io.socket.put("/cart/" +  _self.$cart.items[index].id, {qty:  _self.$cart.items[index].qty}, function (data, jwres){
-            
-        })
-    }
-    this.inCart= function (productID) {
-        var _self = this;
-        return $.grep(_self.$cart.items, function(e){ return e.product.id == productID; });
-    }
-    this.recalculeItemsInCart = function(){
-        var _self = this;
-        var total = 0;
-        var totalOrder = 0;
-        AsyncForEach(_self.$cart.items, 
-            function(item, index, next){
-                total += parseInt(item.qty);
-                totalOrder += parseInt(item.qty) * item.product.price;
-                next()
-            }, 
-            function (){
-                _self.$cart.count = total;
-                _self.$cart.amount = totalOrder;
-                $rootScope.$broadcast('ngCart:change', {});
-        });
-    }
-   
-});
 sailsShop.service('ngCart', function($rootScope){
 
+    io.socket.on('addItem', function  (data) {
+        cart.items.push(data.item);
+        cart.recalculeItemsInCart();
+    });
+
+    io.socket.on('removeItem', function  (data) {
+        var result = $.grep(cart.items, function(e){ return e.id == data.id; });
+        if (result.length > 0) {
+            var index = cart.items.indexOf(result[0]);
+            cart.items.splice(index, 1);
+            cart.recalculeItemsInCart();
+        }
+    });
+
+    io.socket.on('saveItem', function  (data) {
+        var result = $.grep(cart.items, function(e){ return e.id == data.item.id; });
+        if (result.length > 0) {
+            var index = cart.items.indexOf(result[0]);
+            cart.items[index].qty = parseInt(data.item.qty);
+            cart.recalculeItemsInCart();
+        } 
+    });
 
     var cart = {
         amount : 0,
@@ -173,16 +109,7 @@ sailsShop.service('ngCart', function($rootScope){
             var _self = this;
             if (quantity == undefined) { quantity = 1; }
             io.socket.post("/cart", {product: id, qty: quantity}, function (data, jwres){
-                var result = $.grep(_self.items, function(e){ return e.product.id == data.product.id; });
-                if (result.length > 0) {
-                    var index = _self.items.indexOf(result[0]);
-                    _self.items[index].qty = parseInt(_self.items[index].qty) + parseInt(quantity);
-                    $rootScope.$broadcast('ngCart:itemUpdated', _self.items[index]);
-                }else{
-                    _self.items.push(data);
-                    $rootScope.$broadcast('ngCart:itemAdded', data);
-                }
-                _self.recalculeItemsInCart();
+                
             });
         },
 
@@ -190,10 +117,10 @@ sailsShop.service('ngCart', function($rootScope){
             var _self = this;
             var index = _self.items.indexOf(item);
             io.socket.delete("/cart", {id: _self.items[index].id}, function (data, jwres){
-                if (index > -1) {
-                    _self.items.splice(index, 1);
-                    _self.recalculeItemsInCart();
-                }
+                // if (index > -1) {
+                //     _self.items.splice(index, 1);
+                //     _self.recalculeItemsInCart();
+                // }
             });
         },
 
@@ -205,7 +132,7 @@ sailsShop.service('ngCart', function($rootScope){
         saveItem: function(index){
             var _self = this;
             io.socket.put("/cart/" +  _self.items[index].id, {qty:  parseInt(_self.items[index].qty)}, function (data, jwres){
-                _self.recalculeItemsInCart();
+               // _self.recalculeItemsInCart();
             })
         },
 
@@ -256,7 +183,6 @@ sailsShop.controller('shopController', function($scope, ngCart, $rootScope) {
     $scope.cart = ngCart;
 
     $rootScope.$on('ngCart:change', function(){
-        console.log('recalcule');
         $scope.$apply();
     });
 });

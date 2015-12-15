@@ -7,12 +7,33 @@ module.exports = {
 				sails.log.debug('Failed to get the list of products in the cart');
 				callback("Failed to get the list of products in the cart", null);
             }else {
+            	if (req.isSocket) {
+            		sails.sockets.join(req.socket, req.session.id);
+            		//, _.pluck(model, 'session')
+            		Cart.watch(req.socket);
+            	}
             	callback(null, model);
             }
 		});
 	},
-
+	Destroy: function(req, res) {
+		if (!req.isSocket || req.param("id")==null ) { res.json({code:404});return; }
+		Cart.destroy({id:req.param("id")}).exec(function deleteCB(err){
+		  	sails.sockets.broadcast(req.session.id, "removeItem", { id: req.param("id") });
+		});
+	},
+	Update: function (req, res) {
+		if (!req.isSocket || req.param("id")==null ) { res.json({code:404});return; }
+		Cart.update({id:req.param("id")},{qty:parseInt(req.param("qty"))}).exec(function afterwards(err, updated){
+			if (err) {
+				return res.serverError("Error update product of cart");
+			}else{
+				sails.sockets.broadcast(req.session.id, "saveItem", { item: updated[0] });
+			}
+		});
+	},
 	Create: function (req, res) {
+		if (!req.isSocket) { res.json({code:404});return; }
 		if(req.method=="POST" && req.param("product")!=null && req.param("qty")!=null ){
 
 			Cart.findOne({session: req.session.id, product: req.param("product")}).exec(function (err, model){
@@ -26,6 +47,7 @@ module.exports = {
                 			if (err) {
 								return res.serverError("Error adding product to cart");
 	                		}else {
+	                			sails.sockets.broadcast(req.session.id, "saveItem", { item: model });
 		                		return res.ok(model);
 		                	}
                 		});
@@ -38,6 +60,7 @@ module.exports = {
 			                		if (err) {
 										return res.serverError("Error adding product to cart");
 			                		}else {
+			                			sails.sockets.broadcast(req.session.id, "addItem", { item: model });
 				                		return res.ok(model);
 				                	}
 				                });
@@ -52,6 +75,7 @@ module.exports = {
 	},
 
 	Find: function (req, res) {
+		if (!req.isSocket) { res.json({code:404});return; }
 		sails.controllers.cart.cartContents(req, function(err, model){
 			if (err) {
 				return res.serverError(err);
