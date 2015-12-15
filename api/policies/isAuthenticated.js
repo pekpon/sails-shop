@@ -3,6 +3,7 @@ module.exports = function(req, res, next) {
         return next();
     }
     else{
+        req.session.backurl = req.originalUrl;
         return res.redirect('/login');
     }
 };

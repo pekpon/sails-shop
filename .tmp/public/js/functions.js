@@ -71,11 +71,9 @@ AsyncForEach = function (array, fn, callback) {
     }
 };
 
+var sailsShop = angular.module('sailsShop', ['ngMessages']);
 
-
-var sailsShop = angular.module('sailsShop', []);
-
-sailsShop.service('ngCart', function($rootScope){
+sailsShop.factory('ngCart', function($rootScope){
 
     io.socket.on('addItem', function  (data) {
         cart.items.push(data.item);
@@ -109,7 +107,6 @@ sailsShop.service('ngCart', function($rootScope){
             var _self = this;
             if (quantity == undefined) { quantity = 1; }
             io.socket.post("/cart", {product: id, qty: quantity}, function (data, jwres){
-                
             });
         },
 
@@ -117,10 +114,6 @@ sailsShop.service('ngCart', function($rootScope){
             var _self = this;
             var index = _self.items.indexOf(item);
             io.socket.delete("/cart", {id: _self.items[index].id}, function (data, jwres){
-                // if (index > -1) {
-                //     _self.items.splice(index, 1);
-                //     _self.recalculeItemsInCart();
-                // }
             });
         },
 
@@ -132,7 +125,6 @@ sailsShop.service('ngCart', function($rootScope){
         saveItem: function(index){
             var _self = this;
             io.socket.put("/cart/" +  _self.items[index].id, {qty:  parseInt(_self.items[index].qty)}, function (data, jwres){
-               // _self.recalculeItemsInCart();
             })
         },
 
@@ -157,7 +149,6 @@ sailsShop.service('ngCart', function($rootScope){
                     $rootScope.$broadcast('ngCart:change', {});
             });
         }
-
     };
     
 

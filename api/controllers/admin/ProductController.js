@@ -33,6 +33,8 @@ var ProductController = {
 
     create: function(req, res) {
       
+      var featured = req.param('featured') == "true" ? true : false; 
+      
       var paramObj = {
         name: req.param('name'),
         description: req.param('description'),
@@ -40,13 +42,13 @@ var ProductController = {
         category: req.param('category'),
         stock: parseInt(req.param('stock')),
         status: req.param('status'),
+        featured: featured,
         price: parseFloat(req.param('price')),
         shipping: parseFloat(req.param('shipping')),
         options: [],
         images: []
       }
-      
-      
+           
       if(req.param('oname')){
         if(typeof req.param('oname') == "object"){
           //Two or more options
@@ -57,10 +59,8 @@ var ProductController = {
           //One option
           paramObj.options.push({name: req.param('oname'), stock: req.param('ostock')});
         }
-      }
+      }  
       
-      
-
       Product.create(paramObj, function (err, product) {
         if (err) {
           sails.log.error(err);
@@ -97,6 +97,7 @@ var ProductController = {
     update: function(req, res) {
       
       var images = req.param('images[]') ? req.param('images[]') : [];
+      var featured = req.param('featured') == "true" ? true : false; 
       
       var paramObj = {
         name: req.param('name'),
@@ -104,6 +105,7 @@ var ProductController = {
         slug: slugg(req.param('name')),
         category: req.param('category'),
         stock: parseInt(req.param('stock')),
+        featured: featured,
         status: req.param('status'),
         price: parseFloat(req.param('price')),
         shipping: parseFloat(req.param('shipping')),

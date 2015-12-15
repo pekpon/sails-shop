@@ -16,6 +16,12 @@
   <input type="radio" name="status" value="sold_out"> Sold Out <br>
   <input type="radio" name="status" value="disabled"> Disabled <br>
 </div>
+
+<div class="form-group">
+  <label for="inputslug">Is featured</label><br>
+  <input type="radio" name="featured" value="true" <%if(product.featured){%>checked<%}%>> True <br>
+  <input type="radio" name="featured" value="false" <%if(!product.featured){%>checked<%}%>> False <br>
+</div>
  
 <div class="form-group">
   <label for="inputslug">options</label>

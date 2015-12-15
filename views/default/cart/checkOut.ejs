@@ -35,12 +35,9 @@
                                     <div class="panel-body">
                                         <h1 style="margin-top:5px;">Login</h1>
                                         <form role="form" action="/login" method="post">
-                                            <p>
-                                                <input type="text" class="form-control" name="email" placeholder="Email">
-                                            </p>
-                                            <p>
-                                                <input type="password" class="form-control" name="password" placeholder="Password">
-                                            </p>
+                                            <p><input type="text" class="form-control" name="email" placeholder="Email"></p>
+                                            <p><input type="password" class="form-control" name="password" placeholder="Password"></p>
+                                            <input type="hidden" name="url" value="/cart/checkout">
                                             <hr>
                                             <p>
                                                 <button type="submit" class="btn btn-primary  btn-block">Sign in</button>
