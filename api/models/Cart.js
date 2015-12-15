@@ -15,7 +15,7 @@ module.exports = {
         },
         option: {
             type: 'string'
-        }
+        },
         toJSON: function() {
             var obj = this.toObject();
             delete obj.session;

@@ -16,6 +16,7 @@ module.exports = {
           } else {
             var response = [];
             if ( data.length >0 ){ response = data[0].toJSON().products; }
+            console.log("-",data[0]);
             return res.view({ products: response });
           }
       });

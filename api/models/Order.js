@@ -21,7 +21,7 @@ module.exports = {
             via: 'order'
         },
         comments: {
-            type: 'string'
+            type: 'string',
             defaultsTo: ''
         },
         amount: {

@@ -20,7 +20,7 @@ module.exports = {
         },
         option: {
             'type': 'string'
-        }
+        },
         quantity: {
             type: 'int'
         },
@@ -29,6 +29,6 @@ module.exports = {
         },
         order: {
             model: 'Order'
-        },
+        }
     }
 };
