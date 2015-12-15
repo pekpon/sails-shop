@@ -35,6 +35,10 @@ module.exports = {
             type : "boolean",
             defaultsTo : false
         },
+        orders: {
+            collection: 'Order',
+            via: 'user'
+        },
       
         toJSON: function() {
             var obj = this.toObject();
