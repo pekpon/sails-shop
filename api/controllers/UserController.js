@@ -18,6 +18,10 @@ module.exports = {
     }
   },
   
+  success: function(req, res, next) {
+    return res.view();
+  },
+  
   update: function(req, res, next) {
     
     var paramObj = {

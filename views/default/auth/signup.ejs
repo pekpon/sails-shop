@@ -16,12 +16,15 @@
 			<div class="panel panel-default">
                 <div class="panel-body">
                     <h1>Sign Up</h1>
-                    <form role="form" action="/user" method="post">
+                    <form role="form" class="ajaxForm" action="/user" method="post" data-redirect="/user/success">
                         <p>
                             <input type="email" class="form-control" name="email" placeholder="Email" required>
                         </p>
                         <p>
-                            <input type="password" class="form-control" name="password" placeholder="Password" required>
+                            <input type="text" class="form-control" name="name" placeholder="Name" required>
+                        </p>
+                        <p>
+                            <input type="password" class="form-control" name="password" placeholder="Password" pattern=".{6,}" required title="6 characters minimum">
                         </p>
                         <p>
                             <button type="submit" class="btn btn-primary">Sign up</button>

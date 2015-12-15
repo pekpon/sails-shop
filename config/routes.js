@@ -17,6 +17,7 @@ module.exports.routes = {
   
   'GET /account': { controller: 'UserController', action: 'account'},
   'POST /account': { controller: 'UserController', action: 'update'},
+  'GET /user/success': {controller: 'UserController', action: 'success'},
   
   
   //ADMIN ROUTES
