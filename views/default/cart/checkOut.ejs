@@ -52,76 +52,117 @@
                 </div>
                 <hr style="margin-top:0px;">
                 <% } %>
+                <form name="userForm">
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="">Name</label>
+                            <div class="form-group" ng-class="{ 'has-error' : userForm.name.$invalid, 'has-success': !userForm.name.$invalid }">
+                                <label>Name</label>
                                 <input type="text" name="name" class="form-control" ng-model="checkout.name" 
                                 <% if (req.isAuthenticated() && req.user.name) { %> 
                                     ng-init="checkout.name = '<%=req.user.name %>'"
                                 <% }%>
-                                placeholder="Name">
+                                 ng-minlength="3" ng-maxlength="8" placeholder="Name" required>
+                                <small ng-show="userForm.name.$error.minlength" class="help-block">Name is too short.</small>
+                                <small ng-show="userForm.name.$error.maxlength" class="help-block">Name is too long.</small>
+                                <small ng-show="userForm.name.$error.required" class="help-block">Name is required.</small>
+                                <small ng-show="!userForm.name.$error.required && !userForm.name.$error.minlength && !userForm.name.$error.maxlength" class="help-block">&nbsp;</small>
                             </div>
-                            <div class="form-group">
-                                <label for="">Email</label>
+
+                            <div class="form-group" ng-class="{ 'has-error' : userForm.email.$invalid, 'has-success': !userForm.email.$invalid }">
+                                <label>Email</label>
                                 <input type="email" name="email" class="form-control" ng-model="checkout.email" 
                                 <% if (req.isAuthenticated() && req.user.email) { %> 
                                     ng-init="checkout.email = '<%=req.user.email %>'"
                                 <% }%>
-                                placeholder="Email">
+                                 ng-minlength="3" placeholder="Email" required>
+                                <small ng-show="userForm.email.$error.minlength" class="help-block">Email is too short.</small>
+                                <small ng-show="userForm.email.$error.required" class="help-block">Email is required.</small>
+                                <small ng-show="userForm.email.$error.email" class="help-block">Your email address is invalid.</small>
+                                <small ng-show="!userForm.email.$error.minlength && !userForm.email.$error.required && !userForm.email.$error.email" class="help-block">&nbsp;</small>
                             </div>
-                            <div class="form-group">
-                                <label for="">Address</label>
+
+                            <div class="form-group" ng-class="{ 'has-error' : userForm.address.$invalid, 'has-success': !userForm.address.$invalid }">
+                                <label>Address</label>
                                 <input type="text" name="address" class="form-control" ng-model="checkout.address" 
                                 <% if (req.isAuthenticated() && req.user.address) { %> 
                                     ng-init="checkout.address = '<%=req.user.address %>'"
                                 <% }%>
-                                placeholder="Address">
+                                 ng-minlength="3" ng-maxlength="8" placeholder="Address" required>
+                                <small ng-show="userForm.address.$error.minlength" class="help-block">Address is too short.</small>
+                                <small ng-show="userForm.address.$error.maxlength" class="help-block">Address is too long.</small>
+                                <small ng-show="userForm.address.$error.required" class="help-block">Address is required.</small>
+                                <small ng-show="!userForm.address.$error.required && !userForm.address.$error.minlength && !userForm.address.$error.maxlength" class="help-block">&nbsp;</small>
                             </div>
-                            <div class="form-group">
-                                <label for="">Postal Code</label>
+
+                             <div class="form-group" ng-class="{ 'has-error' : userForm.cp.$invalid, 'has-success': !userForm.cp.$invalid }">
+                                <label>Postal code</label>
                                 <input type="text" name="cp" class="form-control" ng-model="checkout.cp" 
                                 <% if (req.isAuthenticated() && req.user.cp) { %> 
                                     ng-init="checkout.cp = '<%=req.user.cp %>'"
                                 <% }%>
-                                placeholder="Postal Code">
+                                 ng-minlength="5" ng-maxlength="5" placeholder="Postal code" required>
+                                <small ng-show="userForm.cp.$error.minlength" class="help-block">Postal code is too short.</small>
+                                <small ng-show="userForm.cp.$error.maxlength" class="help-block">Postal code is too long.</small>
+                                <small ng-show="userForm.cp.$error.required" class="help-block">Postal code is required.</small>
+                                <small ng-show="!userForm.cp.$error.required && !userForm.cp.$error.minlength && !userForm.cp.$error.maxlength" class="help-block">&nbsp;</small>
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="">Surname</label>
+                            <div class="form-group" ng-class="{ 'has-error' : userForm.surname.$invalid, 'has-success': !userForm.surname.$invalid }">
+                                <label>Surname</label>
                                 <input type="text" name="surname" class="form-control" ng-model="checkout.surname" 
                                 <% if (req.isAuthenticated() && req.user.surname) { %> 
                                     ng-init="checkout.surname = '<%=req.user.surname %>'"
                                 <% }%>
-                                placeholder="Surname">
+                                 ng-minlength="3" ng-maxlength="8" placeholder="Surname" required>
+                                <small ng-show="userForm.surname.$error.minlength" class="help-block">Surname is too short.</small>
+                                <small ng-show="userForm.surname.$error.maxlength" class="help-block">Surname is too long.</small>
+                                <small ng-show="userForm.surname.$error.required" class="help-block">Surname is required.</small>
+                                <small ng-show="!userForm.surname.$error.required && !userForm.surname.$error.minlength && !userForm.surname.$error.maxlength" class="help-block">&nbsp;</small>
                             </div>
-                            <div class="form-group">
-                                <label for="">Phone</label>
+
+                            <div class="form-group" ng-class="{ 'has-error' : userForm.phone.$invalid, 'has-success': !userForm.phone.$invalid }">
+                                <label>Phone</label>
                                 <input type="text" name="phone" class="form-control" ng-model="checkout.phone" 
                                 <% if (req.isAuthenticated() && req.user.phone) { %> 
                                     ng-init="checkout.phone = '<%=req.user.phone %>'"
                                 <% }%>
-                                placeholder="Phone">
+                                 ng-minlength="5" ng-maxlength="8" placeholder="Phone" required>
+                                <small ng-show="userForm.phone.$error.minlength" class="help-block">Phone is too short.</small>
+                                <small ng-show="userForm.phone.$error.maxlength" class="help-block">Phone is too long.</small>
+                                <small ng-show="userForm.phone.$error.required" class="help-block">Phone is required.</small>
+                                <small ng-show="!userForm.phone.$error.required && !userForm.phone.$error.minlength && !userForm.phone.$error.maxlength" class="help-block">&nbsp;</small>
                             </div>
-                            <div class="form-group">
-                                <label for="">City</label>
-                                <input type="text" class="form-control" name="city" ng-model="checkout.city" 
+
+                            <div class="form-group" ng-class="{ 'has-error' : userForm.city.$invalid, 'has-success': !userForm.city.$invalid}">
+                                <label>City</label>
+                                <input type="text" name="city" class="form-control" ng-model="checkout.city" 
                                 <% if (req.isAuthenticated() && req.user.city) { %> 
                                     ng-init="checkout.city = '<%=req.user.city %>'"
                                 <% }%>
-                                placeholder="City">
+                                 ng-minlength="3" ng-maxlength="8" placeholder="City" required>
+                                <small ng-show="userForm.city.$error.minlength" class="help-block">City is too short.</small>
+                                <small ng-show="userForm.city.$error.maxlength" class="help-block">City is too long.</small>
+                                <small ng-show="userForm.city.$error.required" class="help-block">City is required.</small>
+                                <small ng-show="!userForm.city.$error.required && !userForm.city.$error.minlength && !userForm.city.$error.maxlength" class="help-block">&nbsp;</small>
                             </div>
-                            <div class="form-group">
-                                <label for="">Country</label>
+
+                            <div class="form-group" ng-class="{ 'has-error' : userForm.country.$invalid, 'has-success': !userForm.country.$invalid }">
+                                <label>Country</label>
                                 <input type="text" name="country" class="form-control" ng-model="checkout.country" 
                                 <% if (req.isAuthenticated() && req.user.country) { %> 
                                     ng-init="checkout.country = '<%=req.user.country %>'"
                                 <% }%>
-                                placeholder="Country">
+                                 ng-minlength="3" ng-maxlength="8" placeholder="Country" required>
+                                <small ng-show="userForm.country.$error.minlength" class="help-block">Country is too short.</small>
+                                <small ng-show="userForm.country.$error.maxlength" class="help-block">Country is too long.</small>
+                                <small ng-show="userForm.country.$error.required" class="help-block">Country is required.</small>
+                                <small ng-show="!userForm.country.$error.required && !userForm.country.$error.minlength && !userForm.country.$error.maxlength" class="help-block">&nbsp;</small>
                             </div>
+
                         </div>
                     </div>
+                </form>
         </div>
         <div class="col-sm-4 ">
             <div class="col-sm-12">
@@ -130,12 +171,12 @@
                         <h3 class="panel-title">Your order</h3>
                     </div>
                     <div class="panel-body">
-                        <div>Products: <span class="pull-right">{{(totalOrder | number:2) + "€"}}</span></div>
+                        <div>Products: <span class="pull-right">{{(cart.amount | number:2) + "€"}}</span></div>
                         <div style="margin-top:10px;">Shipping:
                             <span class="pull-right"> <input type="radio" checked> Normal shipping - <b><%= utils.getShipping(cart).toFixed(2) %> €</b></span>
                         </div>
                         <hr>
-                        <b>Total: <span class="pull-right">{{(totalOrder + <%= utils.getShipping(cart).toFixed(2) %>| number:2) + "€"}}</span></b>
+                        <b>Total: <span class="pull-right">{{(cart.amount + <%= utils.getShipping(cart).toFixed(2) %>| number:2) + "€"}}</span></b>
                         <hr>
                         <div class="row">
                             <div class="col-lg-6">
