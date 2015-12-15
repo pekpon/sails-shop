@@ -9,10 +9,10 @@
 
 		<div style="display:inline;" class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-				<span class="glyphicon glyphicon-shopping-cart"></span> My cart ({{cart.getCart().count}}) <span class="caret"></span>
+				<span class="glyphicon glyphicon-shopping-cart"></span> My cart ({{cart.count}}) <span class="caret"></span>
     		</a>
-    		<ul ng-show="cart.getCart().items.length>0" class="dropdown-menu dropdown-cart" role="menu">
-        		<li ng-repeat="item in cart.getCart().items|limitTo:4">
+    		<ul ng-show="cart.items.length>0" class="dropdown-menu dropdown-cart" role="menu">
+        		<li ng-repeat="item in cart.items|limitTo:4">
             		<span class="item">
 						<span class="item-left">
 							<img src="{{item.product.images[0]}}" alt="" width="50"/>
@@ -31,14 +31,14 @@
 		        <li class="divider"></li>
 		        <li><a class="text-center" href="/cart/show">View Cart</a></li>
     		</ul>
-    		<ul ng-show="cart.getCart().items.length==0" class="dropdown-menu dropdown-cart" role="menu">
+    		<ul ng-show="cart.count==0" class="dropdown-menu dropdown-cart" role="menu">
         		<li>
             		<span class="item">
 						<p class="text-center">Your cart is empty</p>
             		</span>
         		</li>
-		        <li class="divider" ng-hide="cart.getCart().items.length==0"></li>
-		        <li ng-hide="cart.getCart().items.length==0"><a class="text-center" href="/cart/show">View Cart</a></li>
+		        <li class="divider" ng-hide="cart.items.length==0"></li>
+		        <li ng-hide="cart.items.length==0"><a class="text-center" href="/cart/show">View Cart</a></li>
     		</ul>
 		</div>
 	</span>
