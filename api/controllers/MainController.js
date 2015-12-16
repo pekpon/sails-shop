@@ -11,7 +11,7 @@ module.exports = {
    * `MainController.index()`
    */
   index: function (req, res) { 
-    Product.find(function(err, products){
+    Product.find({status:"active", featured: true}, function(err, products){
       res.view('homepage', {
         products: products
       });
