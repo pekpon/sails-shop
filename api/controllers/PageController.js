@@ -8,7 +8,7 @@
 module.exports = {
 	
   show: function(req, res, next) {
-    return res.view(sails.config.views.theme + '/page/' + req.param('slug'));
+    return res.view('page/' + req.param('slug'));
   }
   
 };

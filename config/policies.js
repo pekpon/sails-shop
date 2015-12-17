@@ -20,6 +20,10 @@ module.exports.policies = {
     '*': ['category', 'cart']
   },
   
+  'PageController': {
+    '*': ['category', 'cart']
+  },
+  
   
   
   'admin/AdminController': {
