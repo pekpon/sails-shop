@@ -15,9 +15,10 @@ module.exports = {
               throw err;
           } else {
             var response = [];
-            if ( data.length >0 ){ response = data[0].toJSON().products; }
-            console.log("-",data[0]);
-            return res.view({ products: response });
+            if ( data.length >0 ){ 
+              response = {products: data[0].toJSON().products, category: data[0].name}; 
+            }
+            return res.view( response );
           }
       });
     },
