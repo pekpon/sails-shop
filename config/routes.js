@@ -19,7 +19,7 @@ module.exports.routes = {
   'POST /account': { controller: 'UserController', action: 'update'},
   'GET /user/success': {controller: 'UserController', action: 'success'},
   
-  'GET /pages/:slug': {controller: 'PagesController', action: 'show'},
+  'GET /pages/:slug': {controller: 'PageController', action: 'show'},
   
   
   
