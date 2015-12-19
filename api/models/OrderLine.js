@@ -24,6 +24,7 @@ module.exports = {
         quantity: {
             type: 'int'
         },
+        images: { type: 'array'},
         productId: {
             type: 'string'
         },

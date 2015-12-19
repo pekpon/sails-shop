@@ -25,8 +25,8 @@
       <a href="javascript:void(0)" ng-click="cart.addItem('<%= product.id %>', 1)" class="btn btn-success btn-block">BUY</a>
     </p>
     
-    <div class="alert alert-warning" role="alert" ng-show="cart.inCart(<%= product.id %>).length>0">
-      This item is in your cart. <a href="#" ng-click="cart.removeItem(cart.inCart(<%= product.id %>)[0])"> Remove </a>
+    <div class="alert alert-warning" role="alert" ng-show="cart.inCart('<%= product.id %>'').length>0">
+      This item is in your cart. <a href="#" ng-click="cart.removeItem(cart.inCart('<%= product.id %>'')[0])"> Remove </a>
     </div>
   </div>
 </div>
