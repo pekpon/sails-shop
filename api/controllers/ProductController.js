@@ -24,7 +24,7 @@ module.exports = {
     },
   
     show: function(req, res, next) {
-      Product.findOne({slug: req.param('slug')}, function(err, product){
+      Product.findOne({slug: req.param('slug'), status: "active"}, function(err, product){
         if(err) return res.serverError(err);
         if(product)
           return res.view({product: product});
