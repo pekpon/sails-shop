@@ -142,7 +142,7 @@ module.exports = {
 			                        callback("Error on insert order lines");
 			                    } else {
 			                    	//Restart stock pieces
-			                    	Product.update(cartline.product.id, {stock: cartline.product.stock - quantity.quantity}  function(err, product){
+			                    	Product.update(cartline.product.id, {stock: cartline.product.stock - quantity.quantity}, function(err, product){
 			                    		if (err) {
 			                        		sails.log.error("Error on change prodcut stock");
 			                        		callback("Error on change prodcut stock");
