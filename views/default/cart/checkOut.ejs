@@ -54,6 +54,9 @@
                         <div class="col-sm-6">
                             <div class="form-group" ng-class="{ 'has-error' : userForm.name.$invalid, 'has-success': !userForm.name.$invalid }">
                                 <label>Name</label>
+                                <% if (req.isAuthenticated() && req.user.id) { %>
+                                    <input type="hidden" name="id" ng-model="checkout.id" ng-init="checkout.id = '<%=req.user.id %>'">
+                                <% } %>
                                 <input type="text" name="name" class="form-control" ng-model="checkout.name" 
                                 <% if (req.isAuthenticated() && req.user.name) { %> 
                                     ng-init="checkout.name = '<%=req.user.name %>'"
@@ -137,7 +140,7 @@
                                 <% if (req.isAuthenticated() && req.user.city) { %> 
                                     ng-init="checkout.city = '<%=req.user.city %>'"
                                 <% }%>
-                                 ng-minlength="3" ng-maxlength="8" placeholder="City" required>
+                                 ng-minlength="3" ng-maxlength="9" placeholder="City" required>
                                 <small ng-show="userForm.city.$error.minlength" class="help-block">City is too short.</small>
                                 <small ng-show="userForm.city.$error.maxlength" class="help-block">City is too long.</small>
                                 <small ng-show="userForm.city.$error.required" class="help-block">City is required.</small>
@@ -180,7 +183,7 @@
                                 <button class="btn btn-success btn-block" ng-disabled="!checkout.email || !checkout.name || !checkout.surname || !checkout.address || !checkout.city || !checkout.cp || !checkout.country || !checkout.phone">Credit card</button>
                             </div>
                             <div class="col-lg-6">
-                                <button class="btn btn-warning btn-block" ng-disabled="!checkout.email || !checkout.name || !checkout.surname || !checkout.address || !checkout.city || !checkout.cp || !checkout.country || !checkout.phone">PayPal</button>
+                                <button class="btn btn-warning btn-block" ng-disabled="!checkout.email || !checkout.name || !checkout.surname || !checkout.address || !checkout.city || !checkout.cp || !checkout.country || !checkout.phone" ng-click="payPaypal()">PayPal</button>
                             </div>
                         </div>
                     </div>

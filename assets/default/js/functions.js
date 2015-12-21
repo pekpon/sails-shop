@@ -176,4 +176,13 @@ sailsShop.controller('shopController', function($scope, ngCart, $rootScope) {
     $rootScope.$on('ngCart:change', function(){
         $scope.$apply();
     });
+
+    $scope.payPaypal = function(){
+        io.socket.get("/paypal",{user: $scope.checkout}, function (data, jwres){
+
+        })
+    };
 });
+
+
+

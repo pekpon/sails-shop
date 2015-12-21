@@ -13,6 +13,12 @@ module.exports.routes = {
   'GET /product/:slug': {controller: 'ProductController', action: 'show'},
   
   'GET /cart/checkout': { controller: 'CartController', action: 'viewCheckOut'},
+  
+  'GET /paypal': { controller: 'PaymentController', action: 'paypal'},
+  'GET /payment/success': {view: 'payment/success'},
+  'GET /payment/execute': { controller: 'PaymentController', action: 'execute' },
+  'GET /payment/cancel': { view: 'payment/cancel' },
+
   'GET /cart/show': { controller: 'CartController', action: 'viewCartDetails'},
   
   'GET /account': { controller: 'UserController', action: 'account'},
