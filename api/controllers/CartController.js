@@ -33,6 +33,29 @@ module.exports = {
             });
         });
     },
+    amount: function (req, res, callback){
+    	Cart.find({
+            session: req.session.id
+        }).populate('product').exec(function(err, cart) {
+            if (err) {
+                sails.log.debug('Failed to get the list of products in the cart');
+                callback("Failed to get the list of products in the cart", null);
+            } else {
+            	var cartAmount = 0;
+                async.each(cart, function(cartline, callback) {
+		            var pline = parseInt(cartline.qty) * parseFloat(cartline.product.price);
+		            cartAmount = parseFloat(cartAmount) + parseFloat(pline);
+		        }, function(err) {
+		        	if (err) {
+                        sails.log.error("Error in calculating the amount of cart");
+                        callback("Error in calculating the amount of cart");
+                    } else {
+                    	callback(null, cartAmount);
+                    }
+		        });
+            }
+        });
+    },
     Update: function(req, res) {
         if (!req.isSocket || req.param("id") == null) {
             res.json({
@@ -56,9 +79,7 @@ module.exports = {
     },
     Create: function(req, res) {
         if (!req.isSocket) {
-            res.json({
-                code: 404
-            });
+            res.json({ code: 404 });
             return;
         }
         if (req.method == "POST" && req.param("product") != null && req.param("qty") != null) {
@@ -122,9 +143,10 @@ module.exports = {
                 callback ("Failed to get the list of products in the cart")
             } else {
             	var cartAmount = 0;
+
             	// Open a new order
                 Order.create({
-                    status: 2, shippingAddress: user.address, user: user.id,  comments: "", amount: cartAmount, tax: 21
+                    status: 2, shippingAddress: user, user: user.id,  comments: "", amount: cartAmount, tax: 21
                 }, function(err, order) {
                     if (err) {
                         sails.log.error("Error open new order");
@@ -142,7 +164,8 @@ module.exports = {
 			                        callback("Error on insert order lines");
 			                    } else {
 			                    	//Restart stock pieces
-			                    	Product.update(cartline.product.id, {stock: cartline.product.stock - quantity.quantity}  function(err, product){
+			                    	var newStock = parseInt(cartline.product.stock) - parseInt(quantity.quantity);
+			                    	Product.update(cartline.product.id, {stock: newStock},  function(err, product){
 			                    		if (err) {
 			                        		sails.log.error("Error on change prodcut stock");
 			                        		callback("Error on change prodcut stock");
@@ -157,7 +180,7 @@ module.exports = {
 		                    } else {
 		                    	order.amount = cartAmount;
 		                    	order.save();
-		                    	callback (null);
+		                    	callback (null, order);
 		                    }
 		                });
                     }
