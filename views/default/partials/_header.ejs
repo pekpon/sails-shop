@@ -15,7 +15,7 @@
         		<li ng-repeat="item in cart.items|limitTo:4">
             		<span class="item">
 						<span class="item-left">
-							<img src="{{item.product.images[0]}}" alt="" width="50"/>
+							<img ng-src="{{item.product.images[0].substring(0, item.product.images[0].lastIndexOf('.')) + '-crop-med' + item.product.images[0].substring(item.product.images[0].lastIndexOf('.'))}}" alt="" width="50"/>
 							<span class="item-info">
 								<span>{{item.product.name}}</span>
             					<span>{{item.qty}} x {{(item.product.price | number:2) + "€"}}</span>
