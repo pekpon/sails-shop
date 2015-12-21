@@ -44,6 +44,7 @@ var ProductController = {
         status: req.param('status'),
         featured: featured,
         price: parseFloat(req.param('price')),
+        ref: req.param('ref'),
         shipping: parseFloat(req.param('shipping')),
         options: [],
         images: []
@@ -107,6 +108,7 @@ var ProductController = {
         stock: parseInt(req.param('stock')),
         featured: featured,
         status: req.param('status'),
+        ref: req.param('ref'),
         price: parseFloat(req.param('price')),
         shipping: parseFloat(req.param('shipping')),
         options: [],
