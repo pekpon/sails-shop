@@ -42,9 +42,10 @@ module.exports = {
                 callback("Failed to get the list of products in the cart", null);
             } else {
             	var cartAmount = 0;
-                async.each(cart, function(cartline, callback) {
+                async.each(cart, function(cartline, next) {
 		            var pline = parseInt(cartline.qty) * parseFloat(cartline.product.price);
 		            cartAmount = parseFloat(cartAmount) + parseFloat(pline);
+		            next();
 		        }, function(err) {
 		        	if (err) {
                         sails.log.error("Error in calculating the amount of cart");
@@ -153,7 +154,7 @@ module.exports = {
                         callback ("Error open new order")
                     } else {
                     	var orderLines = [];
-		                async.each(cart, function(cartline, callback) {
+		                async.each(cart, function(cartline, next) {
 		                	var pline = parseInt(cartline.qty) * parseFloat(cartline.product.price);
 		                	cartAmount = parseFloat(cartAmount) + parseFloat(pline);
 		                	// Insert Cart line into OrderLines
@@ -169,6 +170,8 @@ module.exports = {
 			                    		if (err) {
 			                        		sails.log.error("Error on change prodcut stock");
 			                        		callback("Error on change prodcut stock");
+			                    		}else{
+			                    			next();
 			                    		}
 			                    	});
 			                    }
@@ -203,9 +206,8 @@ module.exports = {
             }
         });
     },
-
     viewCheckOut: function(req, res) {
-        sails.controllers.cart.cartContents(req, function(err, model) {
+    	sails.controllers.cart.cartContents(req, function(err, model) {
             if (err) {
                 return res.serverError(err);
             } else {

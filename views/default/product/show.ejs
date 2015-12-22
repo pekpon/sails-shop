@@ -1,35 +1,37 @@
 <div class="container">
-<h1><%= product.name %></h1>
-
-<div class="row">
-  <div class="col-sm-6">
-    <% for(var i = 0; i < product.images.length; i++){ %>
-      <img src="<%= product.images[i] %>" class="img-responsive" alt=""><br>
-    <% } %>
-  </div>
-  <div class="col-sm-6">
-    <div class="well">
-     <h2><%= product.price %>€</h2>
-      <%= product.description %>
-      <br>
-      <% if(product.options && product.options.length > 0){ %>
-      <select name="" id="">
-       <% for(var i = 0; i < product.options.length; i++){ %>
-        <option value=""><%= product.options[i].name %></option>
-        <% } %>
-      </select>
-      <% } %>
+    <h1><%= product.name %></h1>
+    <div class="row">
+        <div class="col-sm-6">
+            <% for(var i = 0; i < product.images.length; i++){ %>
+                <img ng-src="<%= product.images[i] %>" class="img-responsive" alt="">
+                <br>
+                <% } %>
+        </div>
+        <div class="col-sm-6">
+            <div class="well">
+                <h2><%= product.price %>€</h2>
+                <%= product.description %>
+                    <br>
+                    <% if(product.options && product.options.length > 0){ %>
+                        <select ng-model="product.option" name="" id="">
+                            <% for(var i = 0; i < product.options.length; i++) { %>
+                                <option value="">
+                                    <%= product.options[i].name %>
+                                </option>
+                            <% } %>
+                        </select>
+                    <% } %>
+            </div>
+            <p>
+                <a href="javascript:void(0)" ng-click="cart.addItem('<%= product.id %>', 1)" 
+                <% if(product.options && product.options.length > 0){ %>
+                	ng-disabled="!product.option" 
+                <% } %>
+                class="btn btn-success btn-block">BUY</a>
+            </p>
+            <div class="alert alert-warning" role="alert" ng-show="cart.inCart('<%= product.id %>').length>0">
+                This item is in your cart. <a href="#" ng-click="cart.removeItem(cart.inCart('<%= product.id %>')[0])"> Remove </a>
+            </div>
+        </div>
     </div>
-
-    <p>
-      <a href="javascript:void(0)" ng-click="cart.addItem('<%= product.id %>', 1)" class="btn btn-success btn-block">BUY</a>
-    </p>
-    
-    <div class="alert alert-warning" role="alert" ng-show="cart.inCart('<%= product.id %>').length>0">
-      This item is in your cart. <a href="#" ng-click="cart.removeItem(cart.inCart('<%= product.id %>')[0])"> Remove </a>
-    </div>
-  </div>
-</div>
-
-
 </div>

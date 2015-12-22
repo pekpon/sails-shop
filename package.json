@@ -38,6 +38,7 @@
     "redsys": "0.0.5",
     "sails": "~0.11.0",
     "sails-disk": "~0.10.0",
+    "sails-hook-autoreload": "^0.12.0",
     "sails-mongo": "0.11.4",
     "slugg": "latest",
     "validator": "latest"

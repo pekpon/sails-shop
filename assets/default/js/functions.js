@@ -101,9 +101,10 @@ sailsShop.factory('ngCart', function($rootScope){
     var cart = {
         amount : 0,
         count : 0,
+        shipping: 0,
         items : [],
 
-        addItem: function(id, quantity){
+        addItem: function (id, quantity){
             var _self = this;
             if (quantity == undefined) { quantity = 1; }
             io.socket.post("/cart", {product: id, qty: quantity}, function (data, jwres){
@@ -122,7 +123,7 @@ sailsShop.factory('ngCart', function($rootScope){
              _self.removeItem(_self.items[index]);
         },
 
-        saveItem: function(index){
+        saveItem: function (index){
             var _self = this;
             io.socket.put("/cart/" +  _self.items[index].id, {qty:  parseInt(_self.items[index].qty)}, function (data, jwres){
             })
@@ -133,15 +134,16 @@ sailsShop.factory('ngCart', function($rootScope){
             return $.grep(_self.items, function(e){ return e.product.id == productID; });
         },
 
-        recalculeItemsInCart: function(){
+        recalculeItemsInCart: function (){
             var _self = this;
             var total = 0;
             var totalOrder = 0;
             AsyncForEach(_self.items, 
                 function(item, index, next){
+                    if ( parseFloat(item.product.shipping) > parseFloat(_self.shipping) ) _self.shipping = parseFloat(item.product.shipping);
                     total += parseInt(item.qty);
                     totalOrder += parseInt(item.qty) * item.product.price;
-                    next()
+                    next();
                 }, 
                 function (){
                     _self.count = total;
@@ -170,16 +172,29 @@ sailsShop.factory('ngCart', function($rootScope){
     return cart;
    
 });
-sailsShop.controller('shopController', function($scope, ngCart, $rootScope) {
+
+sailsShop.controller('shopController', function ($scope, ngCart, $rootScope) {
     $scope.cart = ngCart;
 
-    $rootScope.$on('ngCart:change', function(){
+    $rootScope.$on('ngCart:change', function () {
         $scope.$apply();
     });
 
-    $scope.payPaypal = function(){
-        io.socket.get("/paypal",{user: $scope.checkout}, function (data, jwres){
-
+    $scope.payPaypal = function () {
+        $scope.message2 = "Payment in process, please wait..."
+        io.socket.get("/paypal", { user: $scope.checkout }, function (data, jwres){
+            $scope.message2 = undefined;
+            if (data.error) {
+                $scope.message = data.error.description;
+                $(".alert-danger").fadeTo(3000, 500).slideUp(500, function() {
+                    $(".alert-danger").alert('close');
+                });
+            }else{
+                if (data.redirect){
+                    window.location.href = data.redirect;
+                }
+            }
+            $scope.$apply();
         })
     };
 });

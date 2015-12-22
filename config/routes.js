@@ -17,7 +17,7 @@ module.exports.routes = {
   'GET /paypal': { controller: 'PaymentController', action: 'paypal'},
   'GET /payment/success': {view: 'payment/success'},
   'GET /payment/execute': { controller: 'PaymentController', action: 'execute' },
-  'GET /payment/cancel': { view: 'payment/cancel' },
+  'GET /payment/cancel': { controller: 'PaymentController', action: 'cancel' },
 
   'GET /cart/show': { controller: 'CartController', action: 'viewCartDetails'},
   

@@ -114,7 +114,7 @@
                                 <% if (req.isAuthenticated() && req.user.surname) { %> 
                                     ng-init="checkout.surname = '<%=req.user.surname %>'"
                                 <% }%>
-                                 ng-minlength="3" ng-maxlength="8" placeholder="Surname" required>
+                                 ng-minlength="3" ng-maxlength="50" placeholder="Surname" required>
                                 <small ng-show="userForm.surname.$error.minlength" class="help-block">Surname is too short.</small>
                                 <small ng-show="userForm.surname.$error.maxlength" class="help-block">Surname is too long.</small>
                                 <small ng-show="userForm.surname.$error.required" class="help-block">Surname is required.</small>
@@ -127,7 +127,7 @@
                                 <% if (req.isAuthenticated() && req.user.phone) { %> 
                                     ng-init="checkout.phone = '<%=req.user.phone %>'"
                                 <% }%>
-                                 ng-minlength="5" ng-maxlength="8" placeholder="Phone" required>
+                                 ng-minlength="5" ng-maxlength="20" placeholder="Phone" required>
                                 <small ng-show="userForm.phone.$error.minlength" class="help-block">Phone is too short.</small>
                                 <small ng-show="userForm.phone.$error.maxlength" class="help-block">Phone is too long.</small>
                                 <small ng-show="userForm.phone.$error.required" class="help-block">Phone is required.</small>
@@ -140,7 +140,7 @@
                                 <% if (req.isAuthenticated() && req.user.city) { %> 
                                     ng-init="checkout.city = '<%=req.user.city %>'"
                                 <% }%>
-                                 ng-minlength="3" ng-maxlength="9" placeholder="City" required>
+                                 ng-minlength="3" ng-maxlength="50" placeholder="City" required>
                                 <small ng-show="userForm.city.$error.minlength" class="help-block">City is too short.</small>
                                 <small ng-show="userForm.city.$error.maxlength" class="help-block">City is too long.</small>
                                 <small ng-show="userForm.city.$error.required" class="help-block">City is required.</small>
@@ -153,7 +153,7 @@
                                 <% if (req.isAuthenticated() && req.user.country) { %> 
                                     ng-init="checkout.country = '<%=req.user.country %>'"
                                 <% }%>
-                                 ng-minlength="3" ng-maxlength="8" placeholder="Country" required>
+                                 ng-minlength="3" ng-maxlength="50" placeholder="Country" required>
                                 <small ng-show="userForm.country.$error.minlength" class="help-block">Country is too short.</small>
                                 <small ng-show="userForm.country.$error.maxlength" class="help-block">Country is too long.</small>
                                 <small ng-show="userForm.country.$error.required" class="help-block">Country is required.</small>
@@ -171,13 +171,23 @@
                         <h3 class="panel-title">Your order</h3>
                     </div>
                     <div class="panel-body">
-                        <div>Products: <span class="pull-right">{{(cart.amount | number:2) + "€"}}</span></div>
+                        <div>Products: <span class="pull-right">{{(cart.amount | number:2) + " €"}}</span></div>
                         <div style="margin-top:10px;">Shipping:
-                            <span class="pull-right"> <input type="radio" checked> Normal shipping - <b><%= utils.getShipping(cart).toFixed(2) %> €</b></span>
+                            <span class="pull-right"> <input type="radio" checked> Normal shipping - <b>{{ (cart.shipping | number:2) + " €" }}</b></span>
                         </div>
                         <hr>
-                        <b>Total: <span class="pull-right">{{(cart.amount + <%= utils.getShipping(cart).toFixed(2) %>| number:2) + "€"}}</span></b>
+                        <b>Total: <span class="pull-right">{{(cart.amount + cart.shipping | number:2) + " €"}}</span></b>
                         <hr>
+                        <div class="alert alert-warning" role="alert" ng-show="message2 && message2!='' ">
+                            <span ng-bind="message2"></span>
+                        </div>
+                        <div class="alert alert-danger" role="alert" ng-show="message && message!=''"
+                        <% if (typeof messagePayment != "undefined"){ %>
+                            ng-init="message = '<%=messagePayment %>'"
+                        <% }%>
+                            >
+                            <span ng-bind="message"></span>
+                        </div>
                         <div class="row">
                             <div class="col-lg-6">
                                 <button class="btn btn-success btn-block" ng-disabled="!checkout.email || !checkout.name || !checkout.surname || !checkout.address || !checkout.city || !checkout.cp || !checkout.country || !checkout.phone">Credit card</button>

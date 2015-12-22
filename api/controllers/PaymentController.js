@@ -8,25 +8,43 @@ var paymentController = {
         var currency = "EUR";
         var user = req.param("user");
         if (user.id) {
-        	User.update({id: user.id, email: user.email }, user, function (err,user) {
+
+        	var dataUpdate = {
+		        name: user.name,
+		        surname: user.surname,
+		        phone: user.phone,
+		        city: user.city,
+		        address: user.address,
+		        cp: user.cp,
+		        country: user.country,
+		        province: user.province
+        	}
+
+        	User.update({id: user.id, email: user.email }, dataUpdate, function (err,user) {
 		    	if (err) {     
 		        	sails.log.error(err);
-		      	} else {
-		        
-		      	}
+		        	res.json({ 'error': error });
+		        	return;
+		      	} 
 		    });
         }
 
         sails.controllers.cart.amount(req, res, function(err, amount) {
-        	console.log("amount", amount);
-            var payment = {
+        	if ( amount == 0 ) { 
+        		var error = {description: "The total amount of the order is 0."};
+        		sails.log.error(error);
+	            res.json({ 'error': error });
+	            return;
+        	}
+        	
+        	var payment = {
                 "intent": "sale",
                 "payer": {
                     "payment_method": 'paypal'
                 },
                 "redirect_urls": {
-                    "return_url": "http://" + req.host + "/payment/execute",
-                    "cancel_url": "http://" + req.host + "/payment/cancel"
+                    "return_url": sails.getBaseurl() + "/payment/execute",
+                    "cancel_url": sails.getBaseurl() + "/payment/cancel"
                 },
                 "transactions": [{
                     "amount": {
@@ -36,26 +54,23 @@ var paymentController = {
                     "description": 'Order from Sails Shop ' + amount + " " + currency + "."
                 }]
             };
-
             paypal.configure(sails.config.general.paypal);
 
             paypal.payment.create(payment, function(error, payment) {
 	            if (error) {
-	                sails.log.error(error);
-	                res.view('payment/error', { 'error': error });
+	                sails.log.error (error);
+	                res.json ({ 'error': error });
 	            } else {
 	            	req.session.userDetails = user;
 	                req.session.paymentId = payment.id;
 	                var redirectUrl;
-	                console.log(req.session.userDetails);
-
 	                for (var i = 0; i < 3; i++) {
 	                    var link = payment.links[i];
 	                    if (link.method === 'REDIRECT') {
 	                        redirectUrl = link.href;
 	                    }
 	                }
-	                res.redirect(redirectUrl);
+	                res.json({redirect: redirectUrl});
 	            }
 	        });
         })
@@ -74,13 +89,12 @@ var paymentController = {
         var payment = paypal.payment.execute(paymentId, details, function(error, payment) {
             if (error) {
                 sails.log.error(error);
-                res.view('payment/error', { 'error': error });
+                res.json ({ 'error': error });
             } else {
-
             	sails.controllers.cart.finish(req.session.id, user, function(err, order){
             		if (err) {
-                            sails.log.error(err);
-                            res.serverError();
+                        sails.log.error(err);
+                        res.serverError();
                     } else {
                     	var html = receipt.html(order, req.getLocale());
                     	var subject = sails.config.general.shopName + " order confirmation nº " + order.id;
@@ -101,7 +115,9 @@ var paymentController = {
     },
 
     cancel: function(req, res) {
-        res.view('payment/cancel');
+        res.view('cart/checkOut', {
+            cart: {}, messagePayment:'Payment has been canceled.'
+        });
     }
 };
 
