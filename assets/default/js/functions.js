@@ -104,10 +104,11 @@ sailsShop.factory('ngCart', function($rootScope){
         shipping: 0,
         items : [],
 
-        addItem: function (id, quantity){
+        addItem: function (id, quantity, option){
             var _self = this;
             if (quantity == undefined) { quantity = 1; }
-            io.socket.post("/cart", {product: id, qty: quantity}, function (data, jwres){
+            console.log(option);
+            io.socket.post("/cart", {product: id, qty: quantity, option: option}, function (data, jwres){
             });
         },
 
@@ -181,9 +182,9 @@ sailsShop.controller('shopController', function ($scope, ngCart, $rootScope) {
     });
 
     $scope.payPaypal = function () {
-        $scope.message2 = "Payment in process, please wait..."
+        $scope.messageWarning = "Payment in process, please wait..."
         io.socket.get("/paypal", { user: $scope.checkout }, function (data, jwres){
-            $scope.message2 = undefined;
+            $scope.messageWarning = undefined;
             if (data.error) {
                 $scope.message = data.error.description;
                 $(".alert-danger").fadeTo(3000, 500).slideUp(500, function() {

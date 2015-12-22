@@ -87,7 +87,8 @@ module.exports = {
 
             Cart.findOne({
                 session: req.session.id,
-                product: req.param("product")
+                product: req.param("product"),
+                option: req.param("option")
             }).exec(function(err, model) {
                 if (err) {
                     return res.serverError("Error adding product to cart");
@@ -109,7 +110,8 @@ module.exports = {
                         Cart.create({
                             qty: req.param("qty"),
                             product: req.param("product"),
-                            session: req.session.id
+                            session: req.session.id,
+                            option: req.param("option")
                         }, function(err, model) {
                             if (err) {
                                 return res.serverError("Error adding product to cart");
@@ -211,9 +213,7 @@ module.exports = {
             if (err) {
                 return res.serverError(err);
             } else {
-                return res.view('cart/checkOut', {
-                    cart: model
-                });
+                return res.view('cart/checkOut');
             }
         });
     },

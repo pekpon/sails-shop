@@ -13,9 +13,9 @@
                 <%= product.description %>
                     <br>
                     <% if(product.options && product.options.length > 0){ %>
-                        <select ng-model="product.option" name="" id="">
+                        <select ng-model="selectedoption" name="itemmodel" >
                             <% for(var i = 0; i < product.options.length; i++) { %>
-                                <option value="">
+                                <option value="<%= product.options[i].name %>">
                                     <%= product.options[i].name %>
                                 </option>
                             <% } %>
@@ -23,9 +23,9 @@
                     <% } %>
             </div>
             <p>
-                <a href="javascript:void(0)" ng-click="cart.addItem('<%= product.id %>', 1)" 
+                <a href="javascript:void(0)" ng-click="cart.addItem('<%= product.id %>', 1, selectedoption)" 
                 <% if(product.options && product.options.length > 0){ %>
-                	ng-disabled="!product.option" 
+                	ng-disabled="!selectedoption" 
                 <% } %>
                 class="btn btn-success btn-block">BUY</a>
             </p>
