@@ -3,7 +3,81 @@ var Redsys = require('redsys');
 
 
 var paymentController = {
+	creditCard: function(req, res) {
+    
+		var user = req.param("user");
+        if (user.id) {
 
+        	var dataUpdate = {
+		        name: user.name,
+		        surname: user.surname,
+		        phone: user.phone,
+		        city: user.city,
+		        address: user.address,
+		        cp: user.cp,
+		        country: user.country,
+		        province: user.province
+        	}
+
+        	User.update({id: user.id, email: user.email }, dataUpdate, function (err,user) {
+		    	if (err) {     
+		        	sails.log.error(err);
+		        	res.json({ 'error': error });
+		        	return;
+		      	} 
+		    });
+        }
+
+        sails.controllers.cart.amount(req, res, function(err, amount) {
+        	if ( amount == 0 ) { 
+        		var error = {description: "The total amount of the order is 0."};
+        		sails.log.error(error);
+	            res.json({ 'error': error });
+	            return;
+        	}
+
+        	
+        });
+
+
+
+		Order.findOne(orderId).populate('user').populate('products').exec(function(err, order) {
+		    if (err) {
+		        sails.log.error(err);
+		        res.serverError();
+		    } else {
+		        if (req.user && order.user.username == req.user.username) {
+		            //send mail
+		            if (order) {
+		                order.taxes = Order.getTaxes(order);
+		                //get total to pay
+		                var totalToPay = (order.price - order.offer) + order.shipping.cost;
+		                if (order.coupon && order.coupon.discount > 0) {
+		                    totalToPay = totalToPay - order.coupon.discount;
+		                }
+		                //round to two decimals
+		                var finalPrice = totalToPay.toFixed(2);
+
+		                var html = receipt.html(order, req.getLocale());
+		                mail.send("<table width='100%' border='0' cellspacing='0' cellpadding='0'><tr><td style='text-align: center;'><a href='https://iberigourmet.com/en'><img src='http://i.imgur.com/qmTfByH.jpg'></a></td></tr></table><hr><br>" + req.__('mail.text.transfer', order.user.name + " " + order.user.surname, finalPrice, order.ref + 1000) + "<br>" + html,
+		                    req.__('mail.subject.neworder', order.ref + 1000),
+		                    order.user.mail,
+		                    order.user.username,
+		                    function(err, message) {
+		                        sails.log(err || message);
+		                    });
+
+		            }
+		            //send response
+		            res.view('payment/transferSuccess', {
+		                order: order
+		            });
+		        } else {
+		            res.notFound();
+		        }
+		    }
+		});
+	},
     paypal: function(req, res) {
         var currency = "EUR";
         var user = req.param("user");

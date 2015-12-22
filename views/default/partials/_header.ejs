@@ -43,6 +43,7 @@
 		</div>
 	</span>
 	<h1 class="text-center">Welcome to <a href="/">Sails-Shop</a></h1>
+	<% if (typeof res.menu != "undefined"){ %>
 	 <p class="text-center">
 	    <% for(var i = 0; i < res.menu.length; i++){ %>
 	      <a href="/collections/<%= res.menu[i].slug %>"><%= res.menu[i].name %></a> <% if(i < res.menu.length - 1) { %>|<% } %>
@@ -53,4 +54,5 @@
 	      <a href="/collections/<%= res.menu[i].slug %>"><%= res.menu[i].name %></a> <% if(i < res.menu.length - 1) { %>|<% } %>
 	    <% } %>
 	  </p>
+	  <% } %>
 </div>

@@ -178,8 +178,8 @@
                         <hr>
                         <b>Total: <span class="pull-right">{{(cart.amount + cart.shipping | number:2) + " €"}}</span></b>
                         <hr>
-                        <div class="alert alert-warning" role="alert" ng-show="message2 && message2!='' ">
-                            <span ng-bind="message2"></span>
+                        <div class="alert alert-warning" role="alert" ng-show="messageWarning && messageWarning!='' ">
+                            <span ng-bind="messageWarning"></span>
                         </div>
                         <div class="alert alert-danger" role="alert" ng-show="message && message!=''"
                         <% if (typeof messagePayment != "undefined"){ %>
