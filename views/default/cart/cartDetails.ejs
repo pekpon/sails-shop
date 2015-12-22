@@ -3,7 +3,7 @@
 <h1>Cart view</h1>
     <div class="row">
         <div class="col-sm-12 col-md-10 col-md-offset-1">
-            <table class="table table-hover" ng-show="cart.items.length > 0">
+            <table class="table table-hover" ng-show="cart.count > 0">
                 <thead>
                     <tr>
                         <th>Product</th>
@@ -18,21 +18,21 @@
                         <td class="col-sm-8 col-md-6">
                         <div class="media">
                             <a class="thumbnail pull-left" href="#" style="margin-right:10px;"> 
-                              <img class="media-object" src="{{item.product.images[0]}}" style="width: 72px;"> 
+                              <img class="media-object" ng-src="{{item.product.images[0].substring(0, item.product.images[0].lastIndexOf('.')) + '-crop-med' + item.product.images[0].substring(item.product.images[0].lastIndexOf('.'))}}" style="width: 72px;"> 
                             </a>
                             <div class="media-body">
-                                <h4 class="media-heading"><a href="#">{{item.product.name}}</a></h4>
+                                <h4 class="media-heading"><a href="#" ng-cloak>{{item.product.name}}</a></h4>
                                 <h5 class="media-heading"> <a href="#"></a></h5>
                                 <span>Status: </span><span class="text-success"><strong>In Stock</strong></span>
                                 <!-- <span>Status: </span><span class="text-warning"><strong>Leaves warehouse in 2 - 3 weeks</strong></span> -->
                             </div>
                         </div></td>
                         <td class="col-sm-1 col-md-1" style="text-align: center">
-                        <input type="number" class="form-control" string-to-number ng-model="cart.items[$index].qty" ng-change="cart.saveItem($index)" value="{{item.qty}}">
+                        <input type="number" class="form-control" string-to-number ng-model="cart.items[$index].qty" ng-change="cart.saveItem($index)" >
                         </td>
-                        <td class="col-sm-1 col-md-1 text-center"><strong>{{(item.product.price | number:2) + "€"}}</strong></td>
+                        <td class="col-sm-1 col-md-1 text-center"><strong ng-cloak>{{(item.product.price | number:2) + "€"}}</strong></td>
               
-                        <td class="col-sm-1 col-md-1 text-center"><strong>{{(item.product.price * item.qty | number:2) + "€"}}</strong></td>
+                        <td class="col-sm-1 col-md-1 text-center"><strong ng-cloak>{{(item.product.price * item.qty | number:2) + "€"}}</strong></td>
                         <td class="col-sm-1 col-md-1">
                         <button type="button" class="btn btn-danger" ng-click="cart.removeItemByIndex($index)">
                             <span class="glyphicon glyphicon-trash"></span> Remove
@@ -42,19 +42,19 @@
                     <tr>
                         <td colspan=3>  </td>
                         <td><h5>Subtotal</h5></td>
-                        <td class="text-right"><h5><strong>{{(cart.amount | number:2) + "€"}}</strong></h5></td>
+                        <td class="text-right"><h5><strong ng-cloak>{{(cart.amount | number:2) + "€"}}</strong></h5></td>
                     </tr>
                     <tr>
                         <td>   </td>
                         <td>   </td>
                         <td>   </td>
                         <td><h5>Estimated shipping</h5></td>
-                        <td class="text-right"><h5><strong><%= utils.getShipping(cart).toFixed(2) %> €</strong></h5></td>
+                        <td class="text-right"><h5><strong ng-cloak><%= utils.getShipping(cart).toFixed(2) %> €</strong></h5></td>
                     </tr>
                     <tr>
                         <td colspan=3>  </td>
                         <td><h3>Total</h3></td>
-                        <td class="text-right"><h3><strong>{{(cart.amount + <%= utils.getShipping(cart).toFixed(2) %> | number:2) + "€"}}</strong></h3></td>
+                        <td class="text-right"><h3><strong ng-cloak>{{(cart.amount + <%= utils.getShipping(cart).toFixed(2) %> | number:2) + "€"}}</strong></h3></td>
                     </tr>
                     <tr>
                        <td colspan=3>  </td>
@@ -70,7 +70,7 @@
                 </tbody>
             </table>
             
-            <div class="well" ng-show="cart.items.length < 1">
+            <div class="well" ng-show="cart.count < 1">
               No products added to the shopping cart
             </div>
         </div>
