@@ -19,7 +19,6 @@ module.exports = {
       unique: true
     },
     ref: {type: 'string'},
-    stock: {type: 'bool'},
     stock: {type: 'int'},
     price: {type: 'float'},
     shipping: {type: 'float'},
