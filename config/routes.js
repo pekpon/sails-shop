@@ -15,6 +15,7 @@ module.exports.routes = {
   // CART
   'GET /cart/checkout': { controller: 'CartController', action: 'viewCheckOut'},
   
+  'POST /payment' : {controller: 'PaymentController', action: 'payment'},
   'GET /paypal': { controller: 'PaymentController', action: 'paypal'},
   'GET /payment/execute': { controller: 'PaymentController', action: 'execute' },
   'GET /payment/cancel': { controller: 'PaymentController', action: 'cancel' },

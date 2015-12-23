@@ -3,7 +3,56 @@ var Redsys = require('redsys');
 
 
 var paymentController = {
-	creditCard: function(req, res) {
+    
+    payment: function (req, res) {
+        var dataUpdate = {
+            name: req.param("user"),
+            surname: req.param("user"),
+            phone: req.param("user"),
+            city: req.param("user"),
+            address: req.param("user"),
+            cp: req.param("user"),
+            country: req.param("user"),
+            province: req.param("user")
+        }
+
+        var user = dataUpdate;
+        user.id = req.param("id");
+        user.email = req.param("email");
+
+        req.session.userDetails = user;
+
+        if (user.id && user.id != undefined) {
+            User.update({id: user.id, email: user.email }, dataUpdate, function (err,user) {
+                if (err) {     
+                    sails.log.error(err);
+                    res.render('cart/checkOut', {
+                        cart: {}, messagePayment: err.description
+                    });
+                    return;
+                } 
+            });
+        }
+
+        var method = req.param("method");
+
+        switch (method) {
+            case "paypal":
+                this.paypal(req, res);
+                break;
+            case "redsys":
+                this.creditCard(req, res);
+                break;
+            default:
+                sails.log.error('Incorrect payment method.');
+                res.render('cart/checkOut', {
+                    cart: {}, messagePayment:'Incorrect payment method.'
+                });
+        }
+}
+
+    },
+    creditCard: function(req, res) {
     
 		var user = req.param("user");
         if (user.id) {
@@ -80,34 +129,12 @@ var paymentController = {
 	},
     paypal: function(req, res) {
         var currency = "EUR";
-        var user = req.param("user");
-        if (user.id) {
 
-        	var dataUpdate = {
-		        name: user.name,
-		        surname: user.surname,
-		        phone: user.phone,
-		        city: user.city,
-		        address: user.address,
-		        cp: user.cp,
-		        country: user.country,
-		        province: user.province
-        	}
-
-        	User.update({id: user.id, email: user.email }, dataUpdate, function (err,user) {
-		    	if (err) {     
-		        	sails.log.error(err);
-		        	res.json({ 'error': error });
-		        	return;
-		      	} 
-		    });
-        }
-
-        sails.controllers.cart.amount(req, res, function(err, amount) {
+        sails.controllers.cart.amount(req.session.id, function(err, amount) {
         	if ( amount == 0 ) { 
-        		var error = {description: "The total amount of the order is 0."};
+        		var error = "The total amount of the order is 0."
         		sails.log.error(error);
-	            res.json({ 'error': error });
+	            res.render('cart/checkOut', { cart: {}, messagePayment: error });
 	            return;
         	}
         	
@@ -133,9 +160,9 @@ var paymentController = {
             paypal.payment.create(payment, function(error, payment) {
 	            if (error) {
 	                sails.log.error (error);
-	                res.json ({ 'error': error });
+	                res.render('cart/checkOut', { cart: {}, messagePayment: error.description });
+                    return;
 	            } else {
-	            	req.session.userDetails = user;
 	                req.session.paymentId = payment.id;
 	                var redirectUrl;
 	                for (var i = 0; i < 3; i++) {
@@ -144,7 +171,7 @@ var paymentController = {
 	                        redirectUrl = link.href;
 	                    }
 	                }
-	                res.json({redirect: redirectUrl});
+                    res.redirect(redirectUrl);
 	            }
 	        });
         })
@@ -163,12 +190,14 @@ var paymentController = {
         var payment = paypal.payment.execute(paymentId, details, function(error, payment) {
             if (error) {
                 sails.log.error(error);
-                res.json ({ 'error': error });
+                res.render('cart/checkOut', { cart: {}, messagePayment: error.description });
+                return;
             } else {
             	sails.controllers.cart.finish(req.session.id, user, function(err, order){
             		if (err) {
                         sails.log.error(err);
-                        res.serverError();
+                        res.render('cart/checkOut', { cart: {}, messagePayment: err.description });
+                        return;
                     } else {
                     	var html = receipt.html(order, req.getLocale());
                     	var subject = sails.config.general.shopName + " order confirmation nº " + order.id;

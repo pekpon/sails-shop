@@ -33,9 +33,9 @@ module.exports = {
             });
         });
     },
-    amount: function (req, res, callback){
+    amount: function (sessionID, callback){
     	Cart.find({
-            session: req.session.id
+            session: sessionID,
         }).populate('product').exec(function(err, cart) {
             if (err) {
                 sails.log.debug('Failed to get the list of products in the cart');
