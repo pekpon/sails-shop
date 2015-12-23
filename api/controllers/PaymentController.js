@@ -1,5 +1,5 @@
 var paypal = require('paypal-rest-sdk');
-var Redsys = require('redsys');
+// var Redsys = require('redsys');
 
 
 var paymentController = {
@@ -49,7 +49,6 @@ var paymentController = {
                     cart: {}, messagePayment:'Incorrect payment method.'
                 });
         }
-}
 
     },
     creditCard: function(req, res) {

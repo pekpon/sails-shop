@@ -50,6 +50,22 @@ function removeOption(e){
 }
 
 
+//CREATE PASSWORD
+    $('#createPassword').click(function(){
+      if(!$(this).prop('checked')){
+        $('.createPasswordBox').hide();
+      }else{
+        $('.createPasswordBox').show();
+      }
+    });
+    
+    //SEND CHEKOUT FORM
+    $('.checkoutButton').click(function(){
+      var type = $(this).data('method');
+      $('#method').val(type);
+      $('.submit').click();
+    });
+
 AsyncForEach = function (array, fn, callback) {
     array = array.slice(0);
     var counter=-1;
