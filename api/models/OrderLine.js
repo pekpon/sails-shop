@@ -9,8 +9,7 @@ module.exports = {
             type: 'string'
         },
         slug: {
-            type: 'string',
-            unique: true
+            type: 'string'
         },
         price: {
             type: 'float'

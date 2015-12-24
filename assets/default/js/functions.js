@@ -49,23 +49,6 @@ function removeOption(e){
   enableStock();
 }
 
-
-//CREATE PASSWORD
-    $('#createPassword').click(function(){
-      if(!$(this).prop('checked')){
-        $('.createPasswordBox').hide();
-      }else{
-        $('.createPasswordBox').show();
-      }
-    });
-    
-    //SEND CHEKOUT FORM
-    $('.checkoutButton').click(function(){
-      var type = $(this).data('method');
-      $('#method').val(type);
-      $('.submit').click();
-    });
-
 AsyncForEach = function (array, fn, callback) {
     array = array.slice(0);
     var counter=-1;
@@ -123,7 +106,6 @@ sailsShop.factory('ngCart', function($rootScope){
         addItem: function (id, quantity, option){
             var _self = this;
             if (quantity == undefined) { quantity = 1; }
-            console.log(option);
             io.socket.post("/cart", {product: id, qty: quantity, option: option}, function (data, jwres){
             });
         },
@@ -197,22 +179,33 @@ sailsShop.controller('shopController', function ($scope, ngCart, $rootScope) {
         $scope.$apply();
     });
 
-    $scope.payPaypal = function () {
-        $scope.messageWarning = "Payment in process, please wait..."
-        io.socket.get("/paypal", { user: $scope.checkout }, function (data, jwres){
-            $scope.messageWarning = undefined;
-            if (data.error) {
-                $scope.message = data.error.description;
-                $(".alert-danger").fadeTo(3000, 500).slideUp(500, function() {
-                    $(".alert-danger").alert('close');
-                });
-            }else{
-                if (data.redirect){
-                    window.location.href = data.redirect;
+    $scope.payment = function (method) {
+        if (!$scope.checkout) $scope.checkout = {};
+        if  (!$scope.checkout.submited) {
+            $scope.checkout.submited = true;
+        }
+        if ( !$scope.userForm.name.$invalid && !$scope.userForm.email.$invalid && !$scope.userForm.address.$invalid && !$scope.userForm.cp.$invalid && !$scope.userForm.surname.$invalid && !$scope.userForm.phone.$invalid && !$scope.userForm.city.$invalid && !$scope.userForm.country.$invalid) {
+            $scope.checkout.submited = false;
+            $scope.checkout.method = method;
+            $scope.messageInfo = "Payment in process, please wait...";
+            io.socket.post("/payment", { data: $scope.checkout }, function (data, jwres){
+                $scope.messageInfo = undefined;
+                if (data.error) {
+                    $scope.message = data.error;
+                    $(".alert-danger").fadeTo(3000, 500).slideUp(500, function() {
+                        $(".alert-danger").alert('close');
+                        $scope.checkout.method = undefined;
+                        $scope.$apply();
+                    });
+                }else{
+                    if (data.redirect){
+                        window.location.href = data.redirect;
+                    }
                 }
-            }
-            $scope.$apply();
-        })
+                $scope.$apply();
+            });
+        }
+
     };
 });
 

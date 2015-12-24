@@ -1,0 +1,175 @@
+<html>
+  <head>
+  <link rel="stylesheet" type="text/css" href="http://getbootstrap.com/dist/css/bootstrap.min.css">
+  <style>
+    body {
+      padding: 1cm;
+    }
+    .jumbotron {
+      background: #F0F0F0!important;
+    }
+    .btn {
+      background: rgb(66,133,243)!important;
+    }
+  </style>
+  <body>
+    <div class="container">
+      <!-- LOGO -->
+      <%if(!isMail){%>
+      <div class="text-center">
+        <img src="http://i.imgur.com/cgiRXSf.jpg" alt="">
+      </div>
+      <br>
+      <%}else{%>
+      <br><br><br>
+      <%}%>
+      <table width="100%">
+        <col width="60%">
+        <col width="25%">
+        <col width="15%">
+        <tr>
+          <td>
+            <!-- CLIENT INFO -->
+            <address>
+              <strong><%= order.shippingAddress.name%> <%= order.shippingAddress.surname%></strong><br>
+              <%= order.shippingAddress.address%><br>
+              <%= order.shippingAddress.city%>, <%= order.shippingAddress.cp%>, <%= order.shippingAddress.province%><br>
+              <%= order.shippingAddress.country%>
+            </address>
+          </td>
+          <td>
+            <p><%= sails.__({phrase:'userorders.ref', locale: locale})%>:</p>
+            <p><%= sails.__({phrase:'userorders.date', locale: locale})%>:</p>
+            <%if(!isMail){%>
+            <p><%= sails.__({phrase:'bill.number', locale: locale})%>:</p>
+            <%}%>
+          </td>
+          <td class="text-right">
+            <p><%= order.ref + 1000 %></p>
+            <p><%= utils.onlyDate(order.createdAt) %></p>
+            <%if(!isMail){%>
+            <p><%= order.ref + 500 %></p>
+            <%}%>
+          </td>
+        </tr>
+      </table>
+      
+      <br>
+      
+          <table width="100%" style="border-collapse: collapse;">
+           <col width="10%">
+           <col width="45%">
+           <col width="15%">
+           <col width="15%">
+           <col width="15%">
+            <thead>
+              <tr style="border-bottom:1pt solid black;">
+                 <th>Ref</th>
+                  <th><%= sails.__({phrase:'checkout.article', locale: locale})%></th>
+                  <th><%= sails.__({phrase:'checkout.qty', locale: locale})%></th>
+                  <th><%= sails.__({phrase:'checkout.price', locale: locale})%></th>
+                  <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+
+            <% for(var i = 0; i < order.products.length; i++ ){ %>
+              <tr>
+                 <td><%= order.products[i].ref %></td>
+                  <td><%= order.products[i].name %></td>
+                  <td class="text-center"><%= order.products[i].quantity %></td>
+                  <td class="text-right"><%= text.priceNoSym(productH.finalPrice(order.products[i]), order.currency) %>    </td>
+                  <td class="text-right"><%= text.priceNoSym(ordersH.getTotalPrice(order.products[i].quantity, productH.finalPrice(order.products[i])), order.currency) %></td>
+              </tr>
+            <% } %>
+
+           <br><br>
+           
+        <tr>
+              <td colspan="3"></td>
+              <td class="text-right"><%= sails.__({phrase:'cart.subtotal', locale: locale})%>:</td>
+              <td class="text-right"><%= text.priceNoSym(order.price-order.offer, order.currency) %></td>
+            </tr>
+        <br>
+            <tr>
+              <td colspan="3"></td>
+              <td class="text-right"><%= sails.__({phrase:'order.shippment', locale: locale})%>:</td>
+              <td class="text-right"><%= text.priceNoSym(order.shipping.cost, order.currency) %></td>
+            </tr>
+            
+            </tbody>
+          </table>
+        
+        <br>
+        
+        <%if(!isMail){%>
+        <% for(var i in order.taxes){ %>
+        <table width="100%">
+        <col width="40%">
+        <col width="20%">
+        <col width="20%">
+        <col width="20%">
+        <tr>
+          <td></td>
+          <td class="text-left">
+            <p><b>B. Imponible</b></p>
+          </td>
+          <td class="text-center">
+            <p><% var t = 0; for(var j = 0; j < order.taxes[i].length; j++){ t += productH.finalPrice(order.taxes[i][j])*order.taxes[i][j].quantity } %><%= text.priceNoSym(t / (1+(i/100)), order.currency) %> <b>IVA <%= i %>%</b></p>
+          </td>
+          <td class="text-right">
+            <p><%= text.priceNoSym( (t / (1+(i/100))) * (i/100) , order.currency ) %></p>
+          </td>
+        </tr>
+        </table>
+        <% } %>
+        <% } %>
+        
+        <table width="100%">
+        <col width="40%">
+        <col width="20%">
+        <col width="20%">
+        <col width="20%">
+        <tr>
+          <td></td>
+          <td class="text-left">
+            <p><b><%= sails.__({phrase:'cart.subtotal', locale: locale})%></b></p>
+          </td>
+          <td class="text-center">
+            <p>
+              <br>
+            </p>
+          </td>
+          <td class="text-right">
+            <p><%= text.priceNoSym( (order.price-order.offer) + order.shipping.cost, order.currency ) %></p>
+          </td>
+        </tr>
+        </table>
+
+       <br>
+       
+       <table width="100%">
+        <col width="80%">
+        <col width="20%">
+
+            
+        <tr style="margin-top:20px">
+          <td class="text-right"><b>TOTAL</b></td>
+          <% if(order.coupon){ %>
+      <td class="text-right"> <%= text.price( (order.price-order.offer-order.coupon.discount) + order.shipping.cost, order.currency ) %></td>
+          <%}else{%>
+      <td class="text-right"> <%= text.price( (order.price-order.offer) + order.shipping.cost, order.currency ) %></td>
+          <%}%>
+        </tr>
+      </table>
+      
+      <br><br><br>
+      
+      <div class="text-center">
+        Macellum Origin, S.L., Carrer Viladomat, 316 Baixos, 08029 Barcelona <br> B66474511, Tomo 44712, Folio 52, Hoja B464196, inscrip. 1
+      </div>
+      
+      
+    </div>
+  </body>
+</html>

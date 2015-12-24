@@ -31,91 +31,130 @@
                             }
                             </script>
                             <% } %>
-                            <div class="panel panel-default">
-                                <div class="panel-body">
-                                    <h1 style="margin-top:5px;">Login</h1>
-                                    <form role="form" action="/login" method="post">
-                                        <p><input type="text" class="form-control" name="email" placeholder="Email"></p>
-                                        <p><input type="password" class="form-control" name="password" placeholder="Password"></p>
-                                        <input type="hidden" name="url" value="/cart/checkout">
-                                        <hr>
-                                        <p>
-                                            <button type="submit" class="btn btn-primary  btn-block">Sign in</button>
-                                        </p>
-                                    </form>
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <h1 style="margin-top:5px;">Login</h1>
+                                        <form role="form" action="/login" method="post">
+                                            <p><input type="text" class="form-control" name="email" placeholder="Email"></p>
+                                            <p><input type="password" class="form-control" name="password" placeholder="Password"></p>
+                                            <input type="hidden" name="url" value="/cart/checkout">
+                                            <hr>
+                                            <p>
+                                                <button type="submit" class="btn btn-primary  btn-block">Sign in</button>
+                                            </p>
+                                        </form>
+                                    </div>
                                 </div>
-                            </div>
                     </div>
                 </div>
                 <hr style="margin-top:0px;">
                 <% } %>
-                    <form name="userForm" id="checkoutForm" method="POST" action="/payment">
+                <form name="userForm" id="userForm" method="POST" action="/payment">
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Nombre</label>
+                            <div class="form-group" ng-class="{ 'has-error' : userForm.name.$invalid && checkout.submited}">
+                                <label>Name</label>
                                 <% if (req.isAuthenticated() && req.user.id) { %>
-                                    <input type="hidden" name="id" value="checkout.id = '<%=req.user.id %>'">
+                                    <input type="hidden" name="id" ng-model="checkout.id" ng-init="checkout.id = '<%=req.user.id %>'">
                                 <% } %>
-                                <input type="text" name="name" class="form-control" value="<%= (req.user) ? req.user.name : '' %>" placeholder="Nombre" required>
+                                <input type="text" name="name" class="form-control" ng-model="checkout.name" 
+                                <% if (req.isAuthenticated() && req.user.name) { %> 
+                                    ng-init="checkout.name = '<%=req.user.name %>'"
+                                <% }%>
+                                 ng-minlength="3" ng-maxlength="20" placeholder="Name" required>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group" ng-class="{ 'has-error' : userForm.email.$invalid && checkout.submited}">
                                 <label>Email</label>
-                                <input type="email" name="email" class="form-control" value="<%= (req.user) ? req.user.email : '' %>" placeholder="Email" required>
+                                <input type="email" name="email" class="form-control" ng-model="checkout.email" 
+                                <% if (req.isAuthenticated() && req.user.email) { %> 
+                                    ng-init="checkout.email = '<%=req.user.email %>'"
+                                <% }%>
+                                 ng-minlength="3" placeholder="Email" required>
                             </div>
 
-                            <div class="form-group">
-                                <label>Dirección</label>
-                                <input type="text" name="address" class="form-control" value="<%= (req.user) ? req.user.address : '' %>" placeholder="Address" required>
+                            <div class="form-group" ng-class="{ 'has-error' : userForm.address.$invalid && checkout.submited}">
+                                <label>Address</label>
+                                <input type="text" name="address" class="form-control" ng-model="checkout.address" 
+                                <% if (req.isAuthenticated() && req.user.address) { %> 
+                                    ng-init="checkout.address = '<%=req.user.address %>'"
+                                <% }%>
+                                 ng-minlength="3" ng-maxlength="50" placeholder="Address" required>
+                                
                             </div>
 
-                             <div class="form-group">
-                                <label>Código postal</label>
-                                <input type="text" name="cp" class="form-control" value="<%= (req.user) ? req.user.cp : '' %>" placeholder="Postal code" required>
+                             <div class="form-group" ng-class="{ 'has-error' : userForm.cp.$invalid && checkout.submited}">
+                                <label>Postal code</label>
+                                <input type="text" name="cp" class="form-control" ng-model="checkout.cp" 
+                                <% if (req.isAuthenticated() && req.user.cp) { %> 
+                                    ng-init="checkout.cp = '<%=req.user.cp %>'"
+                                <% }%>
+                                 ng-minlength="5" ng-maxlength="5" placeholder="Postal code" required>
+                                
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Apellidos</label>
-                                <input type="text" name="surname" class="form-control" value="<%= (req.user) ? req.user.surname : '' %>" placeholder="Surname" required>
+                            <div class="form-group" ng-class="{ 'has-error' : userForm.surname.$invalid && checkout.submited}">
+                                <label>Surname</label>
+                                <input type="text" name="surname" class="form-control" ng-model="checkout.surname" 
+                                <% if (req.isAuthenticated() && req.user.surname) { %> 
+                                    ng-init="checkout.surname = '<%=req.user.surname %>'"
+                                <% }%>
+                                 ng-minlength="3" ng-maxlength="50" placeholder="Surname" required>
+                                
                             </div>
 
-                            <div class="form-group">
-                                <label>Teléfono</label>
-                                <input type="text" name="phone" class="form-control" value="<%= (req.user) ? req.user.phone : '' %>" placeholder="Phone" required>
+                            <div class="form-group" ng-class="{ 'has-error' : userForm.phone.$invalid && checkout.submited}">
+                                <label>Phone</label>
+                                <input type="text" name="phone" class="form-control" ng-model="checkout.phone" 
+                                <% if (req.isAuthenticated() && req.user.phone) { %> 
+                                    ng-init="checkout.phone = '<%=req.user.phone %>'"
+                                <% }%>
+                                 ng-minlength="5" ng-maxlength="20" placeholder="Phone" required>
+                                
                             </div>
 
-                            <div class="form-group">
-                                <label>Población</label>
-                                <input type="text" name="city" class="form-control" value="<%= (req.user) ? req.user.city : '' %>" placeholder="City" required>
+                            <div class="form-group" ng-class="{ 'has-error' : userForm.city.$invalid && checkout.submited}">
+                                <label>City</label>
+                                <input type="text" name="city" class="form-control" ng-model="checkout.city" 
+                                <% if (req.isAuthenticated() && req.user.city) { %> 
+                                    ng-init="checkout.city = '<%=req.user.city %>'"
+                                <% }%>
+                                 ng-minlength="3" ng-maxlength="50" placeholder="City" required>
+                                
                             </div>
 
-                            <div class="form-group">
-                                <label>País</label>
-                                <input type="text" name="country" class="form-control" value="España" placeholder="Country" required>
+                            <div class="form-group" ng-class="{ 'has-error' : userForm.country.$invalid && checkout.submited}">
+                                <label>Country</label>
+                                <input type="text" name="country" class="form-control" ng-model="checkout.country" 
+                                <% if (req.isAuthenticated() && req.user.country) { %> 
+                                    ng-init="checkout.country = '<%=req.user.country %>'"
+                                <% }%>
+                                 ng-minlength="3" ng-maxlength="50" placeholder="Country" required>
                             </div>
 
                         </div>
                     </div>
-                    
-                    <% if( !req.isAuthenticated() ){ %>
-                    <!-- NEW ACCOUNT -->
-                    <p><input type="checkbox" checked id="createPassword"> Quiero crear una contraseña para poder realizar el seguimiento de mi pedido.</p>
+                    <input type="hidden" id="method" name="method" ng-model="method">
+                     <% if (!req.isAuthenticated()) { %>
+                    <p><input type="checkbox" checked="" ng-model="createPassword"> I want to create a password for tracking my order.</p>
                     <div class="createPasswordBox">
-                    <div class="row">
+                    <div class="row" ng-show="createPassword">
                       <div class="col-sm-6">
-                        <input type="password" placeholder="Contraseña" class="form-control" name="password">
+                        <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" placeholder="Password" ng-minlength="5" ng-model="checkout.password" class="form-control" name="password">
+                        </div>
                       </div>
                       <div class="col-sm-6">
-                        <input type="password" placeholder="Repetir contraseña" class="form-control" name="re-password">
+                       <div class="form-group">
+                        <label>Confirm password</label>
+                        <input type="password" placeholder="Confirm password" ng-model="checkout.repassword" class="form-control" name="repassword">
+                        </div>
                       </div>
                     </div>
                     </div>
-                    <!-- //NEW ACCOUNT -->
-                    <% } %>
-                    <input type="hidden" id="method" name="method">
-                    <input type="submit" class="submit" style="display:none;">
+                     <% } %>
                 </form>
         </div>
         <div class="col-sm-4 ">
@@ -132,8 +171,65 @@
                         <hr>
                         <b>Total: <span class="pull-right">{{(cart.amount + cart.shipping | number:2) + " €"}}</span></b>
                         <hr>
-                        <div class="alert alert-warning" role="alert" ng-show="messageWarning && messageWarning!='' ">
-                            <span ng-bind="messageWarning"></span>
+                        <div class="alert alert-info" role="alert" ng-show="messageInfo && messageInfo!=''">
+                            <span ng-bind="messageInfo"></span>
+                        </div>
+                        <div class="alert alert-warning" role="alert" ng-hide="!checkout.submited" ng-show="userForm.name.$invalid || userForm.email.$invalid || userForm.address.$invalid || userForm.cp.$invalid || userForm.surmane.$invalid || userForm.phone.$invalid || userForm.city.$invalid || userForm.country.$invalid || userForm.password.$invalid || userForm.password!= userForm.repassword ">
+                            <div ng-messages="userForm.name.$error">
+                                <small ng-message="required">Name is required</small>
+                                <small ng-message="minlength">Name is too short</small>
+                                <small ng-message="maxlength">Name is too long</small>
+                            </div>
+
+                            <div ng-messages="userForm.email.$error">
+                                <small ng-message="required">Email is required</small>
+                                <small ng-message="minlength">Email is too short</small>
+                                <small ng-message="email">Your email address is invalid</small>
+                            </div>
+
+                            <div ng-messages="userForm.address.$error">
+                                <small ng-message="required">Address is required</small>
+                                <small ng-message="minlength">Address is too short</small>
+                                <small ng-message="maxlength">Address is too long</small>
+                            </div>
+
+                            <div ng-messages="userForm.cp.$error">
+                                <small ng-message="required">Postal code is required</small>
+                                <small ng-message="minlength">Postal code is too short</small>
+                                <small ng-message="maxlength">Postal code is too long</small>
+                            </div>
+
+                            <div ng-messages="userForm.surname.$error">
+                                <small ng-message="required">Surname is required</small>
+                                <small ng-message="minlength">Surname is too short</small>
+                                <small ng-message="maxlength">Surname is too long</small>
+                            </div>
+
+                            <div ng-messages="userForm.phone.$error">
+                                <small ng-message="required">Phone is required</small>
+                                <small ng-message="minlength">Phone is too short</small>
+                                <small ng-message="maxlength">Phone is too long</small>
+                            </div>
+
+                            <div ng-messages="userForm.city.$error">
+                                <small ng-message="required">City is required</small>
+                                <small ng-message="minlength">City is too short</small>
+                                <small ng-message="maxlength">City is too long</small>
+                            </div>
+
+                            <div ng-messages="userForm.country.$error">
+                                <small ng-message="required">Country is required</small>
+                                <small ng-message="minlength">Country is too short</small>
+                                <small ng-message="maxlength">Country is too long</small>
+                            </div>
+
+                            <div ng-show="createPassword" ng-messages="userForm.password.$error || userForm.password != userForm.repassword">
+                                <small ng-message="minlength">Password is too short</small>
+                            </div>
+
+                             <div ng-show="createPassword && userForm.password != '' && userForm.password != userForm.repassword">
+                                <small>Password & confirm password they are different</small>
+                            </div>
                         </div>
                         <div class="alert alert-danger" role="alert" ng-show="message && message!=''"
                         <% if (typeof messagePayment != "undefined"){ %>
@@ -143,11 +239,11 @@
                             <span ng-bind="message"></span>
                         </div>
                         <div class="row">
-                             <div class="col-lg-6">
-                                <button class="btn btn-success btn-block checkoutButton" data-method="credit_card">Credit card</button>
+                            <div class="col-lg-6">
+                                <button class="btn btn-success btn-block" ng-click="payment('creditcard')" ng-disabled="checkout.method || checkout.method!=undefined">Credit card</button>
                             </div>
                             <div class="col-lg-6">
-                                <button class="btn btn-warning btn-block checkoutButton" data-method="paypal">PayPal</button>
+                                <button class="btn btn-warning btn-block" ng-click="payment('paypal')" ng-disabled="checkout.method || checkout.method!=undefined">PayPal</button>
                             </div>
                         </div>
                     </div>
