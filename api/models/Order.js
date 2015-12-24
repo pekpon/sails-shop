@@ -1,7 +1,5 @@
 module.exports = {
 
-    tableName: 'orders',
-
     attributes: {
 
         status: {
@@ -31,6 +29,10 @@ module.exports = {
         tax: {
             type: 'float',
             defaultsTo: 21
+        },
+        lines: {
+            collection: 'OrderLine',
+            via: 'order'
         }
     }
 }

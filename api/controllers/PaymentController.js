@@ -184,7 +184,7 @@ var paymentController = {
 	            var itemTax = (parseFloat(cartline.product.price) / 100) * tax;
                 var p = cartline.product.price - itemTax;
 
-	            items.push ({"name": cartline.product.name ,"description": cartline.product.description + "(" + cartline.option + ")", "quantity": cartline.qty, "price": parseFloat(p).toFixed(2), "sku": cartline.product.id, "tax": parseFloat(itemTax).toFixed(2) ,"currency": currency})
+	            items.push ({"name": cartline.product.name ,"description": cartline.product.description + " (" + cartline.option + ")", "quantity": cartline.qty, "price": parseFloat(p).toFixed(2), "sku": cartline.product.id, "tax": parseFloat(itemTax).toFixed(2) ,"currency": currency})
 	            next();
 	        }, function(err) {
 	        	if (err) {
@@ -261,7 +261,11 @@ var paymentController = {
         
     },
     test: function(req, res){
-        Order
+        Order.find({id:11}).populate("lines").exec(function (err, data){
+            if ( err ) res.json({error: err });  
+            res.view ("receipt",{layout: null, order: data[0]});
+        });
+        
     },
     execute: function(req, res) {
         var user = req.session.userDetails;
@@ -285,16 +289,21 @@ var paymentController = {
                         res.json({error: err });
                         return;
                     } else {
-                    	// var html = receipt.html(order, req.getLocale());
-                    	// var subject = sails.config.general.shopName + " order confirmation nº " + order.id;
-                    	// var text = "<b>ORDER CONFIRMATION</b><br><br>Hello " + user.name + " " + user.surname + ",<br><br><b>Thank you for shopping at " + sails.config.general.shopName + "!</b><br><br>Your order has been successfully placed and the full details are listed down below.<br><br>Once your order has been shipped you will be notified by an email that contains your invoice as an attachment<br><br>If you have any queries regarding your order please email us at <a href=\"mailto:" + sails.config.general.contactEmail + "\">" + sails.config.general.contactEmail + "</a>. Don’t forget to specify your order number in the subject of your email.<br><br>Kind regards,<br><br>" + sails.config.general.shopName + " team";
-                     //    mail.send(text + html,
-                     //        subject,
-                     //        user.email,
-                     //        user.name + " " + user.surname,
-                     //        function(err, message) {
-                     //            sails.log(err || message);
-                     //    });
+                        var fs = require('fs');
+                        var ejs = require('ejs');
+
+                        var html = fs.readFileSync('./views/'+sails.config.general.template+'/receipt.ejs', 'utf8');
+                        var file = ejs.compile(html)({ order: order });
+                    	
+                    	var subject = sails.config.general.shopName + " order confirmation nº " + order.id;
+                    	var text = "<b>ORDER CONFIRMATION</b><br><br>Hello " + user.name + " " + user.surname + ",<br><br><b>Thank you for shopping at " + sails.config.general.shopName + "!</b><br><br>Your order has been successfully placed and the full details are listed down below.<br><br>Once your order has been shipped you will be notified by an email that contains your invoice as an attachment<br><br>If you have any queries regarding your order please email us at <a href=\"mailto:" + sails.config.general.contactEmail + "\">" + sails.config.general.contactEmail + "</a>. Don’t forget to specify your order number in the subject of your email.<br><br>Kind regards,<br><br>" + sails.config.general.shopName + " team<br>";
+                        mail.send(text + file,
+                            subject,
+                            order.shippingAddress.email,
+                            order.shippingAddress.name + " " + order.shippingAddress.surname,
+                            function(err, message) {
+                                sails.log(err || message);
+                        });
                      	res.view('payment/success',{order: order});
                     }
             	})
