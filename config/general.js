@@ -10,15 +10,14 @@ module.exports.general = {
 		port: 465,
 		ssl: true
 	},
-
+	template: 'default',
 	paypal: {
-	    mode: 'sandbox', //sandbox or live
-	    host: 'api.paypal.com',
-	    port: '',
-	    client_id: 'EBWKjlELKMYqRNQ6sYvFo64FtaRLRR5BdHEESmha49TM',
-		client_secret: 'EO422dn3gQLgDbuwqTjzrFgFtaRLRR5BdHEESmha49TM'
+	    host: 'api.sandbox.paypal.com',
+	    client_id: 'ARcyU34HNF354KIeQqEuQK4SAdU1yCzQ2K6qwjZfZDbjV0lnMsWh1-Kj081t6cv6rF9X2d9DNIzCOqs3',
+	    client_secret: 'ECpcnCoSIywa9cSguqLRNmSRyriuLOaLLMbmbmro3CLN6FXuLQCg1xcpK68ZbihF0vNiw7c85YEgVndq'
 	},
-
+	logo: "http://goodlogo.com/images/logos/star_wars_logo_3476.gif",
+	orderBottom: "Sails Shop, Carrer Festa, 69 Baixos, 08754 Papiol <br> XXXXXXXXX, Tomo XXXXXX, Folio XX, Hoja XXXXX, inscrip. X",
 	redsys: {
 	    
 	},

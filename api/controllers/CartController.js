@@ -33,30 +33,7 @@ module.exports = {
             });
         });
     },
-    amount: function (sessionID, callback){
-    	Cart.find({
-            session: sessionID,
-        }).populate('product').exec(function(err, cart) {
-            if (err) {
-                sails.log.debug('Failed to get the list of products in the cart');
-                callback("Failed to get the list of products in the cart", null);
-            } else {
-            	var cartAmount = 0;
-                async.each(cart, function(cartline, next) {
-		            var pline = parseInt(cartline.qty) * parseFloat(cartline.product.price);
-		            cartAmount = parseFloat(cartAmount) + parseFloat(pline);
-		            next();
-		        }, function(err) {
-		        	if (err) {
-                        sails.log.error("Error in calculating the amount of cart");
-                        callback("Error in calculating the amount of cart");
-                    } else {
-                    	callback(null, cartAmount);
-                    }
-		        });
-            }
-        });
-    },
+
     Update: function(req, res) {
         if (!req.isSocket || req.param("id") == null) {
             res.json({
@@ -160,18 +137,32 @@ module.exports = {
 		                	var pline = parseInt(cartline.qty) * parseFloat(cartline.product.price);
 		                	cartAmount = parseFloat(cartAmount) + parseFloat(pline);
 		                	// Insert Cart line into OrderLines
+                            console.log({name: cartline.product.name, description: cartline.product.description, slug: cartline.product.slug, price: cartline.product.price, shipping: cartline.product.shipping, option: cartline.option, quantity:cartline.qty, images: cartline.product.images, productId: cartline.product.id, order: order.id});
 		                	OrderLine.create({name: cartline.product.name, description: cartline.product.description, slug: cartline.product.slug, price: cartline.product.price, shipping: cartline.product.shipping, option: cartline.option, quantity:cartline.qty, images: cartline.product.images, productId: cartline.product.id, order: order.id}, 
 		                		function(err,data){
 	                    		if (err) {
+                                    console.log(err);
 			                        sails.log.error("Error on insert order lines");
 			                        callback("Error on insert order lines");
 			                    } else {
 			                    	//Restart stock pieces
-			                    	var newStock = parseInt(cartline.product.stock) - parseInt(quantity.quantity);
-			                    	Product.update(cartline.product.id, {stock: newStock},  function(err, product){
+                                    var query = {id: cartline.product.id};
+                                    var data = {};
+                                    if (cartline.option){
+                                        data = cartline.product.options;
+                                        for (var i = 0; i < data.length; i++) {
+                                            if (data[i].name == cartline.option){
+                                                data[i].stock = parseInt(data[i].stock) - parseInt(cartline.quantity);
+                                            }
+                                        }
+                                    }else{
+                                        var newStock = parseInt(cartline.product.stock) - parseInt(cartline.quantity);
+                                        data = {stock: newStock};
+                                    }
+			                    	Product.update(cartline.product.id, data,  function(err, product){
 			                    		if (err) {
-			                        		sails.log.error("Error on change prodcut stock");
-			                        		callback("Error on change prodcut stock");
+			                        		sails.log.error("Error on change product stock");
+			                        		callback("Error on change product stock");
 			                    		}else{
 			                    			next();
 			                    		}
@@ -185,7 +176,16 @@ module.exports = {
 		                    } else {
 		                    	order.amount = cartAmount;
 		                    	order.save();
-		                    	callback (null, order);
+
+                                Cart.destroy({session: sessionID}).exec(function deleteCB(err){
+                                    if (err) {
+                                        sails.log.error("Error on remove cart");
+                                        callback("Error on remove cart");
+                                    } else {
+                                        callback (null, order);
+                                    }
+                                });
+		                    	
 		                    }
 		                });
                     }
