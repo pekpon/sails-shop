@@ -28,8 +28,8 @@ module.exports.routes = {
   
   'GET /account': { controller: 'UserController', action: 'account'},
   'POST /account': { controller: 'UserController', action: 'update'},
+  'GET /account/orders': { controller: 'OrderController', action: 'myorders'},
   'GET /user/success': {controller: 'UserController', action: 'success'},
-  
   'GET /pages/:slug': {controller: 'PageController', action: 'show'},
   
   
