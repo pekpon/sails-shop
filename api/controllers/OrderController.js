@@ -8,9 +8,15 @@
 module.exports = {
 	
   myorders: function(req, res, next) {
-    console.log("ORDERS");
     Order.find({user: req.user.id}, function(err, orders){
       return res.view('order/myorders', {orders: orders});
+    });
+  },
+  
+  showmyorder: function(req, res, next) {
+    Order.find({user: req.user.id, id: req.param('id')}).populate("lines").exec(function (err, data){
+      if ( err ) res.json({error: err });  
+      res.view ('order/show',{order: data[0]});
     });
   }
   

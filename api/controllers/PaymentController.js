@@ -261,7 +261,7 @@ var paymentController = {
         
     },
     test: function(req, res){
-        Order.find({id:11}).populate("lines").exec(function (err, data){
+        Order.find({id:1}).populate("lines").exec(function (err, data){
             if ( err ) res.json({error: err });  
             res.view ("receipt",{layout: null, order: data[0]});
         });

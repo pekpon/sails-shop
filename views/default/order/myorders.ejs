@@ -1,5 +1,30 @@
+<div class="container">
 <h1>My Orders</h1>
 
 <% if(orders && orders.length == 0){ %>
-NO ORDERS
-<% } %>
+NO ORDERS YET
+<% }else{ %>
+
+  <table class="table table-striped"> 
+    <thead> 
+      <tr> 
+        <th>#</th> 
+        <th>Status</th> 
+        <th>Actions</th> 
+      </tr> 
+    </thead> 
+    <tbody>
+
+    <% for(var i = 0; i < orders.length; i++){ %>
+      <tr> 
+        <th scope="row"><%=i+1%></th> 
+        <td><%= orders[i].status %></td> 
+        <td><a href="/account/orders/<%= orders[i].id %>">View</a></td>
+      </tr>
+    <% } %>
+    
+    </tbody> 
+  </table>
+
+<% } %>
+</div>
