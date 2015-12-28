@@ -133,40 +133,67 @@ module.exports = {
                         callback ("Error open new order")
                     } else {
                     	var orderLines = [];
-		                async.each(cart, function(cartline, next) {
+		                async.eachSeries(cart, function(cartline, next) {
 		                	var pline = parseInt(cartline.qty) * parseFloat(cartline.product.price);
 		                	cartAmount = parseFloat(cartAmount) + parseFloat(pline);
 		                	// Insert Cart line into OrderLines
-                            console.log({name: cartline.product.name, description: cartline.product.description, slug: cartline.product.slug, price: cartline.product.price, shipping: cartline.product.shipping, option: cartline.option, quantity:cartline.qty, images: cartline.product.images, productId: cartline.product.id, order: order.id});
-		                	OrderLine.create({name: cartline.product.name, description: cartline.product.description, slug: cartline.product.slug, price: cartline.product.price, shipping: cartline.product.shipping, option: cartline.option, quantity:cartline.qty, images: cartline.product.images, productId: cartline.product.id, order: order.id}, 
+                            OrderLine.create({name: cartline.product.name, description: cartline.product.description, slug: cartline.product.slug, price: cartline.product.price, shipping: cartline.product.shipping, option: cartline.option, quantity:cartline.qty, images: cartline.product.images, productId: cartline.product.id, order: order.id}, 
 		                		function(err,data){
 	                    		if (err) {
-                                    console.log(err);
-			                        sails.log.error("Error on insert order lines");
+                                    sails.log.error("Error on insert order lines");
 			                        callback("Error on insert order lines");
 			                    } else {
 			                    	//Restart stock pieces
-                                    var query = {id: cartline.product.id};
-                                    var data = {};
-                                    if (cartline.option){
-                                        data = cartline.product.options;
-                                        for (var i = 0; i < data.length; i++) {
-                                            if (data[i].name == cartline.option){
-                                                data[i].stock = parseInt(data[i].stock) - parseInt(cartline.quantity);
-                                            }
+                                    Product.findOne(cartline.product.id, function(err, product){
+                                        if (err){
+                                            sails.log.error("Error on get product Info");
+                                            callback("Error on get product Info");
+                                        }else{
+                                            async.series([
+                                                function (nextTask){
+                                                    if (cartline.option){
+                                                        // If contains option reduce stock from it
+                                                        Options = product.options;                                   
+                                                        async.eachSeries(Options, function(Option, nextOption){
+                                                            if (Option.name == cartline.option){
+                                                                var newStock = parseInt(Option.stock) - parseInt(cartline.qty);
+                                                                Option.stock = parseInt(newStock);
+                                                            }
+                                                            nextOption();
+                                                        }, function(err){
+                                                            if (err){
+                                                                sails.log.error("Error on calculate new option/product stock");
+                                                                callback("Error on calculate new option/product stock");
+                                                            }else{
+                                                                // Set new Options at the product.
+                                                                product.options = Options;
+                                                                nextTask();
+                                                            }
+                                                        });
+
+                                                    }else{
+                                                        // Reduce Stock
+                                                        var newStock = parseInt(product.stock) - parseInt(cartline.qty);
+                                                        product.stock = newStock;
+                                                        nextTask();
+                                                    }
+                                                },
+                                                function (nextTask){
+                                                    // When set new Stock in product, save
+                                                    product.save(function(err,s){
+                                                        if (err) {
+                                                            console.log("ERROR: ", err);
+                                                        }
+                                                        nextTask();
+                                                      });
+                                                }
+                                            ], function (err){
+                                                // Next cart item
+                                                next();
+                                            });
                                         }
-                                    }else{
-                                        var newStock = parseInt(cartline.product.stock) - parseInt(cartline.quantity);
-                                        data = {stock: newStock};
-                                    }
-			                    	Product.update(cartline.product.id, data,  function(err, product){
-			                    		if (err) {
-			                        		sails.log.error("Error on change product stock");
-			                        		callback("Error on change product stock");
-			                    		}else{
-			                    			next();
-			                    		}
-			                    	});
+                                    })
+			                    	
 			                    }
 	                    	});
 		                }, function(err) {
