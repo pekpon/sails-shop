@@ -175,6 +175,10 @@ var paymentController = {
             var cartAmount = 0;
             var shipping = 0;
             var items = [];
+          
+            var amountSubtotal = 0.00;
+            var amountTax = 0.00;
+          
             async.each(cart, function(cartline, next) {
 
 	            var priceLine = parseInt(cartline.qty) * parseFloat(cartline.product.price);
@@ -183,8 +187,13 @@ var paymentController = {
 	            if(cartline.product.shipping > shipping) shipping = cartline.product.shipping;
 	            var itemTax = (parseFloat(cartline.product.price) / 100) * tax;
                 var p = cartline.product.price - itemTax;
+      
+                amountSubtotal += parseFloat(parseFloat(p).toFixed(2));
+                amountTax += parseFloat(parseFloat(itemTax).toFixed(2));
 
 	            items.push ({"name": cartline.product.name ,"description": cartline.product.description + " (" + cartline.option + ")", "quantity": cartline.qty, "price": parseFloat(p).toFixed(2), "sku": cartline.product.id, "tax": parseFloat(itemTax).toFixed(2) ,"currency": currency})
+                console.log("PRICE: "+parseFloat(p).toFixed(2)+ ", TAX: " +parseFloat(itemTax).toFixed(2));
+                
 	            next();
 	        }, function(err) {
 	        	if (err) {
@@ -218,8 +227,8 @@ var paymentController = {
                                 "currency": currency,
                                 "total": parseFloat(totalCartAmount).toFixed(2),
                                 "details": {
-                                	"subtotal": parseFloat(subtotal).toFixed(2),
-        				        	"tax": parseFloat(cartTax).toFixed(2),
+                                	"subtotal": amountSubtotal,
+        				        	"tax": amountTax,
         				         	"shipping": parseFloat(shipping).toFixed(2)
         				        }
                             },
@@ -235,7 +244,7 @@ var paymentController = {
         		            }
                         }]
                     };
-                    
+                  
                     paypal.configure(sails.config.general.paypal);
 
                     paypal.payment.create(payment, function(error, payment) {
