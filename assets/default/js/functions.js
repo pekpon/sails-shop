@@ -35,12 +35,12 @@ function addOption(){
 }
 
 function disableStock(){
-  $('#stockProduct').val(0);
-  $('#stockProduct').prop('disabled', true);
+  //$('#stockProduct').val(0);
+  //$('#stockProduct').prop('disabled', true);
 }
 function enableStock(){
-  if($('.op').length < 1)
-    $('#stockProduct').prop('disabled', false);
+  //if($('.op').length < 1)
+    //$('#stockProduct').prop('disabled', false);
     
 }
 

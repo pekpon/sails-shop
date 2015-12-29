@@ -23,11 +23,15 @@
                     <% } %>
             </div>
             <p>
+                <% if(product.stock > 0){ %>
                 <a href="javascript:void(0)" ng-click="cart.addItem('<%= product.id %>', 1, selectedoption)" 
                 <% if(product.options && product.options.length > 0){ %>
                 	ng-disabled="!selectedoption" 
                 <% } %>
                 class="btn btn-success btn-block">BUY</a>
+                <% }else{ %>
+                  <h3>SOLD OUT</h3>
+                <% } %>
             </p>
             <div class="alert alert-warning" role="alert" ng-show="cart.inCart('<%= product.id %>').length>0">
                 This item is in your cart. <a href="#" ng-click="cart.removeItem(cart.inCart('<%= product.id %>')[0])"> Remove </a>

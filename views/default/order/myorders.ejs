@@ -20,9 +20,9 @@ NO ORDERS YET
     <% for(var i = 0; i < orders.length; i++){ %>
       <tr> 
         <td><%= utils.onlyDate(orders[i].createdAt) %></th> 
-        <td><%= orders[i].id %></th> 
-        <td><%= orders[i].status %></td> 
-        <td><%= orders[i].amount %></td>
+        <td><%= orders[i].number %></th> 
+        <td><%= orderH.status(orders[i].status) %></td> 
+        <td><%= orders[i].amount + orders[i].shipping %></td>
         <td><a href="/account/orders/<%= orders[i].id %>" class="btn btn-default btn-xs">View detail</a></td>
       </tr>
     <% } %>

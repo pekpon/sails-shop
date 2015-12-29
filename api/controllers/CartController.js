@@ -123,6 +123,7 @@ module.exports = {
                 callback ("Failed to get the list of products in the cart")
             } else {
             	var cartAmount = 0;
+                var shipping = 0;
 
             	// Open a new order
                 Order.create({
@@ -136,6 +137,10 @@ module.exports = {
 		                async.eachSeries(cart, function(cartline, next) {
 		                	var pline = parseInt(cartline.qty) * parseFloat(cartline.product.price);
 		                	cartAmount = parseFloat(cartAmount) + parseFloat(pline);
+                            if ( parseFloat(cartline.product.shipping) > parseFloat(shipping) ){
+                              shipping = parseFloat(cartline.product.shipping);
+                            }
+                            cartline.product.shipping
 		                	// Insert Cart line into OrderLines
                             OrderLine.create({name: cartline.product.name, description: cartline.product.description, price: cartline.product.price, shipping: cartline.product.shipping, option: cartline.option, quantity:cartline.qty, images: cartline.product.images, productId: cartline.product.id, order: order.id}, 
 		                		function(err,data){
@@ -202,8 +207,12 @@ module.exports = {
 		                        sails.log.error("Error on prepare order lines");
 		                        callback("Error on prepare order lines");
 		                    } else {
-		                    	order.amount = cartAmount;
-		                    	order.save();
+                                Order.count().exec(function countCB(err, num) {
+                                  order.amount = cartAmount;
+                                  order.shipping = shipping;
+                                  order.number = parseInt(num) + 1728;
+                                  order.save();
+                                });
 
                                 Cart.destroy({session: sessionID}).exec(function deleteCB(err){
                                     if (err) {

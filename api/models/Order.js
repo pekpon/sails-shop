@@ -18,6 +18,9 @@ module.exports = {
             collection: 'OrderLine',
             via: 'order'
         },
+        number: {
+          type: 'int'
+        },
         comments: {
             type: 'string',
             defaultsTo: ''
@@ -25,6 +28,10 @@ module.exports = {
         amount: {
             type: 'float',
             defaultsTo: 0.0
+        },
+        shipping: {
+          type: 'float',
+          defaultsTo: 0.0
         },
         tax: {
             type: 'float',
@@ -35,4 +42,5 @@ module.exports = {
             via: 'order'
         }
     }
+  
 }

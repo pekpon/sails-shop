@@ -1,0 +1,33 @@
+<!-- HEADER -->
+  <div class="page-header">
+    <h1>Orders <!--<a href="/admin/product/add" class="btn btn-primary pull-right">Create new product</a>--></h1>
+  </div>
+  
+  <!-- SHOW categories -->
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Date</th> 
+          <th>Id</th>
+          <th>Status</th> 
+          <th>Total</th>
+          <th>Actions</th> 
+        </tr>
+      </thead>
+      <tbody>
+      
+      <% for(var i in orders ){ %>
+        <tr>
+          <td><%= utils.onlyDate(orders[i].createdAt) %></th> 
+          <td><%= orders[i].number %></th> 
+          <td><%= orderH.status(orders[i].status) %></td> 
+          <td><%= orders[i].amount + orders[i].shipping %></td>
+          <td><a href="/admin/order/edit/<%=orders[i].id %>">Edit</a></td>
+
+      </tr>
+      <% } %>
+
+      </tbody>
+    </table>
+  </div>
