@@ -227,8 +227,8 @@ var paymentController = {
                                 "currency": currency,
                                 "total": parseFloat(totalCartAmount).toFixed(2),
                                 "details": {
-                                	"subtotal": amountSubtotal,
-        				        	"tax": amountTax,
+                                	"subtotal": amountSubtotal.toFixed(2),
+        				        	"tax": amountTax.toFixed(2),
         				         	"shipping": parseFloat(shipping).toFixed(2)
         				        }
                             },
@@ -244,6 +244,8 @@ var paymentController = {
         		            }
                         }]
                     };
+                  
+                    console.log(JSON.stringify(payment, null, 2));
                   
                     paypal.configure(sails.config.general.paypal);
 

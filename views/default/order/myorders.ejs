@@ -8,8 +8,10 @@ NO ORDERS YET
   <table class="table table-striped"> 
     <thead> 
       <tr> 
-        <th>#</th> 
+        <th>Date</th> 
+        <th>Id</th>
         <th>Status</th> 
+        <th>Total</th>
         <th>Actions</th> 
       </tr> 
     </thead> 
@@ -17,9 +19,11 @@ NO ORDERS YET
 
     <% for(var i = 0; i < orders.length; i++){ %>
       <tr> 
-        <th scope="row"><%=i+1%></th> 
+        <td><%= utils.onlyDate(orders[i].createdAt) %></th> 
+        <td><%= orders[i].id %></th> 
         <td><%= orders[i].status %></td> 
-        <td><a href="/account/orders/<%= orders[i].id %>">View</a></td>
+        <td><%= orders[i].amount %></td>
+        <td><a href="/account/orders/<%= orders[i].id %>" class="btn btn-default btn-xs">View detail</a></td>
       </tr>
     <% } %>
     

@@ -1,6 +1,3 @@
-SHOW ORDER
-
-
 <%
   var shipping = 0;
   var orderTax = (parseFloat(order.amount) / 100) * order.tax;
@@ -11,120 +8,88 @@ SHOW ORDER
   }
   var totalOrderAmount = parseFloat(order.amount) + parseFloat(shipping);
 
+  var date = new Date(order.createdAt);
+  var day = date.getDate();
+  var month = parseInt(date.getMonth()) + 1;
+  var year = date.getFullYear();
 %>
-
+    
     <div class="container">
-      <!-- LOGO -->
-      <div class="text-center">
-        <img src="<%=sails.config.general.logo%>" alt="">
-      </div>
+    
+      <div class="row">
+        <div class="col-sm-4">
+         <p>Order date: <b><%= day + "/" + month + "/" + year%></b><br>
+         Order nº: <b><%= order.id  %></b></p>
+         
+         <hr>
+          
+          <h4>Shipping Address</h4>
+          <strong><%= order.shippingAddress.name%> <%= order.shippingAddress.surname%></strong><br>
+          <%= order.shippingAddress.address%><br>
+          <%= order.shippingAddress.city%>, <%= order.shippingAddress.cp %><br>
+          <%= order.shippingAddress.country%>
+
+        </div>
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4"></div>
+      </div>  
+      
       <br>
-      <table width="100%">
-        <col width="60%">
-        <col width="25%">
-        <col width="15%">
-        <tr>
-          <td>
-            <!-- CLIENT INFO -->
-            <address>
-              <strong><%= order.shippingAddress.name%> <%= order.shippingAddress.surname%></strong><br>
-              <%= order.shippingAddress.address%><br>
-              <%= order.shippingAddress.city%>, <%= order.shippingAddress.cp %><br>
-              <%= order.shippingAddress.country%>
-            </address>
-          </td>
-          <td>
-            <p><%= "REF" %>:</p>
-            <p><%= "DATE"%>:</p>
-          </td>
-          <td class="text-right">
-            <p><%= order.id  %></p>
-            <%
-              var date = new Date(order.createdAt);
-              var day = date.getDate();
-              var month = parseInt(date.getMonth()) + 1;
-              var year = date.getFullYear();
-            %>
-            <p><%= day + "/" + month + "/" + year%></p>
-          </td>
-        </tr>
+      
+      <table class="table table-bordered"> 
+        <thead> 
+          <tr> 
+            <th>Ref</th> 
+            <th>Name</th> 
+            <th>Qty</th> 
+            <th>Price</th> 
+            <th>Total</th>
+          </tr> 
+        </thead> 
+        <tbody> 
+          <% var amount = 0; %>
+          <% for(var i = 0; i < order.lines.length; i++ ){ %>
+            <tr>
+               <td><%= order.lines[i].productId %></td>
+                <td><%= order.lines[i].name%>
+                  <% if (order.lines[i].option) {%>
+                    <%=" (" + order.lines[i].option + ")" %>
+                  <%}%>
+                 </td>
+                <td><%= order.lines[i].quantity %> </td>
+                <%
+                  var itemTax = (parseFloat(order.lines[i].price) / 100) * order.tax;
+                  var p = order.lines[i].price - itemTax;
+                  var totLine = order.lines[i].quantity * p;
+                  amount = amount + totLine;
+                %>
+                <td><%= parseFloat(p).toFixed(2) %>  €</td>
+                <td><%= parseFloat(totLine).toFixed(2) %> €</td>
+            </tr>
+          <% } %>
+         </tbody> 
       </table>
       
-      <br>
+      <div class="row">
+        <div class="col-sm-1 col-sm-offset-9">
+          <p>Amount:<br>
+            Tax: <br> 
+            Subtotal: <br> 
+            Shipping:
+          </p>
+          <h4>TOTAL</h4></div>
+        <div class="col-sm-2">
+          <p>
+            <%= parseFloat(amount).toFixed(2) %> € <br> 
+            <%= order.tax %> % <br> 
+            <%= parseFloat( order.amount ).toFixed(2) %> € <br>
+            <%= parseFloat(shipping).toFixed(2) %> €
+          </p>
+          <h4><%= parseFloat(totalOrderAmount).toFixed(2) %> €</h4></div>
+      </div>
       
-          <table width="100%" style="border-collapse: collapse;">
-           <col width="10%">
-           <col width="45%">
-           <col width="15%">
-           <col width="15%">
-           <col width="15%">
-            <thead>
-              <tr style="border-bottom:1pt solid black;">
-                 <th>Ref</th>
-                  <th>Description</th>
-                  <th class="text-center">Quantity</th>
-                  <th class="text-right">Price</th>
-                  <th class="text-right">Total</th>
-              </tr>
-            </thead>
-            <tbody>
-            <% var amount = 0; %>
-            <% for(var i = 0; i < order.lines.length; i++ ){ %>
-              <tr>
-                 <td><%= order.lines[i].productId %></td>
-                  <td><%= order.lines[i].name + " - " + order.lines[i].description %>
-                    <% if (order.lines[i].option) {%>
-                      <%=" (" + order.lines[i].option + ")" %>
-                    <%}%>
-                   </td>
-                  <td class="text-center"><%= order.lines[i].quantity %> </td>
-                  <%
-                    var itemTax = (parseFloat(order.lines[i].price) / 100) * order.tax;
-                    var p = order.lines[i].price - itemTax;
-                    var totLine = order.lines[i].quantity * p;
-                    amount = amount + totLine;
-                  %>
-                  <td class="text-right"><%= parseFloat(p).toFixed(2) %>  €</td>
-                  <td class="text-right"><%= parseFloat(totLine).toFixed(2) %> €</td>
-              </tr>
-            <% } %>
-            <tr><td colspan="5" style="height: 50px; border-bottom:1px solid black"></td></tr>
-           <br><br>
-           
-        <tr>
-              <td colspan="3"></td>
-              <td class="text-right">Amount:</td>
-              <td class="text-right"><%= parseFloat(amount).toFixed(2) %> €</td>
-        </tr>
-        <tr>
-              <td colspan="3"></td>
-              <td class="text-right">Tax:</td>
-              <td class="text-right" style=""><%= order.tax %> %</td>
-        </tr>
-        <tr><td colspan="5" >&nbsp</td></tr>
-        <tr >
-              <td colspan="3"></td>
-              <td class="text-right">Subtotal:</td>
-              <td class="text-right" ><%= parseFloat( order.amount ).toFixed(2) %> €</td>
-        </tr>
-
-        <tr>
-              <td colspan="3"></td>
-              <td class="text-right">Shippment:</td>
-              <td class="text-right"><%= parseFloat(shipping).toFixed(2) %> €</td>
-        </tr>
-        <tr><td colspan="5" >&nbsp</td></tr>
-         <tr>
-              <td colspan="3"></td>
-              <td class="text-right"><b>Total:</b></td>
-              <td class="text-right"><%= parseFloat(totalOrderAmount).toFixed(2) %> €</td>
-        </tr>
-
-            </tbody>
-          </table>
-        
-
-      
+    
+   
       <div class="text-center" style="margin-top: 50px;">
         <%- sails.config.general.orderBottom %>
       </div>

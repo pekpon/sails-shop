@@ -8,9 +8,6 @@ module.exports = {
         description: {
             type: 'string'
         },
-        slug: {
-            type: 'string'
-        },
         price: {
             type: 'float'
         },

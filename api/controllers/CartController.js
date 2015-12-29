@@ -137,9 +137,10 @@ module.exports = {
 		                	var pline = parseInt(cartline.qty) * parseFloat(cartline.product.price);
 		                	cartAmount = parseFloat(cartAmount) + parseFloat(pline);
 		                	// Insert Cart line into OrderLines
-                            OrderLine.create({name: cartline.product.name, description: cartline.product.description, slug: cartline.product.slug, price: cartline.product.price, shipping: cartline.product.shipping, option: cartline.option, quantity:cartline.qty, images: cartline.product.images, productId: cartline.product.id, order: order.id}, 
+                            OrderLine.create({name: cartline.product.name, description: cartline.product.description, price: cartline.product.price, shipping: cartline.product.shipping, option: cartline.option, quantity:cartline.qty, images: cartline.product.images, productId: cartline.product.id, order: order.id}, 
 		                		function(err,data){
 	                    		if (err) {
+                                    sails.log.error(err);
                                     sails.log.error("Error on insert order lines");
 			                        callback("Error on insert order lines");
 			                    } else {
