@@ -41,5 +41,9 @@ module.exports.policies = {
   'SettingsController': {
     '*': ['isAuthenticated', 'isAdmin']
   },
+  
+  'OrderController': {
+    '*': ['category', 'cart', 'isAuthenticated']
+  },
 
 };
