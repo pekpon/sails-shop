@@ -39,7 +39,7 @@ module.exports.http = {
               'session',
               'passportInit',     
               'passportSession', 
-              'myRequestLogger',
+              'analyticsCode',
               'bodyParser',
               'handleBodyParserError',
               'compress',
@@ -59,11 +59,15 @@ module.exports.http = {
   *                                                                           *
   ****************************************************************************/
 
-    // myRequestLogger: function (req, res, next) {
-    //     console.log("Requested :: ", req.method, req.url);
-    //     return next();
-    // }
-
+     analyticsCode: function (req, res, next) {
+      Settings.findOne({key: "analytics_code"}).exec(function(err, code){
+        var a;
+        if(code){a = code.value}else{a="";}
+        res.locals.analytics = a;
+        return next();
+      });
+         
+     },
 
   /***************************************************************************
   *                                                                          *
