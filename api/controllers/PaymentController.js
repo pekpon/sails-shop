@@ -188,8 +188,8 @@ var paymentController = {
 	            var itemTax = (parseFloat(cartline.product.price) / 100) * tax;
                 var p = cartline.product.price - itemTax;
       
-                amountSubtotal += parseFloat(parseFloat(p).toFixed(2));
-                amountTax += parseFloat(parseFloat(itemTax).toFixed(2));
+                amountSubtotal += parseFloat(p);
+                amountTax += parseFloat(itemTax);
 
 	            items.push ({"name": cartline.product.name ,"description": cartline.product.description + " (" + cartline.option + ")", "quantity": cartline.qty, "price": parseFloat(p).toFixed(2), "sku": cartline.product.id, "tax": parseFloat(itemTax).toFixed(2) ,"currency": currency})
                 console.log("PRICE: "+parseFloat(p).toFixed(2)+ ", TAX: " +parseFloat(itemTax).toFixed(2));

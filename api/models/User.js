@@ -10,12 +10,21 @@ var bcrypt = require('bcryptjs');
 module.exports = {
   
     tableName: 'users',
-  
+    
+
+    uniqueEmail: false,
+    types: {
+        uniqueEmail: function(value) {
+            return uniqueEmail;
+        }
+    },
+
     attributes: {
         email: {
             type: 'email',
             required: true,
-            unique: true
+            unique: true,
+            uniqueEmail:true
         },
         password: {
             type: 'string',
@@ -46,6 +55,13 @@ module.exports = {
             return obj;
         }
     },
+    beforeValidate: function(values, cb) {
+        User.findOne({email: values.email}).exec(function (err, record) {
+            console.log('before validation ' + !err && !record);
+            uniqueEmail = !err && !record;
+            cb();
+        });
+    },
     beforeCreate: function(user, cb) {
         bcrypt.genSalt(10, function(err, salt) {
             bcrypt.hash(user.password, salt, function(err, hash) {
@@ -58,5 +74,12 @@ module.exports = {
                 }
             });
         });
+    },
+    validationMessages: {
+        email: {
+          required : 'Email is required',
+          email : 'Enter valid email',
+          uniqueEmail: 'Email already registered'
+        }
     }
 };
