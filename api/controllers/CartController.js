@@ -159,12 +159,14 @@ module.exports = {
                                                 function (nextTask){
                                                     if (cartline.option){
                                                         // If contains option reduce stock from it
-                                                        Options = product.options;                                   
+                                                        Options = product.options;  
+                                                        var newProductStock = 0;                                 
                                                         async.eachSeries(Options, function(Option, nextOption){
                                                             if (Option.name == cartline.option){
                                                                 var newStock = parseInt(Option.stock) - parseInt(cartline.qty);
                                                                 Option.stock = parseInt(newStock);
                                                             }
+                                                            newProductStock += parseInt(Option.stock);
                                                             nextOption();
                                                         }, function(err){
                                                             if (err){
@@ -172,6 +174,7 @@ module.exports = {
                                                                 callback("Error on calculate new option/product stock");
                                                             }else{
                                                                 // Set new Options at the product.
+                                                                product.stock = newProductStock;
                                                                 product.options = Options;
                                                                 nextTask();
                                                             }
