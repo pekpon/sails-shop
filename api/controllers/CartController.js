@@ -11,11 +11,30 @@ module.exports = {
             } else {
                 if (req.isSocket) {
                     sails.sockets.join(req.socket, req.session.id);
-                    //, _.pluck(model, 'session')
                     Cart.watch(req.socket);
                 }
+                
                 callback(null, model);
             }
+        });
+    },
+    clearOldItems: function (){
+        var now = new Date();
+        var limit = sails.config.general.cartExpires;
+        var limitData = new Date(now.getTime() - limit*60000);
+
+        Cart.find({
+            updatedAt: { '<': limitData }
+        }).exec(function(err, model) {
+            model.forEach(function (item){
+                Cart.destroy({
+                    id: item.id
+                }).exec(function (err) {
+                    sails.sockets.broadcast(item.session, "removeItem", [{
+                        id: item.id
+                    }]);
+                })
+            });
         });
     },
     Destroy: function(req, res) {
@@ -25,11 +44,16 @@ module.exports = {
             });
             return;
         }
-        Cart.destroy({
+        Cart.findOne({
             id: req.param("id")
-        }).exec(function deleteCB(err) {
-            sails.sockets.broadcast(req.session.id, "removeItem", {
+        }).exec(function (err, model) {
+            Cart.destroy({
                 id: req.param("id")
+            }).exec(function (err) {
+                sails.controllers.product.sendSocketInfo(model.product);
+                sails.sockets.broadcast(req.session.id, "removeItem", {
+                    id: req.param("id")
+                });
             });
         });
     },
@@ -49,6 +73,7 @@ module.exports = {
             if (err) {
                 return res.serverError("Error update product of cart");
             } else {
+                sails.controllers.product.sendSocketInfo(updated[0].product);
                 sails.sockets.broadcast(req.session.id, "saveItem", {
                     item: updated[0]
                 });
@@ -77,6 +102,7 @@ module.exports = {
                             if (err) {
                                 return res.serverError("Error adding product to cart");
                             } else {
+                                sails.controllers.product.sendSocketInfo(copyModel.product);
                                 sails.sockets.broadcast(req.session.id, "saveItem", {
                                     item: model
                                 });
@@ -93,6 +119,8 @@ module.exports = {
                             if (err) {
                                 return res.serverError("Error adding product to cart");
                             } else {
+                                sails.controllers.product.sendSocketInfo(req.param("product"));
+                                
                                 Cart.findOne({
                                     id: model.id
                                 }).populate('product').exec(function(err, model) {
@@ -257,7 +285,6 @@ module.exports = {
             }
         });
     },
-
     viewCartDetails: function(req, res) {
         sails.controllers.cart.cartContents(req, function(err, model) {
             if (err) {

@@ -106,10 +106,16 @@ sailsShop.factory('ngCart', function($rootScope){
         addItem: function (id, quantity, option){
             var _self = this;
             if (quantity == undefined) { quantity = 1; }
+            console.log(id);
             io.socket.post("/cart", {product: id, qty: quantity, option: option}, function (data, jwres){
             });
         },
-
+        removeItems: function (items){
+            var _self = this;
+            items.forEach(function(item){
+                _self.removeItem(item);
+            });
+        },
         removeItem: function (item) {
             var _self = this;
             var index = _self.items.indexOf(item);
@@ -147,7 +153,7 @@ sailsShop.factory('ngCart', function($rootScope){
                 function (){
                     _self.count = total;
                     _self.amount = totalOrder;
-                    $rootScope.$broadcast('ngCart:change', {});
+                    $rootScope.$broadcast('scope:refresh', {});
             });
         }
     };
@@ -156,6 +162,7 @@ sailsShop.factory('ngCart', function($rootScope){
     var reload = function (){
         var _self = this;
         io.socket.get("/cart", function (data, jwres){
+            console.log(data);
             AsyncForEach (data, function(item, index, next){
                 item.qty = parseInt(item.qty);
                 cart.items.push(item);
@@ -167,15 +174,54 @@ sailsShop.factory('ngCart', function($rootScope){
     }
 
     reload();
-
     return cart;
-   
 });
 
-sailsShop.controller('shopController', function ($scope, ngCart, $rootScope) {
-    $scope.cart = ngCart;
+sailsShop.factory('ngProduct', function($rootScope){
+    var product = {
+        info: {},
+        load : function (code){
+            var self = this;
+            io.socket.post("/product/" + code, function (data, jwres){
+                self.info = data;
+                $rootScope.$broadcast('scope:refresh', {});
+            })
+        },
+        myFilterOption: function (item) { 
+            var sold = item.sold != undefined ? parseInt(item.sold) : 0;
+            var realStock = parseInt(item.stock) - sold;
+            if ( realStock > 0 ){
+               return true;
+            }
+            return false;
+        }
+    };
 
-    $rootScope.$on('ngCart:change', function () {
+    io.socket.on('infoProduct', function  (data) {
+        
+        if (product.info.id == data.id) {
+            product.info = data;
+            $rootScope.$broadcast('scope:refresh', {});
+        }
+    });
+
+    return product;
+});
+
+sailsShop.directive('ngProduct', function (ngProduct){
+    return {
+        link: function (scope, element, attr) {
+            var code = attr.ngProduct;
+            ngProduct.load(code);
+        } 
+    }
+});
+
+sailsShop.controller('shopController', function ($scope, ngCart, ngProduct, $rootScope) {
+    $scope.cart = ngCart;
+    $scope.product = ngProduct;
+
+    $rootScope.$on('scope:refresh', function () {
         $scope.$apply();
     });
 

@@ -11,6 +11,7 @@ module.exports.routes = {
   
   'GET /collections/:slug': {controller: 'ProductController', action: 'index'},
   'GET /product/:slug': {controller: 'ProductController', action: 'show'},
+  'POST /product/:id': {controller: 'ProductController', action: 'info'},
   
   // CART
   'GET /cart/checkout': { controller: 'CartController', action: 'viewCheckOut'},
@@ -18,7 +19,6 @@ module.exports.routes = {
   'POST /payment' : {controller: 'PaymentController', action: 'payment'},
   'GET /payment/execute': { controller: 'PaymentController', action: 'execute' },
   'GET /payment/cancel': { controller: 'PaymentController', action: 'cancel' },
-  //'GET /test': {controller: 'PaymentController', action: 'test' },
   'GET /creditcard': { controller: 'PaymentController', action: 'creditCard'},
   
   'GET /cart/show': { controller: 'CartController', action: 'viewCartDetails'},

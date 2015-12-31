@@ -1,40 +1,28 @@
-<div class="container">
-    <h1><%= product.name %></h1>
+<div class="container" ng-product="<%= product.id %>">
+    <h1>{{product.info.name}}</h1>
     <div class="row">
         <div class="col-sm-6">
-            <% for(var i = 0; i < product.images.length; i++){ %>
-                <img ng-src="<%= product.images[i] %>" class="img-responsive" alt="">
-                <br>
-                <% } %>
+            <div ng-repeat="image in product.info.images">
+                <img ng-src="{{image}}" class="img-responsive" alt="">
+            </div>
         </div>
         <div class="col-sm-6">
             <div class="well">
-                <h2><%= product.price %>€</h2>
-                <%= product.description %>
-                    <br>
-                    <% if(product.options && product.options.length > 0){ %>
-                        <select ng-model="selectedoption" name="itemmodel" >
-                            <% for(var i = 0; i < product.options.length; i++) { %>
-                                <option value="<%= product.options[i].name %>">
-                                    <%= product.options[i].name %>
-                                </option>
-                            <% } %>
-                        </select>
-                    <% } %>
+                <h2>{{ product.info.price }} €</h2>
+                {{ product.info.description }}
+                <br>
+                <select ng-show= "product.info.stock - product.info.sold > 0 && product.info.options.length > 0" ng-model="selectedoption" name="itemmodel" >
+                    <option ng-repeat="option in product.info.options | filter: product.myFilterOption" value="{{ option.name }}" ng-hide="option.sold != undefined && option.stock - option.sold > 1 " ng-if="option.stock > 0">
+                        {{ option.name }}
+                    </option>
+                </select>
             </div>
             <p>
-                <% if(product.stock > 0){ %>
-                <a href="javascript:void(0)" ng-click="cart.addItem('<%= product.id %>', 1, selectedoption)" 
-                <% if(product.options && product.options.length > 0){ %>
-                	ng-disabled="!selectedoption" 
-                <% } %>
-                class="btn btn-success btn-block">BUY</a>
-                <% }else{ %>
-                  <h3>SOLD OUT</h3>
-                <% } %>
+                <a href="javascript:void(0)" ng-show= "product.info.stock - product.info.sold > 0" ng-click="cart.addItem(product.info.id, 1, selectedoption)" ng-disabled="product.info.options.length > 0 && !selectedoption" class="btn btn-success btn-block">BUY</a>
+                <h3 ng-hide= "product.info.stock - product.info.sold > 0">SOLD OUT</h3>
             </p>
-            <div class="alert alert-warning" role="alert" ng-show="cart.inCart('<%= product.id %>').length>0">
-                This item is in your cart. <a href="#" ng-click="cart.removeItem(cart.inCart('<%= product.id %>')[0])"> Remove </a>
+            <div class="alert alert-warning" role="alert" ng-show="cart.inCart(product.info.id).length>0">
+                This item is in your cart. <a href="#" ng-click="cart.removeItems(cart.inCart(product.info.id))"> Remove </a>
             </div>
         </div>
     </div>

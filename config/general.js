@@ -10,6 +10,7 @@ module.exports.general = {
 		port: 465,
 		ssl: true
 	},
+	cartExpires: 30, //minutes
 	template: 'default',
 	paypal: {
 	    host: 'api.sandbox.paypal.com',
