@@ -9,6 +9,7 @@ module.exports = {
 	
   myorders: function(req, res, next) {
     Order.find({user: req.user.id}, function(err, orders){
+      console.log("ORDERS");
       return res.view('order/myorders', {orders: orders});
     });
   },
