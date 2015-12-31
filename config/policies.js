@@ -24,6 +24,14 @@ module.exports.policies = {
     '*': ['category', 'cart']
   },
   
+  'SettingsController': {
+    '*': ['isAuthenticated', 'isAdmin']
+  },
+  
+  'OrderController': {
+    '*': ['category', 'cart', 'isAuthenticated']
+  },
+  
   
   
   'admin/AdminController': {
@@ -36,14 +44,6 @@ module.exports.policies = {
   
   'admin/CategoryController': {
     '*': ['isAuthenticated', 'isAdmin']
-  },
-  
-  'SettingsController': {
-    '*': ['isAuthenticated', 'isAdmin']
-  },
-  
-  'OrderController': {
-    '*': ['category', 'cart', 'isAuthenticated']
   },
 
 };
