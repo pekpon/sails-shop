@@ -21,7 +21,7 @@ module.exports = {
     getSoldItem: function(productId, callback) {
         var totalSold = 0;
         var now = new Date();
-        var limitData = new Date(now.getTime() - sails.config.general.cartExpires*60000);
+        var limitData = new Date(now.getTime() - sails.config.settings.cartExpires*60000);
         sails.controllers.cart.clearOldItems();
         
         Product.findOne({id: productId}).exec(function(err, product) {

@@ -1,7 +1,9 @@
 var moment = require('moment');
 
 module.exports = {
-
+  settings: function(key){
+    return sails.config.settings[key];
+  },
   parseDate: function (date) {
     return moment(date).format('DD/MM/YYYY hh:mm');
   },

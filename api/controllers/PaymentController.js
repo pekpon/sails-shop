@@ -232,7 +232,7 @@ var paymentController = {
         				         	"shipping": parseFloat(shipping).toFixed(2)
         				        }
                             },
-                            "description": 'Order from ' + sails.config.general.shopName ,
+                            "description": 'Order from ' + sails.config.settings.shopName ,
                             "item_list": { "items": items, 
         	                    "shipping_address": {
         		                    "recipient_name": user.name.concat(" ").concat(user.surname).substring(0, 50),
@@ -247,7 +247,7 @@ var paymentController = {
                   
                     console.log(JSON.stringify(payment, null, 2));
                   
-                    paypal.configure(sails.config.general.paypal);
+                    paypal.configure(sails.config.settings.paypal);
 
                     paypal.payment.create(payment, function(error, payment) {
         	            if (error) {
@@ -303,11 +303,11 @@ var paymentController = {
                         var fs = require('fs');
                         var ejs = require('ejs');
 
-                        var html = fs.readFileSync('./views/'+sails.config.general.template+'/receipt.ejs', 'utf8');
+                        var html = fs.readFileSync('./views/'+sails.config.settings.template+'/receipt.ejs', 'utf8');
                         var file = ejs.compile(html)({ order: order });
                     	
-                    	var subject = sails.config.general.shopName + " order confirmation nº " + order.id;
-                    	var text = "<b>ORDER CONFIRMATION</b><br><br>Hello " + user.name + " " + user.surname + ",<br><br><b>Thank you for shopping at " + sails.config.general.shopName + "!</b><br><br>Your order has been successfully placed and the full details are listed down below.<br><br>Once your order has been shipped you will be notified by an email that contains your invoice as an attachment<br><br>If you have any queries regarding your order please email us at <a href=\"mailto:" + sails.config.general.contactEmail + "\">" + sails.config.general.contactEmail + "</a>. Don’t forget to specify your order number in the subject of your email.<br><br>Kind regards,<br><br>" + sails.config.general.shopName + " team<br>";
+                    	var subject = sails.config.settings.shopName + " order confirmation nº " + order.id;
+                    	var text = "<b>ORDER CONFIRMATION</b><br><br>Hello " + user.name + " " + user.surname + ",<br><br><b>Thank you for shopping at " + sails.config.settings.shopName + "!</b><br><br>Your order has been successfully placed and the full details are listed down below.<br><br>Once your order has been shipped you will be notified by an email that contains your invoice as an attachment<br><br>If you have any queries regarding your order please email us at <a href=\"mailto:" + sails.config.settings.contactEmail + "\">" + sails.config.settings.contactEmail + "</a>. Don’t forget to specify your order number in the subject of your email.<br><br>Kind regards,<br><br>" + sails.config.settings.shopName + " team<br>";
                         mail.send(text + file,
                             subject,
                             order.shippingAddress.email,

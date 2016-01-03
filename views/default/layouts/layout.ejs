@@ -9,10 +9,7 @@
     
     <!--STYLES-->
     <link rel="stylesheet" href="/styles/bootstrap.min.css">
-    <link rel="stylesheet" href="/styles/custom.bootstrap.css">
-    <link rel="stylesheet" href="/styles/main.css">
-    <link rel="stylesheet" href="/styles/media.queries.css">
-    <link rel="stylesheet" href="/styles/simple-sidebar.css">
+    <link rel="stylesheet" href="/styles/styles.css">
     <!--STYLES END-->
     
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -42,7 +39,7 @@
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-      ga('create', '<%= analytics %>', 'auto');
+      ga('create', '<%= utils.settings("analytics_code") %>', 'auto');
       ga('send', 'pageview');
 
     </script>

@@ -20,7 +20,7 @@ module.exports = {
     },
     clearOldItems: function (){
         var now = new Date();
-        var limit = sails.config.general.cartExpires;
+        var limit = sails.config.settings.cartExpires;
         var limitData = new Date(now.getTime() - limit*60000);
 
         Cart.find({

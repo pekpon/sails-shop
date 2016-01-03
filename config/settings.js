@@ -1,4 +1,4 @@
-module.exports.general = {
+module.exports.settings = {
 
 	shopName: "Sails shop",
 	contactEmail: "info@sailsshop.com",
