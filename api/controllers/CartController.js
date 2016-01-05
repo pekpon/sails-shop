@@ -142,7 +142,122 @@ module.exports = {
             return res.badRequest();
         }
     },
-    finish: function(sessionID, user, callback) {
+    cartToOrder: function(orderID, callback){
+         Order.findOne({id: orderID}).populate('user').exec(function(err, order) {
+            if (err) {
+                sails.log.error("Error on get order for add new lines");
+                callback ("Error on get order for add new lines")
+            } else {
+                Cart.find({
+                    session: order.user.sessionID
+                }).populate('product').exec(function(err, cart) {
+                    if (err) {
+                        sails.log.error('Failed to get the list of products in the cart');
+                        callback ("Failed to get the list of products in the cart")
+                    } else {
+                        var cartAmount = 0;
+                        var shipping = 0;
+
+                        var orderLines = [];
+                        async.eachSeries(cart, function(cartline, next) {
+                            var pline = parseInt(cartline.qty) * parseFloat(cartline.product.price);
+                            cartAmount = parseFloat(cartAmount) + parseFloat(pline);
+                            if ( parseFloat(cartline.product.shipping) > parseFloat(shipping) ){
+                              shipping = parseFloat(cartline.product.shipping);
+                            }
+                            //cartline.product.shipping
+                            // Insert Cart line into OrderLines
+                            OrderLine.create({name: cartline.product.name, description: cartline.product.description, price: cartline.product.price, shipping: cartline.product.shipping, option: cartline.option, quantity:cartline.qty, images: cartline.product.images, productId: cartline.product.id, order: order.id}, 
+                                function(err,data){
+                                if (err) {
+                                    sails.log.error(err);
+                                    sails.log.error("Error on insert order lines");
+                                    callback("Error on insert order lines");
+                                } else {
+                                    //Restart stock pieces
+                                    Product.findOne(cartline.product.id, function(err, product){
+                                        if (err){
+                                            sails.log.error("Error on get product Info");
+                                            callback("Error on get product Info");
+                                        }else{
+                                            async.series([
+                                                function (nextTask){
+                                                    if (cartline.option){
+                                                        // If contains option reduce stock from it
+                                                        Options = product.options;  
+                                                        var newProductStock = 0;                                 
+                                                        async.eachSeries(Options, function(Option, nextOption){
+                                                            if (Option.name == cartline.option){
+                                                                var newStock = parseInt(Option.stock) - parseInt(cartline.qty);
+                                                                Option.stock = parseInt(newStock);
+                                                            }
+                                                            newProductStock += parseInt(Option.stock);
+                                                            nextOption();
+                                                        }, function(err){
+                                                            if (err){
+                                                                sails.log.error("Error on calculate new option/product stock");
+                                                                callback("Error on calculate new option/product stock");
+                                                            }else{
+                                                                // Set new Options at the product.
+                                                                product.stock = newProductStock;
+                                                                product.options = Options;
+                                                                nextTask();
+                                                            }
+                                                        });
+
+                                                    }else{
+                                                        // Reduce Stock
+                                                        var newStock = parseInt(product.stock) - parseInt(cartline.qty);
+                                                        product.stock = newStock;
+                                                        nextTask();
+                                                    }
+                                                },
+                                                function (nextTask){
+                                                    // When set new Stock in product, save
+                                                    product.save(function(err,s){
+                                                        if (err) {
+                                                            console.log("ERROR: ", err);
+                                                        }
+                                                        nextTask();
+                                                      });
+                                                }
+                                            ], function (err){
+                                                // Next cart item
+                                                next();
+                                            });
+                                        }
+                                    })
+                                    
+                                }
+                            });
+                        }, function(err) {
+                            if (err) {
+                                sails.log.error("Error on prepare order lines");
+                                callback("Error on prepare order lines");
+                            } else {
+                                Order.count().exec(function countCB(err, num) {
+                                    order.amount = cartAmount;
+                                    order.shipping = shipping;
+                                    order.save();
+                                });
+
+                                Cart.destroy({session: order.user.sessionID}).exec(function deleteCB(err){
+                                    if (err) {
+                                        sails.log.error("Error on remove cart");
+                                        callback("Error on remove cart");
+                                    } else {
+                                        callback (null, order);
+                                    }
+                                });
+                                
+                            }
+                        });
+                    }
+                })
+            }   
+        });
+    },
+    finish: function(sessionID, user, callback) { //<====== Mark for delete
         Cart.find({
             session: sessionID
         }).populate('product').exec(function(err, cart) {
@@ -260,7 +375,7 @@ module.exports = {
                 });
             }
         });
-    },
+    },//<====== END Mark for delete
     Find: function(req, res) {
         if (!req.isSocket) {
             res.json({

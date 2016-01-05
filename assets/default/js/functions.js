@@ -106,7 +106,6 @@ sailsShop.factory('ngCart', function($rootScope){
         addItem: function (id, quantity, option){
             var _self = this;
             if (quantity == undefined) { quantity = 1; }
-            console.log(id);
             io.socket.post("/cart", {product: id, qty: quantity, option: option}, function (data, jwres){
             });
         },
@@ -162,7 +161,6 @@ sailsShop.factory('ngCart', function($rootScope){
     var reload = function (){
         var _self = this;
         io.socket.get("/cart", function (data, jwres){
-            console.log(data);
             AsyncForEach (data, function(item, index, next){
                 item.qty = parseInt(item.qty);
                 cart.items.push(item);
@@ -246,6 +244,14 @@ sailsShop.controller('shopController', function ($scope, ngCart, ngProduct, $roo
                 }else{
                     if (data.redirect){
                         window.location.href = data.redirect;
+                    }else if (data.form){
+                        var e = document.createElement('div');
+                        e.innerHTML = data.form;
+                        document.body.appendChild(e);
+                        console.log(data.form);
+                        //document.forms["redsys_form"].submit();
+                    } else {
+                        console.log(data);
                     }
                 }
                 $scope.$apply();

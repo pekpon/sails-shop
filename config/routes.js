@@ -19,21 +19,21 @@ module.exports.routes = {
   'POST /payment' : {controller: 'PaymentController', action: 'payment'},
   'GET /payment/execute': { controller: 'PaymentController', action: 'execute' },
   'GET /payment/cancel': { controller: 'PaymentController', action: 'cancel' },
-  'GET /creditcard': { controller: 'PaymentController', action: 'creditCard'},
-  
+  'GET /payment/transport': { controller: 'PaymentController', action: 'redsysCallback' },
+  'GET /payment/ok': { controller: 'PaymentController', action: 'redsysOk' },
+  'GET /payment/ko': { controller: 'PaymentController', action: 'redsysCancel' },
+  'GET /test': { controller: 'PaymentController', action: 'redsysCallback' },
+
+
   'GET /cart/show': { controller: 'CartController', action: 'viewCartDetails'},
   // end CART
 
-  
   'GET /account': { controller: 'UserController', action: 'account'},
   'POST /account': { controller: 'UserController', action: 'update'},
   'GET /account/orders': { controller: 'OrderController', action: 'myorders'},
   'GET /account/orders/:id': { controller: 'OrderController', action: 'showmyorder'},
   'GET /user/success': {controller: 'UserController', action: 'success'},
   'GET /pages/:slug': {controller: 'PageController', action: 'show'},
-  
-  
-  
   
   //ADMIN ROUTES
   
