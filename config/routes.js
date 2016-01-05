@@ -32,6 +32,9 @@ module.exports.routes = {
   'GET /user/success': {controller: 'UserController', action: 'success'},
   'GET /pages/:slug': {controller: 'PageController', action: 'show'},
   
+  //PAYMENT TEST
+  'GET /payment/transport': { controller: 'PaymentController', action: 'transport'},
+  
   
   
   

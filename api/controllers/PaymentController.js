@@ -278,6 +278,11 @@ var paymentController = {
         });
         
     },
+  
+    transport: function(req, res){
+      sails.log("Redsys callback");
+      sails.log(req.allParams());
+    },
     execute: function(req, res) {
         var user = req.session.userDetails;
         var paymentId = req.session.paymentId;
