@@ -12,13 +12,14 @@
                 {{ product.info.description }}
                 <br>
                 <select ng-show= "product.info.stock - product.info.sold > 0 && product.info.options.length > 0" ng-model="selectedoption" name="itemmodel" >
+                    <option value=''>- Please Choose -</option>
                     <option ng-repeat="option in product.info.options | filter: product.myFilterOption" value="{{ option.name }}" ng-hide="option.sold != undefined && option.stock - option.sold > 1 " ng-if="option.stock > 0">
                         {{ option.name }}
                     </option>
                 </select>
             </div>
             <p>
-                <a href="javascript:void(0)" ng-show= "product.info.stock - product.info.sold > 0" ng-click="cart.addItem(product.info.id, 1, selectedoption)" ng-disabled="product.info.options.length > 0 && !selectedoption" class="btn btn-success btn-block">BUY</a>
+                <button ng-show= "product.info.stock - product.info.sold > 0" ng-click="cart.addItem(product.info.id, 1, selectedoption)" ng-disabled="product.info.options.length > 0 && !selectedoption" class="btn btn-success btn-block">BUY</button>
                 <h3 ng-hide= "product.info.stock - product.info.sold > 0">SOLD OUT</h3>
             </p>
             <div class="alert alert-warning" role="alert" ng-show="cart.inCart(product.info.id).length>0">

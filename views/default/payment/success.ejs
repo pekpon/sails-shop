@@ -12,10 +12,10 @@ var fivetext = fiveDate.getDate() + "/" + ("0" + (fiveDate.getMonth() + 1)).slic
     
     <br>
     <p>You will receive your order between <b><%=threetext %></b> and <b><%=fivetext %></b></p>
-    <p><b>Order number:</b>  <%=order.id%></p>
+    <p><b>Order number:</b>  <%=order.number%></p>
     
     <br>
     <p><a href="/account/orders/<%= order.id%>" class="btn btn-default">View order</a> 
-    <a href="javascript:void(0)" data-toggle="modal" data-target="#contact" class="btn btn-default">Contact</a></p>
+    <a href="/contact" class="btn btn-default">Contact</a></p>
   </div>
 </div>
