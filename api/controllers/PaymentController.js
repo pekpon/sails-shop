@@ -29,7 +29,6 @@ var paymentController = {
                 }
             });
         }else if (data.password && data.password == data.repassword){
-
             User.findOne({email: data.email}, function (err, userData){
                 if (err) {
                     callback( err );
