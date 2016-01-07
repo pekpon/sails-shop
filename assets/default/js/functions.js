@@ -229,11 +229,10 @@ sailsShop.controller('shopController', function ($scope, ngCart, ngProduct, $roo
             $scope.checkout.submited = true;
         }
         if ( !$scope.userForm.name.$invalid && !$scope.userForm.email.$invalid && !$scope.userForm.address.$invalid && !$scope.userForm.cp.$invalid && !$scope.userForm.surname.$invalid && !$scope.userForm.phone.$invalid && !$scope.userForm.city.$invalid && !$scope.userForm.country.$invalid) {
-            $scope.checkout.submited = false;
+            $scope.checkout.submited = false; 
             $scope.checkout.method = method;
             $scope.messageInfo = "Payment in process, please wait...";
             io.socket.post("/payment", { data: $scope.checkout }, function (data, jwres){
-                $scope.messageInfo = undefined;
                 if (data.error) {
                     $scope.message = data.error;
                     $(".alert-danger").fadeTo(3000, 500).slideUp(500, function() {
@@ -249,7 +248,7 @@ sailsShop.controller('shopController', function ($scope, ngCart, ngProduct, $roo
                         e.innerHTML = data.form;
                         document.body.appendChild(e);
                         console.log(data.form);
-                        //document.forms["redsys_form"].submit();
+                        document.forms["redsys_form"].submit();
                     } else {
                         console.log(data);
                     }
