@@ -66,7 +66,7 @@
 
                             <div class="form-group" ng-class="{ 'has-error' : userForm.email.$invalid && checkout.submited}">
                                 <label>Email</label>
-                                <input type="email" name="email" class="form-control" ng-model="checkout.email" 
+                                <input type="email" name="email" class="form-control" ng-model="checkout.email" ng-disabled="checkout.id"
                                 <% if (req.isAuthenticated() && req.user.email) { %> 
                                     ng-init="checkout.email = '<%=req.user.email %>'"
                                 <% }%>
