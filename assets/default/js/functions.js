@@ -106,7 +106,6 @@ sailsShop.factory('ngCart', function($rootScope){
         addItem: function (id, quantity, option){
             var _self = this;
             if (quantity == undefined) { quantity = 1; }
-            console.log(id);
             io.socket.post("/cart", {product: id, qty: quantity, option: option}, function (data, jwres){
             });
         },
@@ -162,7 +161,6 @@ sailsShop.factory('ngCart', function($rootScope){
     var reload = function (){
         var _self = this;
         io.socket.get("/cart", function (data, jwres){
-            console.log(data);
             AsyncForEach (data, function(item, index, next){
                 item.qty = parseInt(item.qty);
                 cart.items.push(item);
@@ -231,11 +229,10 @@ sailsShop.controller('shopController', function ($scope, ngCart, ngProduct, $roo
             $scope.checkout.submited = true;
         }
         if ( !$scope.userForm.name.$invalid && !$scope.userForm.email.$invalid && !$scope.userForm.address.$invalid && !$scope.userForm.cp.$invalid && !$scope.userForm.surname.$invalid && !$scope.userForm.phone.$invalid && !$scope.userForm.city.$invalid && !$scope.userForm.country.$invalid) {
-            $scope.checkout.submited = false;
+            $scope.checkout.submited = false; 
             $scope.checkout.method = method;
             $scope.messageInfo = "Payment in process, please wait...";
             io.socket.post("/payment", { data: $scope.checkout }, function (data, jwres){
-                $scope.messageInfo = undefined;
                 if (data.error) {
                     $scope.message = data.error;
                     $(".alert-danger").fadeTo(3000, 500).slideUp(500, function() {
@@ -246,6 +243,14 @@ sailsShop.controller('shopController', function ($scope, ngCart, ngProduct, $roo
                 }else{
                     if (data.redirect){
                         window.location.href = data.redirect;
+                    }else if (data.form){
+                        var e = document.createElement('div');
+                        e.innerHTML = data.form;
+                        document.body.appendChild(e);
+                        console.log(data.form);
+                        document.forms["redsys_form"].submit();
+                    } else {
+                        console.log(data);
                     }
                 }
                 $scope.$apply();

@@ -9,6 +9,7 @@
     "bcryptjs": "latest",
     "ejs": "~0.8.4",
     "emailjs": "^1.0.1",
+    "gm": "1.21.1",
     "grunt": "0.4.2",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-coffee": "~0.10.1",
@@ -25,6 +26,7 @@
     "jimp": "0.2.21",
     "lodash": "latest",
     "moment": "latest",
+    "node-redsys-api": "0.0.3",
     "passport": "latest",
     "passport-cas": "latest",
     "passport-facebook": "latest",
@@ -41,8 +43,7 @@
     "sails-hook-autoreload": "^0.12.0",
     "sails-mongo": "0.11.4",
     "slugg": "latest",
-    "validator": "latest",
-    "gm":"1.21.1"
+    "validator": "latest"
   },
   "scripts": {
     "start": "node app.js",

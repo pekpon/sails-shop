@@ -37,3 +37,5 @@ views/*
 
 assets/*
 !assets/default
+
+config/settings.js

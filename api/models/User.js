@@ -31,7 +31,7 @@ module.exports = {
             minLength: 6,
             required: true
         },
-      
+        sessionID: {type: 'string'},
         name: { type: 'string'},
         surname: { type: 'string'},
         address: { type: 'string'},
@@ -51,6 +51,7 @@ module.exports = {
       
         toJSON: function() {
             var obj = this.toObject();
+            delete obj.sessionID;
             delete obj.password;
             return obj;
         }

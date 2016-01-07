@@ -6,6 +6,7 @@
  */
 
 var slugg = require('slugg');
+var async = require('async');
 
 module.exports = {
     info: function(req, res) {
@@ -18,7 +19,7 @@ module.exports = {
           sails.sockets.blast('infoProduct', newproduct);
       });
     },
-    getSoldItem: function(productId, callback) {
+    getSoldItem: function(productId, cb) {
         var totalSold = 0;
         var now = new Date();
         var limitData = new Date(now.getTime() - sails.config.settings.cartExpires*60000);
@@ -28,28 +29,49 @@ module.exports = {
           if (err) return res.serverError(err);
 
           if (product){
-            Cart.find({
-                product: productId, updatedAt: { '>=': limitData }
-            }).exec(function(err, items) {
-            	if (err) return res.serverError(err);
-                async.each(items, function(item, next) {
-                    if (item.option != undefined && product.options) {
-                        product.options.forEach(function(opt) {
-                            if (item.option == opt.name) {
-                            	if (opt.sold == undefined) opt.sold = 0;
-                                opt.sold += parseInt(item.qty);
-                            }
-                        })
-                    } 
-                    totalSold += parseInt(item.qty);
-                    next();
-                }, function() {
-                  product.sold = totalSold;
-                	callback(product);
-                })
-            });
+
+            async.series([ function(callback){
+                // recalcule Stock
+                if (product.options){
+                    var s = 0;
+                    async.each(product.options, function(item, next) {
+                        s += item.stock;
+                        next();
+                    }, function(){
+                        product.stock = s;
+                        callback();
+                    })
+                }else{
+                    callback();
+                }
+            }, function(callback){
+                // calcule Sold items
+                Cart.find({
+                    product: productId, updatedAt: { '>=': limitData }
+                }).exec(function(err, items) {
+                    if (err) return res.serverError(err);
+                    async.each(items, function(item, next) {
+                        if (item.option != undefined && product.options) {
+                            product.options.forEach(function(opt) {
+                                if (item.option == opt.name) {
+                                    if (opt.sold == undefined) opt.sold = 0;
+                                    opt.sold += parseInt(item.qty);
+                                }
+                            })
+                        } 
+                        totalSold += parseInt(item.qty);
+                        next();
+                    }, function() {
+                        product.sold = totalSold;
+                        callback();
+                    })
+                });
+            }], function(){
+                cb(product);
+            })
+           
           }else{
-            callback(null);
+            cb(null);
           }
         });
     },
