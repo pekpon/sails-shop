@@ -227,8 +227,11 @@ var paymentController = {
       
                 amountSubtotal += parseInt(cartline.qty) * parseFloat(p);
                 amountTax += parseInt(cartline.qty) * parseFloat(itemTax);
-
-	            items.push ({"name": cartline.product.name ,"description": cartline.product.description + " (" + cartline.option + ")", "quantity": cartline.qty, "price": parseFloat(p).toFixed(2), "sku": cartline.product.id, "tax": parseFloat(itemTax).toFixed(2) ,"currency": currency})
+                var description = cartline.product.description;
+                if (cartline.option) {
+                    description+=" (" + cartline.option + ")";
+                }
+	            items.push ({"name": cartline.product.name ,"description": description, "quantity": cartline.qty, "price": parseFloat(p).toFixed(2), "sku": cartline.product.id, "tax": parseFloat(itemTax).toFixed(2) ,"currency": currency})
                 console.log("PRICE: "+parseFloat(p).toFixed(2)+ ", TAX: " +parseFloat(itemTax).toFixed(2));
                 
 	            next();
