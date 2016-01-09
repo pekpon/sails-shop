@@ -32,10 +32,14 @@ module.exports = {
 
             async.series([ function(callback){
                 // recalcule Stock
-                if (product.options){
+              console.log(product.options)
+                if (product.options.length > 0){
                     var s = 0;
+                    var index = 0;
                     async.each(product.options, function(item, next) {
-                        s += item.stock;
+                        s += parseInt(item.stock);
+                        product.options[index].stock = parseInt(product.options[index].stock);
+                        index += 1;
                         next();
                     }, function(){
                         product.stock = s;
@@ -53,10 +57,10 @@ module.exports = {
                     async.each(items, function(item, next) {
                         if (item.option != undefined && product.options) {
                             product.options.forEach(function(opt) {
-                                if (item.option == opt.name) {
-                                    if (opt.sold == undefined) opt.sold = 0;
-                                    opt.sold += parseInt(item.qty);
-                                }
+                                if (opt.sold == undefined) opt.sold = 0;
+if (item.option == opt.name) {
+      opt.sold += parseInt(item.qty);
+}
                             })
                         } 
                         totalSold += parseInt(item.qty);

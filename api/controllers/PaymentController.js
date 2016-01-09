@@ -175,15 +175,15 @@ var paymentController = {
                                 "DS_MERCHANT_URLKO":"http://localhost:1337/payment/ko",
                                 "DS_MERCHANT_PAYMETHODS": "C"
                             }
-
-                            var signature = redsys.createMerchantSignature(settings.key, params);
+   
+                            var signature = redsys.createMerchantSignature(sails.config.settings.redsys.key, params);
                             var MerchParams = redsys.createMerchantParameters(params);
 
                             var form = '<form action="' + sails.config.settings.redsys.url + '" method="post" id="redsys_form" name="redsys_form" >';
                                 form += '<input type="hidden" name="Ds_MerchantParameters" value="' + MerchParams + '"/>';
                                 form += '<input type="hidden" name="Ds_Signature" value="' + signature + '"/>';
                                 form += '<input type="hidden" name="Ds_SignatureVersion" value="' + sails.config.settings.redsys.version + '"/>';
-                                form += '<input type="submit" name="btn_submit_redsys" id="btn_submit_redsys" value="send" class="" >';
+                                
                                 form += '</form>';
 
                             res.json({form: form });

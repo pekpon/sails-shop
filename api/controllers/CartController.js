@@ -4,17 +4,24 @@ module.exports = {
     cartContents: function(req, callback) {
         Cart.find({
             session: req.session.id
-        }).populate('product').exec(function(err, model) {
+        }).exec(function(err, model) {
             if (err) {
                 sails.log.debug('Failed to get the list of products in the cart');
                 callback("Failed to get the list of products in the cart", null);
             } else {
-                if (req.isSocket) {
-                    sails.sockets.join(req.socket, req.session.id);
-                    Cart.watch(req.socket);
-                }
-                
-                callback(null, model);
+                async.each(model, function(item, next) {
+                    sails.controllers.product.getSoldItem(item.product, function(newproduct) {
+                        item.product = newproduct;
+                        next();
+                    });
+                }, function(){
+                    if (req.isSocket) {
+                        sails.sockets.join(req.socket, req.session.id);
+                        Cart.watch(req.socket);
+                    }
+                    console.log(model);
+                    callback(null, model);
+                })
             }
         });
     },
