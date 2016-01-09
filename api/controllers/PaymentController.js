@@ -59,6 +59,7 @@ var paymentController = {
         }else{
             var user = dataUpdate;
             user.email = data.email;
+            user.id = data.email;
             callback(null, user); // transport user info in req.session
         }
     },
@@ -110,6 +111,7 @@ var paymentController = {
         res.view('payment/success',{order: {id: _orderID}});
     },
     redsysCancel: function (req, res){
+
         sails.log("Redsys response cancel");
         sails.log(req.allParams());
         res.view('cart/checkOut', {
@@ -337,6 +339,8 @@ var paymentController = {
                 res.json({error: error });
                 return;
             } else {
+                req.session.paymentId = undefined;
+                req.session.orderID = undefined;
                 sails.controllers.payment.finishPayment(_orderID, res);
             }
         });
@@ -368,6 +372,11 @@ var paymentController = {
         })
     },
     cancel: function(req, res) {
+        var _orderID = req.session.orderID;
+        Order.destroy({id: _orderID}).exec(function deleteCB(err){
+            req.session.paymentId = undefined;
+            req.session.orderID = undefined;
+        });
         res.view('cart/checkOut', {
             cart: {}, messagePayment:'Payment has been canceled.'
         });
