@@ -155,8 +155,9 @@ module.exports = {
                 sails.log.error("Error on get order for add new lines");
                 callback ("Error on get order for add new lines")
             } else {
+                var ssid = order.user ? order.user.sessionID : order.shippingAddress.sessionID
                 Cart.find({
-                    session: order.user.sessionID
+                    session: ssid
                 }).populate('product').exec(function(err, cart) {
                     if (err) {
                         sails.log.error('Failed to get the list of products in the cart');
@@ -249,7 +250,7 @@ module.exports = {
                                     order.save();
                                 });
 
-                                Cart.destroy({session: order.user.sessionID}).exec(function deleteCB(err){
+                                Cart.destroy({session: ssid}).exec(function deleteCB(err){
                                     if (err) {
                                         sails.log.error("Error on remove cart");
                                         callback("Error on remove cart");
