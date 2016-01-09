@@ -22,7 +22,8 @@ NO ORDERS YET
         <td><%= utils.onlyDate(orders[i].createdAt) %></th> 
         <td><%= orders[i].number %></th> 
         <td><%= orderH.status(orders[i].status) %></td> 
-        <td><%= orders[i].amount + orders[i].shipping %></td>
+        <% var total = parseFloat(orders[i].amount) + parseFloat(orders[i].shipping);
+        <td><%= parseFloat(total).toFixed(2) %></td>
         <td><a href="/account/orders/<%= orders[i].id %>" class="btn btn-default btn-xs">View detail</a></td>
       </tr>
     <% } %>

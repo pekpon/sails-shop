@@ -58,6 +58,7 @@ var paymentController = {
         }else{
             var user = dataUpdate;
             user.email = data.email;
+            user.id = data.email;
             callback(null, user); // transport user info in req.session
         }
     },
@@ -92,7 +93,7 @@ var paymentController = {
         sails.log("Redsys callback");
         sails.log(req.allParams());
         var params = req.allParams();
-        
+        console.log("redsysCallback:", params);
         var notifikey = redsys.createMerchantSignatureNotif( sails.config.settings.redsys.key, params["Ds_MerchantParameters"]);
         var resp = redsys.decodeMerchantParameters( params["Ds_MerchantParameters"] );
 
@@ -106,11 +107,18 @@ var paymentController = {
         var _orderID = req.session.orderID;
         sails.log("Redsys response ok");
         sails.log(req.allParams());
-        res.view('payment/success',{order: {id: _orderID}});
+        Order.findOne({id: _orderID}).exec(function(err, order) {
+            res.view('payment/success',{order: order});
+            req.session.orderID = undefined;
+        });
     },
     redsysCancel: function (req, res){
         sails.log("Redsys response cancel");
         sails.log(req.allParams());
+
+
+
+
         res.view('cart/checkOut', {
             cart: {}, messagePayment:'Payment has been canceled.'
         });
@@ -155,6 +163,15 @@ var paymentController = {
                     var user = req.session.userDetails;
                     var total = parseFloat(cartAmount) + parseFloat(shipping);
 
+//if exists order delete
+                    Order.find({user: user.id, status: 1}).exec(function(err, orders) {
+                        orders.forEach( function( item ){
+                             Order.destroy({id: item.id}).exec(function deleteCB(err){
+
+                            });
+                        });
+                    });
+
                     Order.create({
                         status: 1, shippingAddress: user, user: user.id,  comments: "", amount: parseFloat(cartAmount), shipping: parseFloat(shipping), tax: 21
                     }, function(err, order) {
@@ -162,10 +179,10 @@ var paymentController = {
                             order.number = parseInt(num) + 1728;
                             order.save();
                             req.session.orderID = order.id;
-
+                            var rndnumber = Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000;
                             var params = {
                                 "DS_MERCHANT_AMOUNT": parseFloat(total).toFixed(2).toString().replace(".",""),
-                                "DS_MERCHANT_ORDER": order.number.toString(),
+                                "DS_MERCHANT_ORDER": rndnumber + "-" + order.number.toString(),
                                 "DS_MERCHANT_MERCHANTCODE":sails.config.settings.redsys.merchanCode,
                                 "DS_MERCHANT_CURRENCY": sails.config.settings.redsys.currency,
                                 "DS_MERCHANT_TRANSACTIONTYPE":"0",
@@ -252,6 +269,15 @@ var paymentController = {
                 	var subtotal = parseFloat(cartAmount) - parseFloat(cartTax)
                 	var totalCartAmount = parseFloat(cartAmount) + parseFloat(shipping);
 
+                    //if exists order delete
+                    Order.find({user: user.id, status: 1}).exec(function(err, orders) {
+                        orders.forEach( function( item ){
+                             Order.destroy({id: item.id}).exec(function deleteCB(err){
+
+                            });
+                        });
+                    });
+                 
                     Order.create({
                         status: 1, shippingAddress: user, user: user.id,  comments: "", amount: parseFloat(cartAmount), shipping: parseFloat(shipping), tax: 21
                     }, function(err, order) {
@@ -278,7 +304,7 @@ var paymentController = {
                 				         	"shipping": parseFloat(shipping).toFixed(2)
                 				        }
                                     },
-                                    "description": 'Order (' + order.id + ')from ' + sails.config.settings.shopName ,
+                                    "description": 'Order (' + order.number + ')from ' + sails.config.settings.shopName ,
                                     "item_list": { "items": items, 
                 	                    "shipping_address": {
                 		                    "recipient_name": user.name.concat(" ").concat(user.surname).substring(0, 50),
@@ -336,10 +362,13 @@ var paymentController = {
                 res.json({error: error });
                 return;
             } else {
+                req.session.paymentId = undefined;
+                req.session.orderID = undefined;
                 sails.controllers.payment.finishPayment(_orderID, res);
             }
         });
     },
+
     finishPayment: function (orderID, res){
         sails.controllers.cart.cartToOrder(orderID, function(err, order){
             if (err) {
@@ -353,8 +382,8 @@ var paymentController = {
                 var html = fs.readFileSync('./views/'+sails.config.settings.template+'/receipt.ejs', 'utf8');
                 var file = ejs.compile(html)({ order: order });
                 
-                var subject = sails.config.settings.shopName + " order confirmation nº " + order.id;
-                var text = "<b>ORDER CONFIRMATION</b><br><br>Hello " + order.user.name + " " + order.user.surname + ",<br><br><b>Thank you for shopping at " + sails.config.settings.shopName + "!</b><br><br>Your order has been successfully placed and the full details are listed down below.<br><br>Once your order has been shipped you will be notified by an email that contains your invoice as an attachment<br><br>If you have any queries regarding your order please email us at <a href=\"mailto:" + sails.config.settings.contactEmail + "\">" + sails.config.settings.contactEmail + "</a>. Don’t forget to specify your order number in the subject of your email.<br><br>Kind regards,<br><br>" + sails.config.settings.shopName + " team<br>";
+                var subject = sails.config.settings.shopName + " order confirmation nº " + order.number;
+                var text = "<b>ORDER CONFIRMATION</b><br><br>Hello " + order.shippingAddress.name + " " + order.shippingAddress.surname + ",<br><br><b>Thank you for shopping at " + sails.config.settings.shopName + "!</b><br><br>Your order has been successfully placed and the full details are listed down below.<br><br>Once your order has been shipped you will be notified by an email that contains your invoice as an attachment<br><br>If you have any queries regarding your order please email us at <a href=\"mailto:" + sails.config.settings.contactEmail + "\">" + sails.config.settings.contactEmail + "</a>. Don’t forget to specify your order number in the subject of your email.<br><br>Kind regards,<br><br>" + sails.config.settings.shopName + " team<br>";
                 mail.send(text + file,
                     subject,
                     order.shippingAddress.email,
@@ -367,6 +396,11 @@ var paymentController = {
         })
     },
     cancel: function(req, res) {
+        var _orderID = req.session.orderID;
+        Order.destroy({id: _orderID}).exec(function deleteCB(err){
+            req.session.paymentId = undefined;
+            req.session.orderID = undefined;
+        });
         res.view('cart/checkOut', {
             cart: {}, messagePayment:'Payment has been canceled.'
         });
