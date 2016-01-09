@@ -94,7 +94,7 @@ var paymentController = {
         sails.log("Redsys callback");
         sails.log(req.allParams());
         var params = req.allParams();
-        
+        console.log("redsysCallback:", params);
         var notifikey = redsys.createMerchantSignatureNotif( sails.config.settings.redsys.key, params["Ds_MerchantParameters"]);
         var resp = redsys.decodeMerchantParameters( params["Ds_MerchantParameters"] );
 
@@ -108,12 +108,18 @@ var paymentController = {
         var _orderID = req.session.orderID;
         sails.log("Redsys response ok");
         sails.log(req.allParams());
-        res.view('payment/success',{order: {id: _orderID}});
+        Order.findOne({id: _orderID}).exec(function(err, order) {
+            res.view('payment/success',{order: order});
+            req.session.orderID = undefined;
+        });
     },
     redsysCancel: function (req, res){
-
         sails.log("Redsys response cancel");
         sails.log(req.allParams());
+
+
+
+
         res.view('cart/checkOut', {
             cart: {}, messagePayment:'Payment has been canceled.'
         });
@@ -158,6 +164,15 @@ var paymentController = {
                     var user = req.session.userDetails;
                     var total = parseFloat(cartAmount) + parseFloat(shipping);
 
+//if exists order delete
+                    Order.find({user: user.id, status: 1}).exec(function(err, orders) {
+                        orders.forEach( function( item ){
+                             Order.destroy({id: item.id}).exec(function deleteCB(err){
+
+                            });
+                        });
+                    });
+
                     Order.create({
                         status: 1, shippingAddress: user, user: user.id,  comments: "", amount: parseFloat(cartAmount), shipping: parseFloat(shipping), tax: 21
                     }, function(err, order) {
@@ -165,10 +180,10 @@ var paymentController = {
                             order.number = parseInt(num) + 1728;
                             order.save();
                             req.session.orderID = order.id;
-
+                            var rndnumber = Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000;
                             var params = {
                                 "DS_MERCHANT_AMOUNT": parseFloat(total).toFixed(2).toString().replace(".",""),
-                                "DS_MERCHANT_ORDER": order.number.toString(),
+                                "DS_MERCHANT_ORDER": rndnumber + "-" + order.number.toString(),
                                 "DS_MERCHANT_MERCHANTCODE":sails.config.settings.redsys.merchanCode,
                                 "DS_MERCHANT_CURRENCY": sails.config.settings.redsys.currency,
                                 "DS_MERCHANT_TRANSACTIONTYPE":"0",
