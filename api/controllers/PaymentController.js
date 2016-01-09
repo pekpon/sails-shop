@@ -281,7 +281,7 @@ var paymentController = {
                 				         	"shipping": parseFloat(shipping).toFixed(2)
                 				        }
                                     },
-                                    "description": 'Order (' + order.id + ')from ' + sails.config.settings.shopName ,
+                                    "description": 'Order (' + order.number + ')from ' + sails.config.settings.shopName ,
                                     "item_list": { "items": items, 
                 	                    "shipping_address": {
                 		                    "recipient_name": user.name.concat(" ").concat(user.surname).substring(0, 50),
@@ -345,6 +345,7 @@ var paymentController = {
             }
         });
     },
+
     finishPayment: function (orderID, res){
         sails.controllers.cart.cartToOrder(orderID, function(err, order){
             if (err) {
@@ -358,7 +359,7 @@ var paymentController = {
                 var html = fs.readFileSync('./views/'+sails.config.settings.template+'/receipt.ejs', 'utf8');
                 var file = ejs.compile(html)({ order: order });
                 
-                var subject = sails.config.settings.shopName + " order confirmation nº " + order.id;
+                var subject = sails.config.settings.shopName + " order confirmation nº " + order.number;
                 var text = "<b>ORDER CONFIRMATION</b><br><br>Hello " + order.user.name + " " + order.user.surname + ",<br><br><b>Thank you for shopping at " + sails.config.settings.shopName + "!</b><br><br>Your order has been successfully placed and the full details are listed down below.<br><br>Once your order has been shipped you will be notified by an email that contains your invoice as an attachment<br><br>If you have any queries regarding your order please email us at <a href=\"mailto:" + sails.config.settings.contactEmail + "\">" + sails.config.settings.contactEmail + "</a>. Don’t forget to specify your order number in the subject of your email.<br><br>Kind regards,<br><br>" + sails.config.settings.shopName + " team<br>";
                 mail.send(text + file,
                     subject,
