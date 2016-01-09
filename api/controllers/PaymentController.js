@@ -255,6 +255,15 @@ var paymentController = {
                 	var subtotal = parseFloat(cartAmount) - parseFloat(cartTax)
                 	var totalCartAmount = parseFloat(cartAmount) + parseFloat(shipping);
 
+                    //if exists order delete
+                    Order.find({user: user.id, status: 1}).exec(function(err, orders) {
+                        orders.forEach( function( item ){
+                             Order.destroy({id: item.id}).exec(function deleteCB(err){
+
+                            });
+                        });
+                    });
+                 
                     Order.create({
                         status: 1, shippingAddress: user, user: user.id,  comments: "", amount: parseFloat(cartAmount), shipping: parseFloat(shipping), tax: 21
                     }, function(err, order) {
@@ -360,7 +369,7 @@ var paymentController = {
                 var file = ejs.compile(html)({ order: order });
                 
                 var subject = sails.config.settings.shopName + " order confirmation nº " + order.number;
-                var text = "<b>ORDER CONFIRMATION</b><br><br>Hello " + order.user.name + " " + order.user.surname + ",<br><br><b>Thank you for shopping at " + sails.config.settings.shopName + "!</b><br><br>Your order has been successfully placed and the full details are listed down below.<br><br>Once your order has been shipped you will be notified by an email that contains your invoice as an attachment<br><br>If you have any queries regarding your order please email us at <a href=\"mailto:" + sails.config.settings.contactEmail + "\">" + sails.config.settings.contactEmail + "</a>. Don’t forget to specify your order number in the subject of your email.<br><br>Kind regards,<br><br>" + sails.config.settings.shopName + " team<br>";
+                var text = "<b>ORDER CONFIRMATION</b><br><br>Hello " + order.shippingAddress.name + " " + order.shippingAddress.surname + ",<br><br><b>Thank you for shopping at " + sails.config.settings.shopName + "!</b><br><br>Your order has been successfully placed and the full details are listed down below.<br><br>Once your order has been shipped you will be notified by an email that contains your invoice as an attachment<br><br>If you have any queries regarding your order please email us at <a href=\"mailto:" + sails.config.settings.contactEmail + "\">" + sails.config.settings.contactEmail + "</a>. Don’t forget to specify your order number in the subject of your email.<br><br>Kind regards,<br><br>" + sails.config.settings.shopName + " team<br>";
                 mail.send(text + file,
                     subject,
                     order.shippingAddress.email,
