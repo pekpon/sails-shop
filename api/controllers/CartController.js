@@ -155,7 +155,8 @@ module.exports = {
                 sails.log.error("Error on get order for add new lines");
                 callback ("Error on get order for add new lines")
             } else {
-                var ssid = order.user ? order.user.sessionID : order.shippingAddress.sessionID
+                //var ssid = order.user ? order.user.sessionID : order.shippingAddress.sessionID
+                var ssid = order.shippingAddress.sessionID;
                 Cart.find({
                     session: ssid
                 }).populate('product').exec(function(err, cart) {

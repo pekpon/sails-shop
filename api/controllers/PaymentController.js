@@ -379,19 +379,26 @@ var paymentController = {
                 var fs = require('fs');
                 var ejs = require('ejs');
 
-                var html = fs.readFileSync('./views/'+sails.config.settings.template+'/receipt.ejs', 'utf8');
-                var file = ejs.compile(html)({ order: order });
+                var html1 = fs.readFileSync('./views/'+sails.config.settings.template+'/payment/receipt.ejs', 'utf8');
+                var html2 = fs.readFileSync('./views/'+sails.config.settings.template+'/mail/new_order.ejs', 'utf8');
                 
-                var subject = sails.config.settings.shopName + " order confirmation nº " + order.number;
-                var text = "<b>ORDER CONFIRMATION</b><br><br>Hello " + order.shippingAddress.name + " " + order.shippingAddress.surname + ",<br><br><b>Thank you for shopping at " + sails.config.settings.shopName + "!</b><br><br>Your order has been successfully placed and the full details are listed down below.<br><br>Once your order has been shipped you will be notified by an email that contains your invoice as an attachment<br><br>If you have any queries regarding your order please email us at <a href=\"mailto:" + sails.config.settings.contactEmail + "\">" + sails.config.settings.contactEmail + "</a>. Don’t forget to specify your order number in the subject of your email.<br><br>Kind regards,<br><br>" + sails.config.settings.shopName + " team<br>";
-                mail.send(text + file,
-                    subject,
-                    order.shippingAddress.email,
-                    order.shippingAddress.name + " " + order.shippingAddress.surname,
-                    function(err, message) {
-                        sails.log(err || message);
+                Order.findOne(order.id).populate('lines').exec(function(e,order){
+                
+                  var receipt = ejs.compile(html1)({ order: order });
+                  var text = ejs.compile(html2)({ order: order });
+                  console.log(order);
+
+                  var subject = sails.config.settings.shopName + " order confirmation nº " + order.number;
+                  mail.send(text + receipt,
+                      subject,
+                      order.shippingAddress.email,
+                      order.shippingAddress.name + " " + order.shippingAddress.surname,
+                      function(err, message) {
+                          sails.log(err || message);
+                  });
+                  res.view('payment/success',{order: order});
+                
                 });
-                res.view('payment/success',{order: order});
             }
         })
     },
