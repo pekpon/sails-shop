@@ -191,9 +191,9 @@ var paymentController = {
                                 "DS_MERCHANT_CURRENCY": sails.config.settings.redsys.currency,
                                 "DS_MERCHANT_TRANSACTIONTYPE":"0",
                                 "DS_MERCHANT_TERMINAL":sails.config.settings.redsys.terminal,
-                                "DS_MERCHANT_MERCHANTURL": sails.config.settings.shopName + "/payment/transport",
-                                "DS_MERCHANT_URLOK": sails.config.settings.shopName + "/payment/ok",
-                                "DS_MERCHANT_URLKO": sails.config.settings.shopName + "/payment/ko",
+                                "DS_MERCHANT_MERCHANTURL": sails.config.settings.host + "/payment/transport",
+                                "DS_MERCHANT_URLOK": sails.config.settings.host + "/payment/ok",
+                                "DS_MERCHANT_URLKO": sails.config.settings.host + "/payment/ko",
                                 "DS_MERCHANT_PAYMETHODS": "C"
                             }
 
@@ -299,8 +299,8 @@ var paymentController = {
                                     "payment_method": 'paypal'
                                 },
                                 "redirect_urls": {
-                                    "return_url": sails.config.settings.shopName + "/payment/execute",
-                                    "cancel_url": sails.config.settings.shopName + "/payment/cancel"
+                                    "return_url": sails.config.settings.host + "/payment/execute",
+                                    "cancel_url": sails.config.settings.host + "/payment/cancel"
                                 },
                                 "transactions": [{
                                     "amount": {
