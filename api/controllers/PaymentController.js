@@ -192,6 +192,9 @@ var paymentController = {
                                 "DS_MERCHANT_URLKO": sails.getBaseurl() + "/payment/ko",
                                 "DS_MERCHANT_PAYMETHODS": "C"
                             }
+                            
+                            console.log("REDSYS PARAMS");
+                            console.log(params);
    
                             var signature = redsys.createMerchantSignature(sails.config.settings.redsys.key, params);
                             var MerchParams = redsys.createMerchantParameters(params);
