@@ -19,7 +19,7 @@ module.exports.routes = {
   'POST /payment' : {controller: 'PaymentController', action: 'payment'},
   'GET /payment/execute': { controller: 'PaymentController', action: 'execute' },
   'GET /payment/cancel': { controller: 'PaymentController', action: 'cancel' },
-  'GET /payment/transport': { controller: 'PaymentController', action: 'redsysCallback' },
+  'POST /payment/transport': { controller: 'PaymentController', action: 'redsysCallback' },
   'GET /payment/ok': { controller: 'PaymentController', action: 'redsysOk' },
   'GET /payment/ko': { controller: 'PaymentController', action: 'redsysCancel' },
   'GET /test': { controller: 'PaymentController', action: 'redsysCallback' },
