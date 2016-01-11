@@ -187,9 +187,9 @@ var paymentController = {
                                 "DS_MERCHANT_CURRENCY": sails.config.settings.redsys.currency,
                                 "DS_MERCHANT_TRANSACTIONTYPE":"0",
                                 "DS_MERCHANT_TERMINAL":sails.config.settings.redsys.terminal,
-                                "DS_MERCHANT_MERCHANTURL":"http://cazoletos.com/payment/transport",
-                                "DS_MERCHANT_URLOK":"http://localhost:1337/payment/ok",
-                                "DS_MERCHANT_URLKO":"http://localhost:1337/payment/ko",
+                                "DS_MERCHANT_MERCHANTURL": sails.getBaseurl() + "/payment/transport",
+                                "DS_MERCHANT_URLOK": sails.getBaseurl() + "/payment/ok",
+                                "DS_MERCHANT_URLKO": sails.getBaseurl() + "/payment/ko",
                                 "DS_MERCHANT_PAYMETHODS": "C"
                             }
    
