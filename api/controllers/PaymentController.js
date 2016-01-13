@@ -93,13 +93,17 @@ var paymentController = {
         sails.log("Redsys callback");
         sails.log(req.allParams());
         var params = req.allParams();
-        console.log("redsysCallback:", params);
         var notifikey = redsys.createMerchantSignatureNotif( sails.config.settings.redsys.key, params["Ds_MerchantParameters"]);
         var resp = redsys.decodeMerchantParameters( params["Ds_MerchantParameters"] );
 
         if ( params["Ds_Signature"] == notifikey +"=" ){
             if ( parseInt(resp["Ds_Response"]) < 100 ){
-                sails.controllers.payment.finishPayment(resp["Ds_Order"], res);
+                var items = resp["Ds_Order"].split("-");
+                var numOrder = items[1];
+                Order.findOne({number: numOrder}).exec(function(e,order){
+                    sails.controllers.payment.finishPayment(order.id, res);
+                })
+                
             }
         };
     },
@@ -187,15 +191,12 @@ var paymentController = {
                                 "DS_MERCHANT_CURRENCY": sails.config.settings.redsys.currency,
                                 "DS_MERCHANT_TRANSACTIONTYPE":"0",
                                 "DS_MERCHANT_TERMINAL":sails.config.settings.redsys.terminal,
-                                "DS_MERCHANT_MERCHANTURL": sails.getBaseurl() + "/payment/transport",
-                                "DS_MERCHANT_URLOK": sails.getBaseurl() + "/payment/ok",
-                                "DS_MERCHANT_URLKO": sails.getBaseurl() + "/payment/ko",
+                                "DS_MERCHANT_MERCHANTURL": sails.config.settings.host + "/payment/transport",
+                                "DS_MERCHANT_URLOK": sails.config.settings.host + "/payment/ok",
+                                "DS_MERCHANT_URLKO": sails.config.settings.host + "/payment/ko",
                                 "DS_MERCHANT_PAYMETHODS": "C"
                             }
-                            
-                            console.log("REDSYS PARAMS");
-                            console.log(params);
-   
+
                             var signature = redsys.createMerchantSignature(sails.config.settings.redsys.key, params);
                             var MerchParams = redsys.createMerchantParameters(params);
 
@@ -287,6 +288,10 @@ var paymentController = {
                         Order.count().exec(function countCB(err, num) {
                             order.number = parseInt(num) + 1728;
                             order.save();
+                          
+                          //TRY
+                          //var newSubtotal = parseFloat(totalCartAmount).toFixed(2) - (parseFloat(shipping).toFixed(2) + amountTax.toFixed(2));
+
 
                         	var payment = {
                                 "intent": "sale",
@@ -294,8 +299,8 @@ var paymentController = {
                                     "payment_method": 'paypal'
                                 },
                                 "redirect_urls": {
-                                    "return_url": sails.getBaseurl() + "/payment/execute",
-                                    "cancel_url": sails.getBaseurl() + "/payment/cancel"
+                                    "return_url": sails.config.settings.host + "/payment/execute",
+                                    "cancel_url": sails.config.settings.host + "/payment/cancel"
                                 },
                                 "transactions": [{
                                     "amount": {
@@ -303,6 +308,7 @@ var paymentController = {
                                         "total": parseFloat(totalCartAmount).toFixed(2),
                                         "details": {
                                         	"subtotal": amountSubtotal.toFixed(2),
+                                            //"subtotal": newSubtotal,
                 				        	"tax": amountTax.toFixed(2),
                 				         	"shipping": parseFloat(shipping).toFixed(2)
                 				        }
