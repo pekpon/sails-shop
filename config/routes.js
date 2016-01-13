@@ -3,7 +3,7 @@ module.exports.routes = {
   //NORMAL ROUTES
   
   'GET /': { controller: 'MainController', action: 'index' },
-  
+
   'GET /login': {controller: 'AuthController', action: 'printLogin'},
   'GET /signup': {controller: 'AuthController', action: 'printSignUp'},
   'POST /login': {controller: 'AuthController', action: 'login'},
@@ -36,6 +36,7 @@ module.exports.routes = {
   'GET /pages/:slug': {controller: 'PageController', action: 'show'},
   
   //ADMIN ROUTES
+  'GET /admin/cart': {controller: 'admin/CartController', action: 'index'},
   
   'GET /admin': {controller: 'admin/AdminController', action: 'index'},
   'GET /admin/settings': {controller: 'SettingsController', action: 'indexAdmin'},

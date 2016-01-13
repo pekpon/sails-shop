@@ -1,6 +1,7 @@
 var async = require('async');
 
 module.exports = {
+    
     cartContents: function(req, callback) {
         Cart.find({
             session: req.session.id
@@ -57,10 +58,14 @@ module.exports = {
             Cart.destroy({
                 id: req.param("id")
             }).exec(function (err) {
-                sails.controllers.product.sendSocketInfo(model.product);
-                sails.sockets.broadcast(req.session.id, "removeItem", {
-                    id: req.param("id")
-                });
+                console.log("model: ", model);
+                console.log("-----------------------------------");
+                if ( model ){
+                    sails.controllers.product.sendSocketInfo(model.product);
+                    sails.sockets.broadcast(req.session.id, "removeItem", {
+                        id: req.param("id")
+                    });
+                }
             });
         });
     },

@@ -1,0 +1,50 @@
+<!-- HEADER -->
+  <div class="page-header">
+    <h1>Carts</h1>
+  </div>
+  
+  <!-- SHOW categories -->
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+           <th>image</th>
+            <th>qty</th>
+            <th>name</th>
+            <th>option</th>
+            <th>stock</th>
+            <th>createdAt</th>
+            <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+      
+      <% for(var i in carts ){ %>
+        <tr id="cart_<%=carts[i].id %>">
+            <td style="width:10%"><img src="<%= image.getSize(image.getFirst(carts[i].product.images), 'crop-small') %>" class="img-responsive" alt=""></td>
+      			<td><%= carts[i].qty%></td>
+            <td><%= carts[i].product.name%></td>
+            <td><%= carts[i].option%></td>
+      			<td><%= carts[i].product.stock%></td>
+            <td><%= utils.parseDate(carts[i].createdAt) %></td>
+            <td><a href="#" onclick="removeElement('<%=carts[i].id%>');return false;">Delete</a></td>
+        </tr>
+      <% } %>
+
+      </tbody>
+    </table>
+  </div>
+  <script type="text/javascript">
+       var removeElement = function(id){
+        
+        io.socket.delete("/cart", {id: id}, function (data, jwres){
+          
+        });
+
+        
+          var el = document.getElementById( "cart_" + id );
+          el.parentNode.removeChild( el );
+      }
+
+      
+  </script>
