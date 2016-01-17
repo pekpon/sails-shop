@@ -395,9 +395,10 @@ var paymentController = {
                 
                   var receipt = ejs.compile(html1)({ order: order });
                   var text = ejs.compile(html2)({ order: order });
-                  console.log(order);
 
                   var subject = sails.config.settings.shopName + " order confirmation nº " + order.number;
+                  
+                  //COUSTOMER MAIL
                   mail.send(text + receipt,
                       subject,
                       order.shippingAddress.email,
@@ -405,6 +406,16 @@ var paymentController = {
                       function(err, message) {
                           sails.log(err || message);
                   });
+                  
+                  //ADMIN MAIL
+                  mail.send("New order!" + receipt,
+                      "New order nº " + order.number,
+                      sails.config.settings.email.email,
+                      sails.config.settings.shopName,
+                      function(err, message) {
+                          sails.log(err || message);
+                  });
+                  
                   res.view('payment/success',{order: order});
                 
                 });
