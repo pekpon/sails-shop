@@ -58,5 +58,6 @@ module.exports.routes = {
   
   'GET /admin/order': {controller: 'admin/OrderController', action: 'index'},
   'GET /admin/order/edit/:id': {controller: 'admin/OrderController', action: 'edit'},
+  'POST /admin/order/upSt/:id/:status': {controller: 'admin/OrderController', action: 'updateStatus'},
   
 };
