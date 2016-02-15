@@ -8,7 +8,7 @@
 var OrderController = {
   
 	index: function(req, res, next) {
-      Order.find({status: { '>=': 2 }}, function(err, orders){
+      Order.find({status: ["2", "3", "4"] }, function(err, orders){
         return res.view({
           layout:'layouts/dashboardLayout', 
           orders: orders
