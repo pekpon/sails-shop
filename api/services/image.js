@@ -1,4 +1,4 @@
-/*module.exports = {
+module.exports = {
 
   getFirst: function (images) {
     var image;
@@ -69,9 +69,9 @@
       });
   }
   
-}*/
+}
 
-var fs = require('fs');
+/*var fs = require('fs');
 
 module.exports = {
 
@@ -154,4 +154,4 @@ module.exports = {
       });
   }
   
-}
+}*/
