@@ -126,7 +126,7 @@ module.exports = {
               var fname1 = rootPath + '/images/upload/' + name + "-thumb-med." + ext;
               imgThumb.resize(400, Jimp.AUTO).write(fname1, function(){
                 fs.createReadStream(fname1).pipe(fs.createWriteStream(fname1.replace('/assets/'+sails.config.views.theme+'/', '/.tmp/public/')));
-              };
+              });
               
               var fname2 = rootPath + '/images/upload/' + name + "-thumb-small." + ext;
               imgThumb.resize(150, Jimp.AUTO).write(fname2, function(){
